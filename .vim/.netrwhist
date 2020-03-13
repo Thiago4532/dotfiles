@@ -1,0 +1,7 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =5
+let g:netrw_dirhist_5='/home/thiagomm/.config/i3'
+let g:netrw_dirhist_4='/home/thiagomm/KDE/default/.vim/plugged/vim-monokai-pro/colors'
+let g:netrw_dirhist_3='/home/thiagomm/KDE/default/.vim/plugged/vim-monokai-pro'
+let g:netrw_dirhist_2='/home/thiagomm/KDE/default/.vim/plugged'
+let g:netrw_dirhist_1='/home/thiagomm'
