@@ -50,6 +50,8 @@ nnoremap <C-M-Left> <C-w> <C-Left>
 " Move line up/down ( Sublime Text 3 ) 
 nnoremap <C-S-Up> :m-2<CR>
 nnoremap <C-S-Down> :m+<CR>
+
+
 "inoremap <C-S-Up> <Esc>:m-2<CR>
 "inoremap <C-S-Down> <Esc>:m+<CR>
 
