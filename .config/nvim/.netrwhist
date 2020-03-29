@@ -1,5 +1,10 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =5
+let g:netrw_dirhistcnt =0
+let g:netrw_dirhist_0='/home/thiagomm/.vim/tabindent'
+let g:netrw_dirhist_9='/home/thiagomm/.vim'
+let g:netrw_dirhist_8='/home/thiagomm/javascript'
+let g:netrw_dirhist_7='/home/thiagomm'
+let g:netrw_dirhist_6='/home/thiagomm/.vim'
 let g:netrw_dirhist_5='/home/thiagomm/.config/i3'
 let g:netrw_dirhist_4='/home/thiagomm/KDE/default/.vim/plugged/vim-monokai-pro/colors'
 let g:netrw_dirhist_3='/home/thiagomm/KDE/default/.vim/plugged/vim-monokai-pro'
