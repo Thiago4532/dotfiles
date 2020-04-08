@@ -1,6 +1,6 @@
 call plug#begin()
 
-Plug 'jiangmiao/auto-pairs'
+Plug 'Raimondi/delimitMate'
 Plug 'itchyny/lightline.vim'
 Plug 'Valloric/vim-operator-highlight'
 Plug 'phanviet/vim-monokai-pro'
@@ -11,16 +11,19 @@ Plug 'ctrlpvim/ctrlp.vim'
 call plug#end()
 
 let g:lightline = {
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ], [ 'statuslinetabs' ] ]
+	  \ 'active': {
+	  \  'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ], [ 'statuslinetabs' ] ],
+	  \  'right': [ [ 'lineinfo' ],
+	  \             [ 'percent' ],
+	  \             [ 'fileformat', 'fileencoding', 'filetype' ] ] 
       \ },
-      \ 'component_expand': {
-      \   'statuslinetabs': 'LightlineStatuslineTabs',
+      \ 'component_function': {
+      \   'statuslinetabs': 'LightlineStatuslineTabs'
       \ },
       \ }
 
 function! LightlineStatuslineTabs() abort
-  return join(map(range(1, tabpagenr('$')),
+  return "-> " . join(map(range(1, tabpagenr('$')),
         \ '(v:val == tabpagenr() ? "\uf15b " : "") . lightline#tab#filename(v:val)'), " \u2b81 ")
 endfunction
 
@@ -99,4 +102,18 @@ hi Normal ctermbg=NONE guibg=NONE
 hi NonText ctermbg=NONE guibg=NONE
 hi LineNr guibg=NONE guifg=#7c74b3
 
+let delimitMate_expand_cr = 1
+let delimitMate_expand_space = 1
 "set guicursor=
+"let g:ycm_autoclose_preview_window_after_insertion = 1
+"set completeopt-=preview
+"let g:ycm_add_preview_to_completeopt = 0
+
+"let g:ycm_min_num_of_chars_for_completion = 4
+"let g:ycm_min_num_identifier_candidate_chars = 4
+"let g:ycm_filetype_whitelist = {'javascript': 1}
+"let g:ycm_auto_trigger = 1
+"let g:ctrlp_prompt_mappings = {
+"    \ 'AcceptSelection("e")': ['<2-LeftMouse>'],
+"    \ 'AcceptSelection("t")': ['<cr>'],
+"    \ }

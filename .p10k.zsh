@@ -594,11 +594,11 @@
 
   ##################################[ context: user@hostname ]##################################
   # Context color when running with privileges.
-  typeset -g POWERLEVEL9K_CONTEXT_ROOT_FOREGROUND=013
+  typeset -g POWERLEVEL9K_CONTEXT_ROOT_FOREGROUND=005
   # Context color in SSH without privileges.
-  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_FOREGROUND=013
+  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_FOREGROUND=005
   # Default context color (no privileges, no SSH).
-  typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND=013
+  typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND=005
 
   # Context format when running with privileges: bold user.
   typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE='%B%n'
