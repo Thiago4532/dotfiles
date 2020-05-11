@@ -7,6 +7,7 @@ Plug 'phanviet/vim-monokai-pro'
 Plug 'preservim/nerdcommenter'
 Plug 'sheerun/vim-polyglot'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'arcticicestudio/nord-vim'
 
 call plug#end()
 

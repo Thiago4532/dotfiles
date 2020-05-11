@@ -78,6 +78,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 plugins=(git zsh-autosuggestions zsh-z)
 
 source $ZSH/oh-my-zsh.sh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # User configuration
 
@@ -107,6 +108,7 @@ source $ZSH/oh-my-zsh.sh
 setopt autocd
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=12"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -126,17 +128,13 @@ function buildr() {
 		"./$1"
 	fi
 }
+source /usr/share/doc/pkgfile/command-not-found.zsh
 
 alias redshift='redshift -x && redshift'
-
-# Blur {{{
-if [[ $(ps --no-header -p $PPID -o comm) =~ '^kitty$' ]]; then
-        for wid in $(xdotool search --pid $PPID); do
-            xprop -f _KDE_NET_WM_BLUR_BEHIND_REGION 32c -set _KDE_NET_WM_BLUR_BEHIND_REGION 0 -id $wid; done
-fi
 
 
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 
 # Kitty SSH
 alias tssh='TERM=xterm-256color ssh'
+
