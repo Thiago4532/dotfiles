@@ -616,7 +616,7 @@
   # Custom prefix.
   # typeset -g POWERLEVEL9K_CONTEXT_PREFIX='%f%002F\uF312 '
   # Custom suffix.
-  typeset -g POWERLEVEL9K_CONTEXT_SUFFIX=' %B%231Fin%f'
+  typeset -g POWERLEVEL9K_CONTEXT_SUFFIX=' %231Fin%f'
 
   ###[ virtualenv: python virtual environment (https://docs.python.org/3/library/venv.html) ]###
   # Python virtual environment color.

@@ -21,7 +21,9 @@ let g:lightline = {
       \ 'component_function': {
       \   'statuslinetabs': 'LightlineStatuslineTabs'
       \ },
+	  \ 'colorscheme': 'nord',
       \ }
+
 
 function! LightlineStatuslineTabs() abort
   return "-> " . join(map(range(1, tabpagenr('$')),
@@ -98,10 +100,14 @@ nm <silent> <F1> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name")
 set mouse=a
 set number
 set termguicolors
-colorscheme monokai_pro
-hi Normal ctermbg=NONE guibg=NONE
-hi NonText ctermbg=NONE guibg=NONE
-hi LineNr guibg=NONE guifg=#7c74b3
+
+"colorscheme nord
+colorscheme monokai_nord
+
+
+let g:ophigh_color_gui = "#8fbcbb"
+"hi LineNr guibg=NONE guifg=#7c74b3
+"colorscheme nord
 
 let delimitMate_expand_cr = 1
 let delimitMate_expand_space = 1
