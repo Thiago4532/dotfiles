@@ -13,7 +13,8 @@ To ignore README.md in local repository
 dotfiles update-index --assume-unchanged README.md
 ```
 
-Install plugins to vim using vim-plug.
+Install plugins to vim using vim-plug and coc-nvim.
 ```
 :PlugInstall
+:CocInstall
 ```
