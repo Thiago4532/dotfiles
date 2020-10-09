@@ -1,0 +1,7 @@
+{
+	"diagnostic.enableSign": true,
+	"clangd.arguments": ["-header-insertion=never"],
+	"clangd.semanticHighlighting": true,
+	"rust-analyzer.serverPath": "/usr/bin/rust-analyzer"
+}
+
