@@ -1,6 +1,6 @@
-#!/bin/zsh
+#!/bin/bash
+alias ls='ls --color=auto'
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 alias redsh='redshift -x && redshift'
 alias tssh='TERM=xterm-256color ssh'
 alias kssh='kitty +kitten ssh'
-alias ls='ls --color=auto'
