@@ -10,7 +10,8 @@ dotfiles config --local status.showUntrackedFiles no
 ```  
 To ignore README.md in local repository
 ```bash
-dotfiles update-index --assume-unchanged README.md
+dotfiles config core.sparsecheckout true
+modify ```.git/info/sparse-checkout```
 ```
 
 Install plugins to vim using vim-plug and coc-nvim.
