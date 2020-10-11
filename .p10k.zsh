@@ -104,6 +104,7 @@
     # public_ip             # public IP address
     # proxy                 # system-wide http/https/ftp proxy
     battery                 # internal battery
+    my_ssh
     os_icon                 # os identifier
     # wifi                  # wifi speed
     # example               # example user-defined segment (see prompt_example function below)
@@ -876,7 +877,7 @@
   typeset -g POWERLEVEL9K_CONTEXT_ROOT_FOREGROUND=5
   typeset -g POWERLEVEL9K_CONTEXT_ROOT_BACKGROUND=0
   # Context color in SSH without privileges.
-  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_FOREGROUND=5
+  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_FOREGROUND=3
   typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_BACKGROUND=0
   # Default context color (no privileges, no SSH).
   typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND=3
@@ -885,7 +886,7 @@
   # Context format when running with privileges: user@hostname.
   typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE='%n'
   # Context format when in SSH without privileges: user@hostname.
-  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_TEMPLATE='%n (SSH)'
+  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_TEMPLATE='%n'
   # Default context format (no privileges, no SSH): user@hostname.
   typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE='%n'
 
@@ -1607,6 +1608,15 @@
     p10k segment -b 1 -f 3 -i '⭐' -t 'hello, %n'
   }
 
+  function prompt_my_ssh() {
+    if (($P9K_SSH)); then
+      p10k segment -b 0 -f 3 -t 'SSH'
+    fi
+  }
+
+  function instant_prompt_my_ssh() {
+    prompt_my_ssh
+  }
   # User-defined prompt segments may optionally provide an instant_prompt_* function. Its job
   # is to generate the prompt segment for display in instant prompt. See
   # https://github.com/romkatv/powerlevel10k/blob/master/README.md#instant-prompt.
