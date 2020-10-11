@@ -5,14 +5,47 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# History configuration
+HISTFILE=~/.zsh_history
+HISTSIZE=5000
+SAVEHIST=5000
+setopt extended_history
+
+# Shell options
+setopt autocd
+bindkey -e
+
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/thiagomm/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
 # Environment variables
 export ZLE_RPROMPT_INDENT=0
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=4"
+export ZSH_AUTOSUGGEST_ASYNC=1
+export ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+
+# Keybindings
+bindkey "^[[3~" delete-char # Delete
+bindkey "^[[1;5C" forward-word # Ctrl + Right
+bindkey "^[[1;5D" backward-word # Ctrl + Left
+bindkey "^H" backward-kill-word # Ctrl + Backspace
+bindkey "^[[3;5~" kill-word # Ctrl + Delete
+bindkey "^A" beggining-of-line
+bindkey "^[[H" beggining-of-line
+bindkey "^E" end-of-line
+bindkey "^[[F" end-of-line
 
 source ~/.zplug/init.zsh
 
 # Plugins
 
 zplug romkatv/powerlevel10k, as:theme, depth:1 # Powerlevel10k theme
+zplug zsh-users/zsh-autosuggestions
+zplug zsh-users/zsh-syntax-highlighting
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then

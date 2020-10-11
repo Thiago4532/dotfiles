@@ -60,7 +60,7 @@ augroup numbertoggle
 augroup END
 
 " Disable ESC delay
-set timeoutlen=200 ttimeoutlen=0
+set timeoutlen=500 ttimeoutlen=0
 
 " Statusline editor settings
 set laststatus=2
