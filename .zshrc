@@ -22,10 +22,7 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
-source ~/.zplug/init.zsh
-
 # Environment variables
-export KEYTIMEOUT=1
 export ZLE_RPROMPT_INDENT=0
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=4"
 export ZSH_AUTOSUGGEST_ASYNC=1
@@ -44,10 +41,13 @@ bindkey "^[[F" end-of-line
 source /usr/share/fzf/key-bindings.zsh
 zstyle ':fzf-tab:*' continuous-trigger tab
 
+source ~/.zplug/init.zsh
+
 # Plugins
 zplug romkatv/powerlevel10k, as:theme, depth:1 # Powerlevel10k theme
 zplug zsh-users/zsh-autosuggestions
 zplug zsh-users/zsh-syntax-highlighting
+zplug zsh-users/zsh-completions
 zplug Aloxaf/fzf-tab
 
 # Then, source plugins and add commands to $PATH
