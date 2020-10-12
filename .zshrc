@@ -41,7 +41,10 @@ bindkey "^A" beggining-of-line
 bindkey "^[[H" beggining-of-line
 bindkey "^E" end-of-line
 bindkey "^[[F" end-of-line
-source /usr/share/fzf/key-bindings.zsh
+
+[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh || \
+[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh || \
+echo "No fzf keybindings!"
 zstyle ':fzf-tab:*' continuous-trigger tab
 
 # Plugins

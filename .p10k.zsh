@@ -1623,8 +1623,11 @@
       if [[ $P9K_OS_ICON == '' ]]; then
         typeset -g P9K_MY_OS_BACKGROUND=8
         typeset -g P9K_MY_OS_FOREGROUND=6
+      elif [[ $P9K_OS_ICON == '' ]]; then
+        typeset -g P9K_MY_OS_BACKGROUND=8
+        typeset -g P9K_MY_OS_FOREGROUND=6
       else
-        typeset -g P9K_MY_OS_BACKGROUND='black'
+        typeset -g P9K_MY_OS_BACKGROUND=8
         typeset -g P9K_MY_OS_FOREGROUND='white'
       fi
     fi
