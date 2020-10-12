@@ -22,7 +22,10 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
+source ~/.zplug/init.zsh
+
 # Environment variables
+export KEYTIMEOUT=1
 export ZLE_RPROMPT_INDENT=0
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=4"
 export ZSH_AUTOSUGGEST_ASYNC=1
@@ -38,28 +41,27 @@ bindkey "^A" beggining-of-line
 bindkey "^[[H" beggining-of-line
 bindkey "^E" end-of-line
 bindkey "^[[F" end-of-line
-
-source ~/.zplug/init.zsh
+source /usr/share/fzf/key-bindings.zsh
+zstyle ':fzf-tab:*' continuous-trigger tab
 
 # Plugins
-
 zplug romkatv/powerlevel10k, as:theme, depth:1 # Powerlevel10k theme
 zplug zsh-users/zsh-autosuggestions
 zplug zsh-users/zsh-syntax-highlighting
-
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
-fi
+zplug Aloxaf/fzf-tab
 
 # Then, source plugins and add commands to $PATH
 zplug load
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Functions
+
+function mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+compdef _directories mkcd
 
 # Aliases
 source ~/.zsh_aliases

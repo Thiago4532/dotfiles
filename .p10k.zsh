@@ -105,7 +105,7 @@
     # proxy                 # system-wide http/https/ftp proxy
     battery                 # internal battery
     my_ssh
-    os_icon                 # os identifier
+    my_os_icon              # os identifier (custom)
     # wifi                  # wifi speed
     # example               # example user-defined segment (see prompt_example function below)
   )
@@ -179,10 +179,10 @@
 
   #################################[ os_icon: os identifier ]##################################
   # OS identifier color.
-  typeset -g POWERLEVEL9K_OS_ICON_FOREGROUND=12
-  typeset -g POWERLEVEL9K_OS_ICON_BACKGROUND=8
+  #typeset -g POWERLEVEL9K_OS_ICON_FOREGROUND=12
+  #typeset -g POWERLEVEL9K_OS_ICON_BACKGROUND=8
   # Custom icon.
-  # typeset -g POWERLEVEL9K_OS_ICON_CONTENT_EXPANSION='⭐'
+  #typeset -g POWERLEVEL9K_OS_ICON_CONTENT_EXPANSION='⭐'
   #typeset -g POWERLEVEL9K_OS_ICON_PREFIX=' '
   #typeset -g POWERLEVEL9K_OS_ICON_SUFFIX=' '
 
@@ -1617,6 +1617,24 @@
   function instant_prompt_my_ssh() {
     prompt_my_ssh
   }
+
+  function prompt_my_os_icon() {
+    if ! [[ -v P9K_MY_OS_FOREGROUND ]]; then
+      if [[ $P9K_OS_ICON == '' ]]; then
+        typeset -g P9K_MY_OS_BACKGROUND=8
+        typeset -g P9K_MY_OS_FOREGROUND=6
+      else
+        typeset -g P9K_MY_OS_BACKGROUND='black'
+        typeset -g P9K_MY_OS_FOREGROUND='white'
+      fi
+    fi
+    p10k segment -b $P9K_MY_OS_BACKGROUND -f $P9K_MY_OS_FOREGROUND -t $P9K_OS_ICON
+  }
+
+  function instant_prompt_my_os_icon() {
+    prompt_my_os_icon
+  }
+
   # User-defined prompt segments may optionally provide an instant_prompt_* function. Its job
   # is to generate the prompt segment for display in instant prompt. See
   # https://github.com/romkatv/powerlevel10k/blob/master/README.md#instant-prompt.
