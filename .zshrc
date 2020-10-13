@@ -47,7 +47,7 @@ else
   echo "No fzf keybindings!"
 fi
 
-zstyle ':fzf-tab:*' continuous-trigger tab
+#zstyle ':fzf-tab:*' continuous-trigger tab
 
 source ~/.zplug/init.zsh
 
