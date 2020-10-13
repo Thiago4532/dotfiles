@@ -34,8 +34,8 @@ bindkey "^[[1;5C" forward-word # Ctrl + Right
 bindkey "^[[1;5D" backward-word # Ctrl + Left
 bindkey "^H" backward-kill-word # Ctrl + Backspace
 bindkey "^[[3;5~" kill-word # Ctrl + Delete
-bindkey "^A" beggining-of-line
-bindkey "^[[H" beggining-of-line
+bindkey "^A" beginning-of-line
+bindkey "^[[H" beginning-of-line
 bindkey "^E" end-of-line
 bindkey "^[[F" end-of-line
 
