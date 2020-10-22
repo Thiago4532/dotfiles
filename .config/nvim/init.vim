@@ -3,6 +3,7 @@ let mapleader=','
 
 " === vim-airline ===
 
+let b:AutoPairsOpenBalanceBlacklist = ['{']
 let g:airline_powerline_fonts = 1
 let g:airline_highlighting_cache = 1
 let g:airline_skip_empty_sections = 1
@@ -15,6 +16,8 @@ let g:airline#extensions#default#layout = [['a', 'b', 'c'], ['x', 'z', 'warning'
 let g:airline#extensions#whitespace#enabled = 0
 
 " =/= vim-airline =/=
+
+let g:coc_global_extensions = ['coc-json', 'coc-clangd', 'coc-rust-analyzer']
 
 " === NERDTree ===
 
@@ -44,8 +47,8 @@ source ~/.config/nvim/plugins.vim
 
 " === Editor settings ===
 
-" Set TAB size to 4
-set tabstop=4 softtabstop=4 shiftwidth=4
+" Set TAB to 4 spaces
+set tabstop=8 softtabstop=4 shiftwidth=4 expandtab
 
 " Use arrows to jump lines
 set whichwrap+=<,>,[,]
@@ -66,8 +69,8 @@ set timeoutlen=500 ttimeoutlen=0
 set laststatus=2
 set noshowmode
 
-" Disable mouse features
-set mouse=
+" Enable mouse features
+set mouse=a
 
 " Do not wrap long lines
 "set nowrap
@@ -90,8 +93,12 @@ map <C-n> :NERDTreeToggle<CR>
 map <C-_> <plug>NERDCommenterToggle
 
 " Move line up/down ( Sublime Text 3 )
-"nnoremap <silent> <C-S-Up> :m-2<CR>
-"nnoremap <silent> <C-S-Down> :m+<CR>
+nnoremap <silent> <C-k> :m-2<CR>
+nnoremap <silent> <C-j> :m+<CR>
+
+" Duplicate line
+nnoremap <silent> <leader>d :t.<CR>
+nnoremap <silent> <leader>D :t-<CR>
 
 " Search highlight options
 nnoremap <silent> <F3> :noh<CR>
@@ -99,21 +106,21 @@ nnoremap <silent> <F4> :set ic<CR>
 nnoremap <silent> <F5> :set noic<CR>
 
 " Disable arrow keys
-nnoremap <Left> :echo "No left for you!"<CR>
-vnoremap <Left> :<C-u>echo "No left for you!"<CR>
-inoremap <Left> <C-o>:echo "No left for you!"<CR>
+"nnoremap <Left> :echo "No left for you!"<CR>
+"vnoremap <Left> :<C-u>echo "No left for you!"<CR>
+"inoremap <Left> <C-o>:echo "No left for you!"<CR>
 
-nnoremap <Down> :echo "No down for you!"<CR>
-vnoremap <Down> :<C-u>echo "No down for you!"<CR>
-inoremap <Down> <C-o>:echo "No down for you!"<CR>
+"nnoremap <Down> :echo "No down for you!"<CR>
+"vnoremap <Down> :<C-u>echo "No down for you!"<CR>
+"inoremap <Down> <C-o>:echo "No down for you!"<CR>
 
-nnoremap <Up> :echo "No up for you!"<CR>
-vnoremap <Up> :<C-u>echo "No up for you!"<CR>
-inoremap <Up> <C-o>:echo "No up for you!"<CR>
+"nnoremap <Up> :echo "No up for you!"<CR>
+"vnoremap <Up> :<C-u>echo "No up for you!"<CR>
+"inoremap <Up> <C-o>:echo "No up for you!"<CR>
 
-nnoremap <Right> :echo "No right for you!"<CR>
-vnoremap <Right> :<C-u>echo "No right for you!"<CR>
-inoremap <Right> <C-o>:echo "No right for you!"<CR>
+"nnoremap <Right> :echo "No right for you!"<CR>
+"vnoremap <Right> :<C-u>echo "No right for you!"<CR>
+"inoremap <Right> <C-o>:echo "No right for you!"<CR>
 
 " Move between buffers using Control+Shift+Arrows
 "nnoremap <silent> <C-S-Left> :bp<CR>
@@ -122,10 +129,10 @@ inoremap <Right> <C-o>:echo "No right for you!"<CR>
 nnoremap <silent> <C-h> :bp<CR>
 nnoremap <silent> <C-l> :bn<CR>
 
-nnoremap <silent> <S-Up> :echo "Nope!."<CR>
-nnoremap <silent> <S-Down> :echo "Nope!."<CR>
-nnoremap <silent> <S-Left> :echo "Nope!."<CR>
-nnoremap <silent> <S-Right> :echo "Nope!."<CR>
+"nnoremap <silent> <S-Up> :echo "Nope!."<CR>
+"nnoremap <silent> <S-Down> :echo "Nope!."<CR>
+"nnoremap <silent> <S-Left> :echo "Nope!."<CR>
+"nnoremap <silent> <S-Right> :echo "Nope!."<CR>
 
 " Vertical scrolling using Control + Arrows
 "nnoremap <C-Down> <C-e>
@@ -185,4 +192,5 @@ hi link LspCxxHlSymStruct cppSTLType
 hi link LspCxxHlSymEnum cppSTLType
 hi link LspCxxHlSymTypeAlias cppSTLType
 hi link LspCxxHlSymTypeParameter cppSTLType
+hi link LspCxxHlGroupMemberVariable Normal
 "hi link LspCxxHlSymMacro Constant

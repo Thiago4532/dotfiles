@@ -9,7 +9,7 @@ fi
 HISTFILE=~/.zsh_history
 HISTSIZE=5000
 SAVEHIST=5000
-setopt extended_history
+setopt incappendhistory
 
 # Shell options
 setopt autocd
@@ -57,6 +57,7 @@ zplug zsh-users/zsh-autosuggestions
 zplug zsh-users/zsh-syntax-highlighting
 zplug zsh-users/zsh-completions
 zplug Aloxaf/fzf-tab
+[ -f /usr/share/doc/pkgfile/command-not-found.zsh ] && source /usr/share/doc/pkgfile/command-not-found.zsh
 
 # Then, source plugins and add commands to $PATH
 zplug load
@@ -67,7 +68,7 @@ zplug load
 # Functions
 
 function mkcd() {
-    mkdir -p "$1" && cd "$1"
+  mkdir -p "$1" && cd "$1"
 }
 compdef _directories mkcd
 

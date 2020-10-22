@@ -103,8 +103,8 @@
     # ip                    # ip address and bandwidth usage for a specified network interface
     # public_ip             # public IP address
     # proxy                 # system-wide http/https/ftp proxy
-    battery                 # internal battery
     my_ssh
+    battery                 # internal battery
     my_os_icon              # os identifier (custom)
     # wifi                  # wifi speed
     # example               # example user-defined segment (see prompt_example function below)
