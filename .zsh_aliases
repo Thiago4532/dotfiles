@@ -1,6 +1,6 @@
 #!/bin/zsh
 alias sudo='sudo '
-command -v exa > /dev/null && alias ls='exa'
+command -v exa > /dev/null && alias ls='exa' || alias ls='ls --color=auto'
 command -v rg > /dev/null && alias grep='rg'
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 alias redsh='redshift -x && redshift'
