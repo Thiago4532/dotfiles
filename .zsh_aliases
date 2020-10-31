@@ -1,5 +1,7 @@
-#!/bin/bash
-alias ls='ls --color=auto'
+#!/bin/zsh
+alias sudo='sudo '
+command -v exa > /dev/null && alias ls='exa'
+command -v rg > /dev/null && alias grep='rg'
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 alias redsh='redshift -x && redshift'
 alias tssh='TERM=xterm-256color \ssh'

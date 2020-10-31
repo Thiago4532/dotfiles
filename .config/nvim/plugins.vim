@@ -8,7 +8,6 @@ Plug 'jackguo380/vim-lsp-cxx-highlight' " Semantic syntax highlighting for C/C++
 Plug 'Thiago4532/vim-operator-highlight' " Operator highlighting
 
 "" UI
-Plug 'itchyny/lightline.vim' " Lightline VIM
 Plug 'vim-airline/vim-airline' " vim-airline
 Plug 'vim-airline/vim-airline-themes' " themes for vim-airline
 Plug 'arcticicestudio/nord-vim' " Vim Nord Theme
@@ -20,8 +19,10 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'} " coc-nvim: LSP support, VSCode 
 
 "" Editing Plugins
 Plug 'Krasjet/auto.pairs'
+"Plug 'tmsvg/pear-tree'
 Plug 'preservim/nerdtree' " File explorer
 "Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'preservim/nerdcommenter'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  } " Markdown
 
 call plug#end()

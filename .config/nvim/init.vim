@@ -62,6 +62,11 @@ augroup numbertoggle
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
 
+" Disable coc-nvim when using markdown
+autocmd FileType markdown let b:coc_suggest_disable = 1
+
+autocmd FileType markdown let b:AutoPairsSingleQuoteBalanceCheck = 0
+
 " Disable ESC delay
 set timeoutlen=500 ttimeoutlen=0
 
@@ -105,40 +110,8 @@ nnoremap <silent> <F3> :noh<CR>
 nnoremap <silent> <F4> :set ic<CR>
 nnoremap <silent> <F5> :set noic<CR>
 
-" Disable arrow keys
-"nnoremap <Left> :echo "No left for you!"<CR>
-"vnoremap <Left> :<C-u>echo "No left for you!"<CR>
-"inoremap <Left> <C-o>:echo "No left for you!"<CR>
-
-"nnoremap <Down> :echo "No down for you!"<CR>
-"vnoremap <Down> :<C-u>echo "No down for you!"<CR>
-"inoremap <Down> <C-o>:echo "No down for you!"<CR>
-
-"nnoremap <Up> :echo "No up for you!"<CR>
-"vnoremap <Up> :<C-u>echo "No up for you!"<CR>
-"inoremap <Up> <C-o>:echo "No up for you!"<CR>
-
-"nnoremap <Right> :echo "No right for you!"<CR>
-"vnoremap <Right> :<C-u>echo "No right for you!"<CR>
-"inoremap <Right> <C-o>:echo "No right for you!"<CR>
-
-" Move between buffers using Control+Shift+Arrows
-"nnoremap <silent> <C-S-Left> :bp<CR>
-"nnoremap <silent> <C-S-Right> :bn<CR>
-
 nnoremap <silent> <C-h> :bp<CR>
 nnoremap <silent> <C-l> :bn<CR>
-
-"nnoremap <silent> <S-Up> :echo "Nope!."<CR>
-"nnoremap <silent> <S-Down> :echo "Nope!."<CR>
-"nnoremap <silent> <S-Left> :echo "Nope!."<CR>
-"nnoremap <silent> <S-Right> :echo "Nope!."<CR>
-
-" Vertical scrolling using Control + Arrows
-"nnoremap <C-Down> <C-e>
-"nnoremap <C-Up> <C-y>
-"inoremap <C-Down> <C-e>
-"inoremap <C-Up> <C-y>
 
 " Horizontal scrolling using Control + Arrows
 nnoremap <C-Right> zL
