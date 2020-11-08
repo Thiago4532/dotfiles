@@ -1,0 +1,34 @@
+<h1 id="Thiago4532&amp;#39;s%20dotfiles">Thiago4532&#39;s dotfiles</h1>
+
+<p>Using git bare to manage dotfiles.</p>
+
+<h3 id="Cloning">Cloning</h3>
+
+<p>Clone the repository using <code>--bare</code> option:
+<code>bash
+git clone $URL --depth=1 --bare ~&#47;.dotfiles
+</code></p>
+
+<p>Configure git to show only tracked files:
+<code>bash
+alias dotfiles=&#39;&#47;usr&#47;bin&#47;git --git-dir=$HOME&#47;.dotfiles --work-tree=$HOME&#39; # Dotfiles
+dotfiles config --local status.showUntrackedFiles no
+</code></p>
+
+<h3 id="Zsh%20dotfiles">Zsh dotfiles</h3>
+
+<p>Install zplug to manage zsh plugins:
+<code>bash
+$ curl -sL --proto-redir -all,https https:&#47;&#47;raw.githubusercontent.com&#47;zplug&#47;installer&#47;master&#47;installer.zsh | zsh
+</code></p>
+
+<p>After that, run <code>zplug install</code> to install all zsh plugins.</p>
+
+<h3 id="Neovim%20dotfiles">Neovim dotfiles</h3>
+
+<p>Install plugins to nvim using vim-plug.
+<code>
+:PlugInstall
+</code></p>
+
+<p>Restart neovim to install coc-nvim plugins.</p>

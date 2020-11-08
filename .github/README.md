@@ -4,7 +4,7 @@ Using git bare to manage dotfiles.
 
 ### Cloning
 
-Clone the repository using ```--bare``` option:
+Clone the repository using `--bare` option:
 ```bash
 git clone $URL --depth=1 --bare ~/.dotfiles
 ```
@@ -22,7 +22,7 @@ Install zplug to manage zsh plugins:
 $ curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 ```
 
-After that, run ```zplug install``` to install all zsh plugins.
+After that, run `zplug install` to install all zsh plugins.
 
 ### Neovim dotfiles
 

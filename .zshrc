@@ -7,8 +7,8 @@ fi
 
 # History configuration
 HISTFILE=~/.zsh_history
-HISTSIZE=5000
-SAVEHIST=5000
+HISTSIZE=10000
+SAVEHIST=10000
 setopt incappendhistory
 
 # Shell options
@@ -52,12 +52,14 @@ fi
 source ~/.zplug/init.zsh
 
 # Plugins
+[ -f /usr/share/doc/pkgfile/command-not-found.zsh ] && source /usr/share/doc/pkgfile/command-not-found.zsh
+command -v fasd > /dev/null && source ~/.fasd.zsh
+
 zplug romkatv/powerlevel10k, as:theme, depth:1 # Powerlevel10k theme
 zplug zsh-users/zsh-autosuggestions
 zplug zsh-users/zsh-syntax-highlighting
 zplug zsh-users/zsh-completions
 zplug Aloxaf/fzf-tab
-[ -f /usr/share/doc/pkgfile/command-not-found.zsh ] && source /usr/share/doc/pkgfile/command-not-found.zsh
 
 # Then, source plugins and add commands to $PATH
 zplug load
@@ -65,12 +67,8 @@ zplug load
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# Functions
-
-function mkcd() {
-  mkdir -p "$1" && cd "$1"
-}
-compdef _directories mkcd
-
 # Aliases
 source ~/.zsh_aliases
+
+# Functions
+source ~/.zsh_functions

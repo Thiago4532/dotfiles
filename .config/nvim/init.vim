@@ -56,6 +56,10 @@ set whichwrap+=<,>,[,]
 " Enable line numbers
 set number relativenumber
 
+" Enable .nvimrc files
+set exrc
+set secure
+
 augroup numbertoggle
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
@@ -78,7 +82,7 @@ set noshowmode
 set mouse=a
 
 " Do not wrap long lines
-"set nowrap
+set nowrap
 
 " Insensitive Case by default
 set ic
@@ -107,11 +111,11 @@ nnoremap <silent> <leader>D :t-<CR>
 
 " Search highlight options
 nnoremap <silent> <F3> :noh<CR>
-nnoremap <silent> <F4> :set ic<CR>
-nnoremap <silent> <F5> :set noic<CR>
+nnoremap <F4> :set ic<CR>
+nnoremap <F5> :set noic<CR>
 
-nnoremap <silent> <C-h> :bp<CR>
-nnoremap <silent> <C-l> :bn<CR>
+"nnoremap <silent> <C-h> :bp<CR>
+"nnoremap <silent> <C-l> :bn<CR>
 
 " Horizontal scrolling using Control + Arrows
 nnoremap <C-Right> zL
@@ -123,6 +127,8 @@ nm <silent> <F1> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name")
 	\ . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name")
 	\ . ">"<CR>
 
+
+nmap <F9> <Plug>MarkdownPreview
 
 " === UI ===
 
