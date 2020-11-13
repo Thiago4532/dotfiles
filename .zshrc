@@ -47,8 +47,6 @@ else
   echo "No fzf keybindings!"
 fi
 
-#zstyle ':fzf-tab:*' continuous-trigger tab
-
 source ~/.zplug/init.zsh
 
 # Plugins
@@ -56,10 +54,10 @@ source ~/.zplug/init.zsh
 command -v fasd > /dev/null && source ~/.fasd.zsh
 
 zplug romkatv/powerlevel10k, as:theme, depth:1 # Powerlevel10k theme
-zplug zsh-users/zsh-autosuggestions
-zplug zsh-users/zsh-syntax-highlighting
 zplug zsh-users/zsh-completions
 zplug Aloxaf/fzf-tab
+zplug zsh-users/zsh-autosuggestions
+zplug zsh-users/zsh-syntax-highlighting
 
 # Then, source plugins and add commands to $PATH
 zplug load

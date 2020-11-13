@@ -1,4 +1,27 @@
 function mkcd() {
-  mkdir -p "$1" && cd "$1"
+    mkdir -p "$1" && cd "$1"
 }
 compdef _directories mkcd
+
+function noicMD() {
+    local CONFIG
+    CONFIG=$HOME/.config
+
+    if [ $# -lt 2 ]; then
+        echo "$fg_bold[white]USAGE: $fg_no_bold[white]$0 PROBLEM_NAME file" >&2
+        return 64
+    fi
+    if ! [ -f "$2" ]; then
+        echo "$fg_bold[white]$0: $fg[red]error: $fg_no_bold[white]$2: No such file or directory!" >&2
+        return 69
+    fi
+
+    # import header
+   [ -f $CONFIG/noicMD/header.html ] && cat $CONFIG/noicMD/header.html
+
+    lowdown "$2" | sed -e 's/\$/\$\$/g' -e 's|id="problem_title">problem_title|id="problem_title" align=center>'"$1"'|g'
+    
+    # import footer
+   [ -f $CONFIG/noicMD/footer.html ] && cat $CONFIG/noicMD/footer.html
+}
+compdef _files noicMD
