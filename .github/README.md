@@ -9,10 +9,11 @@ Clone the repository using `--bare` option:
 git clone $URL --depth=1 --bare ~/.dotfiles
 ```
 
-Configure git to show only tracked files:
+Configure git to show only tracked files and checkout files:
 ```bash
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME' # Dotfiles
 dotfiles config --local status.showUntrackedFiles no
+dotfiles checkout --force
 ```
 
 ### Zsh dotfiles
