@@ -41,7 +41,8 @@ let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
 let g:strip_whitespace_confirm=0
 " =/= vim-better-whitespace =/=
-
+"let g:lsp_cxx_hl_log_file = '/tmp/vim-lsp-cxx-hl.log'
+"let g:lsp_cxx_hl_verbose_log = 1
 " Enable plugins (vim-plug)
 source ~/.config/nvim/plugins.vim
 
@@ -77,6 +78,10 @@ set timeoutlen=500 ttimeoutlen=0
 " Statusline editor settings
 set laststatus=2
 set noshowmode
+set noruler
+
+" Temporary fix
+set shortmess+=a
 
 " Enable mouse features
 set mouse=a

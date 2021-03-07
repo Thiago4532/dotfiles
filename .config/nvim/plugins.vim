@@ -11,16 +11,15 @@ Plug 'Thiago4532/vim-operator-highlight' " Operator highlighting
 Plug 'vim-airline/vim-airline' " vim-airline
 Plug 'vim-airline/vim-airline-themes' " themes for vim-airline
 Plug 'arcticicestudio/nord-vim' " Vim Nord Theme
+Plug 'dracula/vim'
 Plug 'ryanoasis/vim-devicons' " Icons
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight' " NERDTree syntax highlight
-Plug 'morhetz/gruvbox'
 
 "" Linting
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " coc-nvim: LSP support, VSCode Extensions
 
 "" Editing Plugins
 Plug 'Krasjet/auto.pairs'
-"Plug 'tmsvg/pear-tree'
 Plug 'preservim/nerdtree' " File explorer
 "Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'preservim/nerdcommenter'
