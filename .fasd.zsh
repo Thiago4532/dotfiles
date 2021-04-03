@@ -10,7 +10,7 @@ add-zsh-hook preexec _fasd_preexec
 
 # fasd aliases
 
-alias v='fasd -e nvim'
-alias vv='fasd -i -e nvim'
-alias o='fasd -e xdg-open'
-alias oo='fasd -i -e xdg-open'
+alias v='fasd -f -e nvim'
+alias vv='fasd -a -e nvim'
+alias o='fasd -a -e xdg-open'
+alias oo='fasd -a -i -e xdg-open'

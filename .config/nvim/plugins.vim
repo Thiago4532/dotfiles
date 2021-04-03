@@ -1,6 +1,8 @@
 " vim-plug
-
 call plug#begin()
+
+"" Linting
+Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
 
 " Syntax Highlight
 Plug 'sheerun/vim-polyglot' " Support many languages
@@ -11,12 +13,12 @@ Plug 'Thiago4532/vim-operator-highlight' " Operator highlighting
 Plug 'vim-airline/vim-airline' " vim-airline
 Plug 'vim-airline/vim-airline-themes' " themes for vim-airline
 Plug 'arcticicestudio/nord-vim' " Vim Nord Theme
+Plug 'connorholyday/vim-snazzy'
 Plug 'dracula/vim'
+Plug 'morhetz/gruvbox'
 Plug 'ryanoasis/vim-devicons' " Icons
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight' " NERDTree syntax highlight
 
-"" Linting
-Plug 'neoclide/coc.nvim', {'branch': 'release'} " coc-nvim: LSP support, VSCode Extensions
 
 "" Editing Plugins
 Plug 'Krasjet/auto.pairs'

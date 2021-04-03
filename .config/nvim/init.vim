@@ -17,7 +17,7 @@ let g:airline#extensions#whitespace#enabled = 0
 
 " =/= vim-airline =/=
 
-let g:coc_global_extensions = ['coc-json', 'coc-clangd', 'coc-rust-analyzer']
+let g:coc_global_extensions = ['coc-json', 'coc-rust-analyzer']
 
 " === NERDTree ===
 
@@ -34,15 +34,14 @@ let g:NERDTreePatternMatchHighlightFullName = 1
 
 " =/= NERDTree =/=
 
-" === vim-better-whitespace
+" === vim-better-whitespace ===
 let g:better_whitespace_guicolor = "#E06C75"
 
 let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
 let g:strip_whitespace_confirm=0
 " =/= vim-better-whitespace =/=
-"let g:lsp_cxx_hl_log_file = '/tmp/vim-lsp-cxx-hl.log'
-"let g:lsp_cxx_hl_verbose_log = 1
+
 " Enable plugins (vim-plug)
 source ~/.config/nvim/plugins.vim
 
@@ -79,9 +78,6 @@ set timeoutlen=500 ttimeoutlen=0
 set laststatus=2
 set noshowmode
 set noruler
-
-" Temporary fix
-set shortmess+=a
 
 " Enable mouse features
 set mouse=a
@@ -137,6 +133,9 @@ nmap <F9> <Plug>MarkdownPreview
 
 " === UI ===
 
+" Set window's title after entering NVIM
+autocmd VimEnter * set title
+
 " Use gui colors instead of terminal colors
 set termguicolors
 
@@ -147,34 +146,40 @@ syntax on
 
 " Vim colorscheme
 
-"let g:onedark_terminal_italics=1
-colorscheme nord
-hi Normal guibg=None ctermbg=None
-hi CursorLineNr guifg=#81A1C1 gui=bold
+"colorscheme nord
+let g:gruvbox_italic=1
+colorscheme gruvbox
+
+" Color variables
+let g:vim_background = synIDattr(synIDtrans(hlID("Normal")), "bg#")
+
+"hi Normal guibg=None ctermbg=None
+"hi CursorLineNr guifg=#81A1C1 gui=bold
 
 " coc-nvim highlight
 hi link SpecialChar Special
-hi CocWarningSign guifg=#ebcb8b
-hi CocErrorSign guifg=#bf616a
 
 " Operator highlight
-let g:ophigh_color_gui = "#81A1C1"
-let g:ophigh_color_gui_braces = "#D8DEE9"
+let g:ophigh_color_gui = "#8EC07C"
+let g:ophigh_color_gui_braces = "#ebdbb2"
 
 " vim-airline colorscheme
-let g:airline_theme="nord"
+let g:airline_theme="gruvbox"
 
 " Custom highlight
-hi Type gui=italic
-hi Pmenu guibg=#292d38 guifg=#ebcb8b
+"hi Type gui=italic
+"hi Pmenu guibg=#292d38 guifg=#ebcb8b
 
-hi link LspCxxHlGroupNamespace cppSTLnamespace
-hi clear cppSTLVariable
-hi cppSTLType guifg=#8fbcbb
-hi link LspCxxHlSymClass cppSTLType
-hi link LspCxxHlSymStruct cppSTLType
-hi link LspCxxHlSymEnum cppSTLType
-hi link LspCxxHlSymTypeAlias cppSTLType
-hi link LspCxxHlSymTypeParameter cppSTLType
-hi link LspCxxHlGroupMemberVariable Normal
-"hi link LspCxxHlSymMacro Constant
+hi default link LspCxxHlGroupNamespace cppSTLnamespace
+hi default link LspCxxHlSymVariable Normal
+"hi link LspCxxHlSymClass cppSTLType
+"hi link LspCxxHlSymStruct cppSTLType
+"hi link LspCxxHlSymEnum cppSTLType
+"hi link LspCxxHlSymTypeAlias cppSTLType
+"hi link LspCxxHlSymTypeParameter cppSTLType
+hi link LspCxxHlGroupMemberVariable GruvboxBlue
+hi link cppSTLVariable LspCxxHlSymVariable
+
+" temp solution
+"set verbose=10
+"set vfile=/dev/null

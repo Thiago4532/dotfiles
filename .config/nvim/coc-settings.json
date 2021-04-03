@@ -1,7 +1,21 @@
 {
-	"diagnostic.enableSign": true,
-        "clangd.arguments": ["-header-insertion=never"],
-	"clangd.semanticHighlighting": true,
-	"rust-analyzer.serverPath": "/usr/bin/rust-analyzer"
+    "diagnostic.enableSign": true,
+    "languageserver": {
+        "ccls": {
+            "command": "ccls",
+            "filetypes": ["c", "cpp", "objc", "objcpp"],
+            "rootPatterns": [".ccls", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+            "initializationOptions": {
+                "cache": {
+                    "directory": "/tmp/ccls"
+                },
+                "clang": {
+                    "extraArgs": [
+                        "-std=c++17"
+                    ]
+                },
+                "highlight": { "lsRanges" : true }
+            }
+        }
+    }
 }
-
