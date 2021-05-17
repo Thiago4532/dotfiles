@@ -1,5 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =1
+let g:netrw_dirhistcnt =2
+let g:netrw_dirhist_2='/home/thiagomm/Documents/cptl'
 let g:netrw_dirhist_1='/home/thiagomm'
 let g:netrw_dirhist_0='/home/thiagomm/teste'
 let g:netrw_dirhist_9='/home/thiagomm'
@@ -9,4 +10,3 @@ let g:netrw_dirhist_6='/home/thiagomm/.mozilla'
 let g:netrw_dirhist_5='/home/thiagomm/.mozilla/firefox'
 let g:netrw_dirhist_4='/home/thiagomm/CP-Problems/Codeforces/1187/C'
 let g:netrw_dirhist_3='/home/thiagomm/.config/latte'
-let g:netrw_dirhist_2='/boot/grub/fonts'

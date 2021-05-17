@@ -1,4 +1,5 @@
 {
+    "signature.hideOnTextChange": true,
     "diagnostic.enableSign": true,
     "languageserver": {
         "ccls": {
@@ -8,12 +9,7 @@
             "initializationOptions": {
                 "cache": {
                     "directory": "/tmp/ccls"
-                },
-                "clang": {
-                    "extraArgs": [
-                        "-std=c++17"
-                    ]
-                },
+                }, 
                 "highlight": { "lsRanges" : true }
             }
         }

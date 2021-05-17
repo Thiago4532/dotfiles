@@ -98,6 +98,9 @@ set hidden
 
 " === Keybindings ===
 
+" Codeforces template
+nnoremap <silent> cpp ggdG:-1read ~/CP-Problems/Codeforces/base.cpp<CR>17zt23gg
+
 " Open NERDTree
 map <C-n> :NERDTreeToggle<CR>
 map <C-_> <plug>NERDCommenterToggle
@@ -146,15 +149,12 @@ syntax on
 
 " Vim colorscheme
 
-"colorscheme nord
 let g:gruvbox_italic=1
 colorscheme gruvbox
+"colorscheme onedark
 
 " Color variables
 let g:vim_background = synIDattr(synIDtrans(hlID("Normal")), "bg#")
-
-"hi Normal guibg=None ctermbg=None
-"hi CursorLineNr guifg=#81A1C1 gui=bold
 
 " coc-nvim highlight
 hi link SpecialChar Special
@@ -167,19 +167,8 @@ let g:ophigh_color_gui_braces = "#ebdbb2"
 let g:airline_theme="gruvbox"
 
 " Custom highlight
-"hi Type gui=italic
-"hi Pmenu guibg=#292d38 guifg=#ebcb8b
 
 hi default link LspCxxHlGroupNamespace cppSTLnamespace
 hi default link LspCxxHlSymVariable Normal
-"hi link LspCxxHlSymClass cppSTLType
-"hi link LspCxxHlSymStruct cppSTLType
-"hi link LspCxxHlSymEnum cppSTLType
-"hi link LspCxxHlSymTypeAlias cppSTLType
-"hi link LspCxxHlSymTypeParameter cppSTLType
 hi link LspCxxHlGroupMemberVariable GruvboxBlue
-hi link cppSTLVariable LspCxxHlSymVariable
-
-" temp solution
-"set verbose=10
-"set vfile=/dev/null
+hi link cppSTLVariable LspCxxHlSymVariable 
