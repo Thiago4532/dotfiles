@@ -28,10 +28,10 @@ compinit
 # End of lines added by compinstall
 
 # Environment variables
-export ZLE_RPROMPT_INDENT=0
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=4"
-export ZSH_AUTOSUGGEST_ASYNC=1
-export ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+ZLE_RPROMPT_INDENT=0
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=4"
+ZSH_AUTOSUGGEST_ASYNC=1
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
 # Keybindings
 bindkey "^[[3~" delete-char # Delete
