@@ -6,7 +6,7 @@ Using git bare to manage dotfiles.
 
 Clone the repository using `--bare` option:
 ```bash
-git clone $URL --depth=1 --bare ~/.dotfiles
+git clone https://github.com/Thiago4532/dotfiles --depth=1 --bare ~/.dotfiles
 ```
 
 Configure git to show only tracked files and checkout files:
