@@ -21,7 +21,7 @@ setopt autocd
 bindkey -e
 
 # The following lines were added by compinstall
-zstyle :compinstall filename '/home/thiagomm/.zshrc'
+zstyle :compinstall filename "$HOME/.zshrc"
 
 autoload -Uz compinit
 compinit
