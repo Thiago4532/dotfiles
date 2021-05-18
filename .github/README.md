@@ -19,8 +19,8 @@ dotfiles checkout --force
 ### Zsh dotfiles
 
 Install zplug to manage zsh plugins:
-```bash
-$ curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+```zsh
+curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 ```
 
 After that, run `zplug install` to install all zsh plugins.
