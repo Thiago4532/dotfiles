@@ -1,8 +1,3 @@
-#case $TERM in
-    #(|color(|?))(([Ekx]|dt|(ai|n)x)term|rxvt|screen*)*)
-        #TERM_BG_COLOR=$(~/Documents/oi.sh) && export TERM_BG_COLOR || unset TERM_BG_COLOR
-#esac
-
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -56,13 +51,15 @@ source ~/.zplug/init.zsh
 
 # Plugins
 [ -f /usr/share/doc/pkgfile/command-not-found.zsh ] && source /usr/share/doc/pkgfile/command-not-found.zsh
+[ -f /etc/zsh_command_not_found ] && source /etc/zsh_command_not_found
 command -v fasd > /dev/null && source ~/.fasd.zsh
 
 zplug romkatv/powerlevel10k, as:theme, depth:1 # Powerlevel10k theme
 zplug zsh-users/zsh-completions
 zplug Aloxaf/fzf-tab
 zplug zsh-users/zsh-autosuggestions
-zplug zsh-users/zsh-syntax-highlighting
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+#zplug zdharma/fast-syntax-highlighting
 
 # Then, source plugins and add commands to $PATH
 zplug load
