@@ -32,5 +32,3 @@ Install plugins to nvim using vim-plug.
 ```
 :PlugInstall
 ```
-
-Restart neovim to install coc-nvim plugins.
