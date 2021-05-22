@@ -25,7 +25,8 @@ curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/instal
 
 After that, run `zplug install` to install all zsh plugins.
 
-### Neovim dotfiles
+### Neovim dotfiles ( Lua )
+##### Requirements: neovim-nightly
 
 Install plugins to nvim using vim-plug.
 ```
