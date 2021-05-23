@@ -10,7 +10,7 @@ vim.g.AutoPairsOpenBalanceBlacklist = {'{'}
 vim.g.airline_powerline_fonts = 1
 vim.g.airline_highlighting_cache = 1
 vim.g.airline_skip_empty_sections = 1
-vim.g['airline#extensions#tabline#enabled'] = 1
+--vim.g['airline#extensions#tabline#enabled'] = 1
 
 vim.g['airline#extensions#default#layout'] = {{'a', 'b', 'c'}, {'x', 'z', 'warning', 'error'}}
 vim.g['airline#extensions#whitespace#enabled'] = 0
@@ -19,7 +19,7 @@ vim.g['airline#extensions#whitespace#enabled'] = 0
 vim.g.coc_global_extensions = {'coc-json', 'coc-rust-analyzer'}
 
 -- plugin: NERDTree
-vim.g.NERDTreeWinSize=28 -- Default NERDTree window's size
+vim.g.NERDTreeWinSize = 28 -- Default NERDTree window's size
 vim.g.NERDTreeMinimalUI = 1 -- Remove bookmarks and help text from NERDTree
 
 vim.g.NERDTreeFileExtensionHighlightFullName = 1
@@ -27,21 +27,31 @@ vim.g.NERDTreeExactMatchHighlightFullName = 1
 vim.g.NERDTreePatternMatchHighlightFullName = 1
 
 -- vim-plug: Source all plugins
-vim.cmd('source ~/.config/nvim/vimscript/plugins.vim')
+vim.cmd'source ~/.config/nvim/vimscript/plugins.vim'
 
 -- lsp: ccls setup
-local lspconfig = require'lspconfig'
-lspconfig.ccls.setup {
+require'lspconfig'.ccls.setup {
     init_options = {
-        compilationDatabaseDirectory = "build";
+        compilationDatabaseDirectory = 'build';
         index = {
             threads = 0;
         };
         highlight = {
             lsRanges = true;
-        }
+        };
+        cache = {
+            directory = vim.fn.expand('~') .. '/.cache/ccls-cache';
+        };
     }
 }
+
+--require'lspconfig'.clangd.setup{
+    --init_options = {
+        --clangd = {
+            --semanticHighlighting = true;
+        --};
+    --}
+--}
 
 -- autocmd: Markdown-only configurations
 vim.cmd([[ 
@@ -56,7 +66,7 @@ autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 ]])
 
 -- autocmd: Window's title
-vim.cmd('autocmd VimEnter * set title')
+vim.cmd'autocmd VimEnter * set title'
 
 -- editor: TAB -> 4 spaces 
 vim.bo.tabstop = 8
@@ -120,7 +130,8 @@ vim.o.termguicolors = true
 -- ui: Colorscheme
 vim.g.gruvbox_material_enable_bold = 1
 vim.g.gruvbox_material_enable_italic = 1
-vim.cmd('colorscheme gruvbox-material')
+vim.g.gruvbox_material_diagnostic_virtual_text = 'colored'
+vim.cmd'colorscheme gruvbox-material'
 vim.g.airline_theme = 'gruvbox_material'
 
 -- ui: Operator highlight colors
@@ -128,7 +139,7 @@ vim.g.airline_theme = 'gruvbox_material'
 --vim.g.ophigh_color_gui_braces = '#ebdbb2'
 
 -- ui: coc-nvim highlight
-vim.cmd('highlight link SpecialChar Special')
+vim.cmd'highlight link SpecialChar Special'
 
 -- ui: vim-lsp-cxx-highlight custom
 vim.cmd([[
@@ -137,4 +148,3 @@ highlight default link LspCxxHlSymVariable Normal
 highlight link LspCxxHlGroupMemberVariable GruvboxBlue
 highlight link cppSTLVariable LspCxxHlSymVariable
 ]])
-

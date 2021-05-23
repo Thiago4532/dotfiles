@@ -2,13 +2,14 @@
 call plug#begin()
 
 " Language Server Protocol
-"Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
 Plug 'neovim/nvim-lspconfig'
+
+"Plug 'kyazdani42/nvim-web-devicons'
+"Plug 'romgrk/barbar.nvim'
 
 " Syntax Highlight
 Plug 'sheerun/vim-polyglot' " Support many languages
 Plug 'jackguo380/vim-lsp-cxx-highlight' " Semantic syntax highlighting for C/C++
-"Plug 'Thiago4532/vim-operator-highlight' " Operator highlighting
 
 " UI
 Plug 'Thiago4532/dtbg.nvim' " Dynamic Terminal Background Color
@@ -28,6 +29,6 @@ Plug 'preservim/nerdcommenter'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  } " Markdown
 
 " Neovim LUA Development
-Plug 'nvim-lua/plenary.nvim' " All the lua functions I don't want to write twice
+Plug 'nvim-lua/plenary.nvim' 
 
 call plug#end()
