@@ -6,18 +6,6 @@ vim.g.mapleader = ','
 -- plugin: auto-pairs
 vim.g.AutoPairsOpenBalanceBlacklist = {'{'}
 
--- plugin: vim-airline
-vim.g.airline_powerline_fonts = 1
-vim.g.airline_highlighting_cache = 1
-vim.g.airline_skip_empty_sections = 1
---vim.g['airline#extensions#tabline#enabled'] = 1
-
-vim.g['airline#extensions#default#layout'] = {{'a', 'b', 'c'}, {'x', 'z', 'warning', 'error'}}
-vim.g['airline#extensions#whitespace#enabled'] = 0
-
--- plugin: coc-nvim
-vim.g.coc_global_extensions = {'coc-json', 'coc-rust-analyzer'}
-
 -- plugin: NERDTree
 vim.g.NERDTreeWinSize = 28 -- Default NERDTree window's size
 vim.g.NERDTreeMinimalUI = 1 -- Remove bookmarks and help text from NERDTree
@@ -31,6 +19,7 @@ vim.cmd'source ~/.config/nvim/vimscript/plugins.vim'
 
 -- lsp: ccls setup
 require'lspconfig'.ccls.setup {
+    on_init = require'teste'.init_handler;
     init_options = {
         compilationDatabaseDirectory = 'build';
         index = {
@@ -42,8 +31,24 @@ require'lspconfig'.ccls.setup {
         cache = {
             directory = vim.fn.expand('~') .. '/.cache/ccls-cache';
         };
+    };
+    no_wait = true;
+}
+
+-- lsp: jedi-language-server setup
+require'lspconfig'.jedi_language_server.setup {
+    on_init = require'teste'.init_handler;
+    no_wait = true;
+}
+
+-- plugin: lualine setup
+require'lualine'.setup {
+    options = {
+        theme = 'gruvbox_material';
     }
 }
+
+require'teste'.setup()
 
 --require'lspconfig'.clangd.setup{
     --init_options = {
