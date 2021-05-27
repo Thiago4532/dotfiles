@@ -23,8 +23,8 @@ map('n', '<F5>', ':set noic<CR>:echo "Case-sensitive"<CR>', opts)
 map('n', '<F9>', '<plug>MarkdownPreview', {})
 
 -- macro keybindings
---[[ map('n', '<leader>ro', ':enew<CR>:setlocal binary noeol buftype=nofile<CR>"rpggJ', opts)
-map('n', '<leader>rs', '^"rd$:bd<CR>', opts) ]]
+map ('n', '<leader>cr', ":<c-u><c-r><c-r>='let @q = '. string(getreg('q'))<cr><c-f><left>", opts)
+map ('n', 'cr', ":<C-U><C-R><C-R>='let @' . v:register . ' = ' . string(getreg())<CR><C-F><Left>", opts)
 
 -- lsp keybindings
 buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)

@@ -15,7 +15,7 @@ return {
     end,
     _call_exit = function(pid_list)
         if #pid_list > 0 then
-            uv.spawn('bin/amanda', { 
+            uv.spawn('bin/safelsp-kill', { 
                 args = pid_list;
                 detached = true;
                 cwd = source_path .. '../'
