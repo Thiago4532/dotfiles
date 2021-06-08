@@ -14,4 +14,4 @@ require'lspconfig'.ccls.setup {
     no_wait = true;
 }
 
-require'lspconfig'.jedi_language_server.setup {}
+require'lspconfig'.tsserver.setup{}

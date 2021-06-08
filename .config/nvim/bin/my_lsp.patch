@@ -1,0 +1,20 @@
+230a231
+>     no_wait         = { config.no_wait, "b", true };
+599a601,603
+> --@param no_wait (boolean) Do not wait the language server to exit
+> --- before closing NeoVim.
+> ---
+1220a1225,1233
+> 
+>   local pid_list = {}
+>   for client_id, client in pairs(active_clients) do
+>     if client.config.no_wait then
+>       pid_list[#pid_list + 1] = client.rpc.handle:get_pid() 
+>       active_clients[client_id] = nil
+>     end
+>   end
+> 
+1223a1237
+>   require'safelsp'._call_exit(pid_list)
+1536a1551
+> lsp._thiago_ = true

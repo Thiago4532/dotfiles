@@ -50,6 +50,9 @@ o.showtabline = 0
 -- Disable intro
 o.shortmess = o.shortmess .. 'I'
 
--- LSP Completion
+-- Omnicompletion menu
 bo.omnifunc, o.omnifunc = 'v:lua.vim.lsp.omnifunc', 'v:lua.vim.lsp.omnifunc'
 o.completeopt = 'menuone,noinsert,noselect'
+
+-- Split right
+o.splitright = true

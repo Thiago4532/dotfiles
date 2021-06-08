@@ -2,7 +2,6 @@
 call plug#begin()
 
 Plug 'tweekmonster/startuptime.vim'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 
 " Language Server Protocol
 Plug 'neovim/nvim-lspconfig'
@@ -17,12 +16,8 @@ Plug 'sainnhe/gruvbox-material'
 Plug 'joshdick/onedark.vim'
 Plug 'hoob3rt/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
-" Plug 'preservim/nerdtree'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'nvim-telescope/telescope.nvim'
-
-" Utility
-" Plug 'famiu/nvim-reload' " Reload plugins
 
 " Editing Plugins
 Plug 'Krasjet/auto.pairs'
@@ -31,5 +26,10 @@ Plug 'b3nj5m1n/kommentary'
 " Neovim LUA Development
 Plug 'nvim-lua/plenary.nvim' 
 Plug 'nvim-lua/popup.nvim'
+
+" Taking notes
+" Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+" Plug 'npxbr/glow.nvim', {'do': ':GlowInstall', 'branch': 'main'}
+Plug 'oberblastmeister/neuron.nvim', { 'branch': 'unstable' }
 
 call plug#end()

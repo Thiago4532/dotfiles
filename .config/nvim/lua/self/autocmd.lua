@@ -1,11 +1,5 @@
 local cmd = vim.cmd
 
--- autocmd: Markdown-only configurations
-cmd([[ 
-autocmd FileType markdown.mdx nnoremap <silent> <leader>cj :set filetype=javascript<CR>
-autocmd FileType markdown.mdx nnoremap <silent> <leader>cm :set filetype=markdown.mdx<CR>
-]])
-
 -- autocmd: Toggle 'relativenumber' when using INSERT mode
 cmd([[
 augroup numbertoggle
@@ -17,3 +11,12 @@ augroup END
 
 -- autocmd: Window's title
 cmd'autocmd VimEnter * set title'
+
+-- autocmd: Neovim's terminal
+cmd([[
+augroup neovim_terminal
+    autocmd!
+    " Disables number lines on terminal buffers
+    autocmd TermOpen * :set nonumber norelativenumber
+augroup END
+]])
