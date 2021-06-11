@@ -12,6 +12,9 @@ augroup END
 -- autocmd: Window's title
 cmd'autocmd VimEnter * set title'
 
+-- autocmd: Disable autopairs on Markdown files
+cmd'autocmd Filetype markdown let b:autopairs_enabled = 0'
+
 -- autocmd: Neovim's terminal
 cmd([[
 augroup neovim_terminal

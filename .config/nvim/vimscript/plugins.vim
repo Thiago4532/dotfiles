@@ -13,7 +13,6 @@ Plug 'jackguo380/vim-lsp-cxx-highlight' " Semantic syntax highlighting for C/C++
 " UI
 Plug 'Thiago4532/dtbg.nvim' " Dynamic Terminal Background Color
 Plug 'sainnhe/gruvbox-material'
-Plug 'joshdick/onedark.vim'
 Plug 'hoob3rt/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
@@ -28,8 +27,7 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-lua/popup.nvim'
 
 " Taking notes
-" Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
-" Plug 'npxbr/glow.nvim', {'do': ':GlowInstall', 'branch': 'main'}
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 Plug 'oberblastmeister/neuron.nvim', { 'branch': 'unstable' }
 
 call plug#end()

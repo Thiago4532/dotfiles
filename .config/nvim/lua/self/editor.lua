@@ -41,7 +41,6 @@ o.hidden = true
 bo.swapfile, o.swapfile = false, false
 
 -- Persistent undo
-o.undodir = vim.fn.expand('~/.cache/nvim/undodir')
 bo.undofile, o.undofile = true, true
 
 -- Turn off tabline
