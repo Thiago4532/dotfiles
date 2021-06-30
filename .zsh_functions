@@ -12,6 +12,7 @@ function fork() {
     ( eval "$@" & )
 }
 compdef _precommand fork
+alias ff='fork'
 
 function noicMD() {
     local CONFIG
@@ -35,3 +36,29 @@ function noicMD() {
    [ -f $CONFIG/noicMD/footer.html ] && cat $CONFIG/noicMD/footer.html
 }
 compdef _files noicMD
+
+# nvim functions
+
+function nvg() {
+    ( neovide $@ & ) > /dev/null 2>&1
+}
+
+function nvim_profile() {
+    sed -i 's/^--\(.*profiler\.lua\)/\1/g' ~/.config/nvim/init.lua
+    (AK_PROFILER=1 nvim $@ 2>&1 >/dev/null)
+    sed -i 's/^\(.*profiler\.lua\)/--\1/g' ~/.config/nvim/init.lua
+}
+
+function nvim_clearundo() {
+    tmpfile=`mktemp`
+
+    nvim --headless \
+        +"call writefile([&undodir], '$tmpfile', 'b')" \
+        +q >/dev/null 2>&1
+
+    undodir=`<"$tmpfile"`
+    rm -f "$tmpfile"
+
+    rm -r "$undodir"
+    return $?
+}

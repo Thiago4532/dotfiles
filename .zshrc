@@ -27,6 +27,7 @@ ZLE_RPROMPT_INDENT=0
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=4"
 ZSH_AUTOSUGGEST_ASYNC=1
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+ZVM_CURSOR_STYLE_ENABLED=false
 
 # Keybindings
 bindkey "^[[3~" delete-char # Delete
@@ -58,8 +59,9 @@ zplug romkatv/powerlevel10k, as:theme, depth:1 # Powerlevel10k theme
 zplug zsh-users/zsh-completions
 zplug Aloxaf/fzf-tab
 zplug zsh-users/zsh-autosuggestions
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-#zplug zdharma/fast-syntax-highlighting
+# zplug zsh-users/zsh-syntax-highlighting, defer:2
+# zplug jeffreytse/zsh-vi-mode
+zplug zdharma/fast-syntax-highlighting, defer:2
 
 # Then, source plugins and add commands to $PATH
 zplug load

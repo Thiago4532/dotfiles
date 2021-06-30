@@ -3,13 +3,9 @@ alias sudo='sudo '
 command -v exa > /dev/null && alias ls='exa' || alias ls='ls --color=auto'
 command -v rg > /dev/null && alias grep='rg'
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
-alias redsh='redshift -x && redshift'
 alias tssh='TERM=xterm-256color \ssh'
 if [[ $TERM == "xterm-kitty" ]]; then alias ssh='kitty +kitten ssh'; fi
 alias open='xdg-open'
-#alias nvim='nvim -V10mylog.log'
+alias dl='aria2c -x16 -s16 -k1M'
 
-# blog aliases
-alias generate='rm -f ~/ssg/dst/.files && ~/ssg/ssg5 ~/ssg/src ~/ssg/dst "Thiago Mota" "thiago.run"'
-alias deploy='lighttpd -f ~/ssg/lighttpd/lighttpd.conf'
-alias openblog="firefox 127.0.0.1:8080"
+alias \$=''
