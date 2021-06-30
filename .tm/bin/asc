@@ -1,0 +1,8 @@
+#!/bin/sh
+
+src="$1"
+shift
+
+[ -f "$src" ] &&
+    jp2a --colors "$src" $@ ||
+    curl --silent "$src" | jp2a --colors - $@

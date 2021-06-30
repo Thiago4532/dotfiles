@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# Custom flags
+CFLAGS="-O2 -std=c++17 -DTDEBUG"
+DIFF_PATH="$HOME/.config/rr"
+INCLUDE_FOLDER="$HOME/.local/include"
+
+if [ $# -lt 1 ]; then
+    echo "usage: ${0##*/} file <flags>" >&2
+    exit 64
+fi
+
+if ! [ -f $1.cpp ]; then
+    echo $1.cpp does not exist! >&2
+    exit 69
+fi
+
+if [ $# -gt 1 ]; then
+    CFLAGS="$CFLAGS ${@:2}"
+fi
+
+DIFF_FILE="$DIFF_PATH/$PWD"
+[ -d "$DIFF_FILE" ] || mkdir -p "$DIFF_FILE"
+DIFF_FILE="$DIFF_FILE/$1.cpp"
+
+if ! [ -f $1 ] || ! diff $1.cpp "$DIFF_FILE" > /dev/null 2> /dev/null; then
+    echo "Compiling: g++ $CFLAGS" >&2
+    g++ $CFLAGS -I"$INCLUDE_FOLDER" -o $1 $1.cpp
+    exit_flag=$?
+    [ $exit_flag -ne 0 ] && exit $exit_flag
+    cp $1.cpp "$DIFF_FILE"
+    echo "Done!" >&2
+fi
+
+./$1
+exit $?

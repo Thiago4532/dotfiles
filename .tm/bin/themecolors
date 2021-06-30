@@ -1,0 +1,58 @@
+#!/bin/bash
+
+use_bold=false
+
+while [ $# -ne 0 ]; do
+    case $1 in
+        -b | --bold)
+            use_bold=true
+            ;;
+        *)
+            printf "[warning] invalid argument: $1\n"
+            ;;
+    esac
+    shift
+done
+
+set_foreground_color() {
+    $use_bold && echo -ne "\033[1m"
+    echo -ne "\033[38;5;$1m"
+}
+
+set_background_color() {
+    echo -ne "\033[48;5;$1m"
+}
+
+reset_color() {
+    echo -ne "\033[0m"
+}
+
+print_background_colors() {
+    printf '   '
+    for background in $@; do
+        set_foreground_color $background
+        printf '   %2d   ' $background
+        reset_color
+    done
+    printf '\n'
+
+    for foreground in {0..15}; do
+        set_foreground_color $foreground
+        printf '%2d  ' $foreground
+
+        for background in $@; do
+            set_foreground_color $foreground
+            set_background_color $background
+            
+            printf ' unix '
+
+            reset_color
+            printf '  '
+        done
+        printf '\n'
+    done
+}
+
+print_background_colors {0..7}
+printf '\n'
+print_background_colors {8..15}

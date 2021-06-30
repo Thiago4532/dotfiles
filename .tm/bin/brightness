@@ -1,0 +1,29 @@
+#!/bin/sh
+
+backlightPath="/sys/class/backlight/intel_backlight"
+brightnessFile="$backlightPath/brightness"
+
+brightness=`<$brightnessFile`
+maxBrightness=`<$backlightPath/max_brightness`
+
+step=$(($maxBrightness / 20)) # step 5%
+
+case "$1" in
+    'up')
+        newBrightness=$(($brightness + $step))
+        [ $newBrightness -gt $maxBrightness ] && newBrightness=$maxBrightness
+        ;;
+    'down')
+        newBrightness=$(($brightness - $step))
+        [ $newBrightness -lt 0 ] && newBrightness=0
+        ;;
+    *)
+        exit 1
+        ;;
+esac
+
+echo $newBrightness > "$brightnessFile"
+
+brightnessPercentage=$(($newBrightness * 100 / $maxBrightness))
+dunstify -i notification-display-brightness -h string:x-dunst-stack-tag:brightness -t 1000 \
+    -u normal "Brightness: ${brightnessPercentage}%"

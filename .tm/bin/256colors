@@ -1,0 +1,57 @@
+#!/bin/bash
+
+set_foreground_color() {
+    printf "\033[38;5;%dm" $1
+}
+
+set_background_color() {
+    printf "\033[48;5;%dm" $1
+}
+
+reset_color() {
+    echo -ne "\033[0m"
+}
+
+centralize_text() {
+    text=$1
+    length=${#text}
+
+    width=$2
+
+    rspaces=$((($width - $length) / 2))
+    lspaces=$(($width - $rspaces - $length))
+
+    for ((i=0; i<$lspaces; i++)); do
+        printf ' '
+    done
+
+    printf '%s' $text
+
+    for ((i=0; i<$rspaces; i++)); do
+        printf ' '
+    done
+}
+
+FG_COLOR_ENABLED=false
+
+while [ $# -ne 0 ]; do
+    case $1 in
+        --fg=*)
+            FG_COLOR_ENABLED=true
+            FG_COLOR=${1#*=}
+            ;;
+        *)
+            printf "[warning] invalid argument: $1\n"
+            ;;
+    esac
+    shift
+done
+
+for background in {0..255}; do
+    set_background_color $background
+    $FG_COLOR_ENABLED && set_foreground_color $FG_COLOR
+
+    centralize_text $background 5
+    reset_color
+    [ $(($background % 16)) -eq 15 ] && printf '\n'
+done

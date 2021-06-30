@@ -1,0 +1,7 @@
+#!/bin/sh
+
+DEVICE=$(rfkill list all | awk -F': ' '$3 ~ "Wireless" {print $1}')
+
+rfkill block $DEVICE
+sleep 1
+rfkill unblock $DEVICE

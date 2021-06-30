@@ -1,0 +1,28 @@
+#!/bin/bash
+
+layouts=("us" "us")
+variants=("" "intl")
+names=("US" "US Intl.")
+
+extraArgs="-option altwin:swap_alt_win"
+
+currentLayout=`setxkbmap -query | awk '($1=="layout:"){print $2}'`
+currentVariant=`setxkbmap -query | awk '($1=="variant:"){print $2}'`
+
+for i in "${!layouts[@]}"; do
+    [ "$currentLayout"  == "${layouts[i]}"  ] &&
+    [ "$currentVariant" == "${variants[i]}" ] &&
+        cKeyboard="$i" && break
+done
+
+case "$1" in
+    'cycle')
+        nKeyboard=$((($cKeyboard + 1) % ${#layouts[@]}))
+        setxkbmap ${layouts[nKeyboard]} ${variants[nKeyboard]} $extraArgs
+        dunstify -i keyboard -h string:x-dunst-stack-tag:keyboardChange -t 1000 \
+            -u normal "Keyboard" "${names[nKeyboard]}"
+        ;;
+    *)
+        exit 1
+        ;;
+esac
