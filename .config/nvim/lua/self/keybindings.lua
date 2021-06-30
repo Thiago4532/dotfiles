@@ -1,7 +1,6 @@
 local map = vim.api.nvim_set_keymap
-local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-
 local opts = { noremap = true, silent = true }
+local optexpr = { silent = true, noremap = true, expr = true }
 
 -- Codeforces template
 map('n', 'cpp', 'ggdG:-1read ~/CP-Problems/Codeforces/base.cpp<CR>17zt23gg', opts)
@@ -10,10 +9,11 @@ map('n', 'cpp', 'ggdG:-1read ~/CP-Problems/Codeforces/base.cpp<CR>17zt23gg', opt
 map('', '<C-n>', ':NvimTreeToggle<CR>', opts) 
 
 -- Highlight keybindings
-map('n', '<F1>', ':call PrintHighlightGroup()<CR>', opts)
+map('n', '<F1>', ':TSHighlightCapturesUnderCursor<CR>', opts)
 map('n', '<F3>', ':noh<CR>', opts)
-map('n', '<F4>', ':set ic<CR>:echo "Case-insensitive"<CR>', opts)
-map('n', '<F5>', ':set noic<CR>:echo "Case-sensitive"<CR>', opts)
+map('n', '<F4>', [[
+&ic ? ':set noic<CR>:echo "Case-sensitive"<CR>' : ':set ic<CR>:echo "Case-insensitive"<CR>'
+]], optexpr)
 
 -- Markdown Preview
 map('n', '<F9>', '<plug>MarkdownPreview', {})
@@ -49,4 +49,7 @@ map('i', '<C-Space>', "<C-x><C-o>", opts)
 map('t', '<Esc>', '<C-\\><C-n>', opts)
 
 -- utility keybindings
-map('n', 'gm', ":exe 'normal '.(virtcol('$')/2).'|'<CR>", opts)
+map('n', 'mm', ':exe "normal ".(virtcol("$")/2)."|"<CR>', opts)
+map('n', '<leader>tw', [[
+&wrap ? ':set nowrap<CR>:echo "Wrap disabled!"<CR>' : ':set wrap<CR>:echo "Wrap enabled!"<CR>'
+]], optexpr)

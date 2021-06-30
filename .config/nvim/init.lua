@@ -1,4 +1,4 @@
--- dofile(vim.fn.expand('~/.config/nvim/lua/profiler.lua'))
+--dofile(vim.fn.expand('~/.config/nvim/lua/profiler.lua'))
 local g = vim.g
 local cmd = vim.cmd
 local fn = vim.fn
@@ -13,19 +13,22 @@ g.loaded_ruby_provider = 0
 g.loaded_node_provider = 0
 g.loaded_perl_provider = 0
 
+cmd'noremap , <Nop>'
 g.mapleader = ','
 g.AutoPairsOpenBalanceBlacklist = {'{'}
 
 -- vim-plug: Source all plugins
 cmd'source ~/.config/nvim/vimscript/plugins.vim'
-cmd'source ~/.config/nvim/vimscript/util.vim'
 
 require 'self.lsp'
 require 'self.statusline'
-require 'self.autocmd'
 require 'self.editor'
 require 'self.keybindings'
-require 'self.ui'
+
+cmd[[
+source ~/.config/nvim/vimscript/ui.vim
+source ~/.config/nvim/vimscript/autocmd.vim
+]]
 
 local nregex = '^' .. fn.expand(notes)
 local cwd = fn.getcwd()
@@ -35,3 +38,17 @@ if cwd:find(nregex) then
         neuron_dir = notes, -- the directory of all of your notes, expanded by default (currently supports only one directory for notes, find a way to detect neuron.dhall to use any directory)
     }
 end
+
+require'nvim-treesitter.configs'.setup {
+    highlight = {
+        enable = true,
+        disable = {'c', 'cpp', 'bash'}
+    },
+    --[[ playground = {
+        enable = true,
+    }, ]]
+}
+
+require('kommentary.config').configure_language("default", {
+    prefer_single_line_comments = true,
+})
