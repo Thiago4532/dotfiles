@@ -1,0 +1,21 @@
+Config { font = "xft:Ubuntu Nerd Font:weight=bold:pixelsize=12:antialias=true:hinting=true"
+        , borderColor = "black"
+        , border = TopB
+        , bgColor = "#282828"
+        , fgColor = "#d4be98"
+        , position = TopW L 100
+        , iconRoot = ".config/xmobar/icons"
+        , commands = [ Run Cpu ["-t", "\xf108  cpu: (<total>%)", "-L","3","-H","50","--high","#ea6962"] 20
+                        , Run Memory ["-t","\xf233  mem: <used>M (<usedratio>%)"] 20
+                        , Run Com "uname" ["-r"] "" 36000
+                        , Run Date "\xf133  %b %d %Y - (%H:%M) " "date" 50
+                        , Run Alsa "default" "Master" ["-t", "\xf028  vol: (<volume>%)<status>", "--", "-O", "", "-o", " [MUTE]", "-c", "red"]
+                        , Run Battery ["-t", "\xf241   bat: (<left>% <acstatus>)"] 50
+                        , Run Com "./.xmonad/bin/trayer-padding-icon.sh" [] "trayerpad" 10
+                        , Run StdinReader
+                        ]
+        , sepChar = "%"
+        , alignSep = "}{"
+        , template = "<fc=#7daea3><action=`dmenu_run`>  Arch Linux</action></fc><fc=#7c6f64>  |  </fc>%StdinReader%}{ %uname%<fc=#7c6f64>  |  </fc><fc=#d8a657><action=`kitty -e htop`>%cpu%</action></fc><fc=#7c6f64>  |  </fc><fc=#ea6962><action=`kitty -e htop`>%memory%</action></fc><fc=#7c6f64>  |  </fc><fc=#a9b665>%battery%</fc><fc=#7c6f64>  |  </fc><fc=#d386b9><action=`pavucontrol`>%alsa:default:Master%</action></fc><fc=#7c6f64>  |  </fc><fc=#7daea3>%date%</fc><fc=#7c6f64>  |  </fc>%trayerpad%"
+
+        }
