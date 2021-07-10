@@ -23,9 +23,6 @@ o.showmode = false
 o.ruler = false
 
 -- Mouse features
--- o.mouse = 'a'
-
--- hard-mode
 o.mouse = ''
 
 -- Don't wrap long lines

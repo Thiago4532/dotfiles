@@ -1,17 +1,18 @@
 " vim-plug
 call plug#begin()
 
-Plug 'nvim-treesitter/nvim-treesitter'
-Plug 'nvim-treesitter/playground'
 Plug 'tweekmonster/startuptime.vim'
 Plug 'gennaro-tedesco/nvim-peekup'
+Plug 'lambdalisue/suda.vim'
 
 " " Language Server Protocol
 Plug 'neovim/nvim-lspconfig'
 
 " " Syntax Highlight
-" Plug 'sheerun/vim-polyglot'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/playground'
 Plug 'vim-jp/vim-cpp'
+Plug 'neovimhaskell/haskell-vim'
 Plug 'bfrg/vim-cpp-modern'
 Plug 'jackguo380/vim-lsp-cxx-highlight' " Semantic syntax highlighting for C/C++
 
@@ -26,6 +27,7 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'Krasjet/auto.pairs'
 Plug 'b3nj5m1n/kommentary'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
 
 " " Neovim LUA Development
 Plug 'nvim-lua/plenary.nvim' 
@@ -33,6 +35,7 @@ Plug 'nvim-lua/popup.nvim'
 
 " " Taking notes
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
-Plug 'oberblastmeister/neuron.nvim', { 'branch': 'unstable' }
+Plug 'vimwiki/vimwiki'
+Plug 'jbyuki/nabla.nvim'
 
 call plug#end()

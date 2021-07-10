@@ -21,6 +21,14 @@ function! s:gruvbox_material_custom() abort
     " Javascript
     highlight! link javascriptTSVariable Blue
     highlight! link javascriptTSParameter Blue
+
+    " VimWiki
+    highlight! link VimwikiHeader1 OrangeBold
+    highlight! link VimwikiHeader2 GreenBold
+    highlight! link VimwikiHeader3 BlueBold
+    highlight! link VimwikiHeader4 PurpleBold
+    highlight! link VimwikiHeader5 AquaBold
+    highlight! link VimwikiHeader6 YellowBold
 endfunction
 
 augroup GruvboxMaterialCustom

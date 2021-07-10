@@ -1,9 +1,9 @@
 #!/bin/sh
 
 # Custom flags
-CFLAGS="-std=c++17 -DTDEBUG -fsanitize=address -fsanitize=undefined"
-DIFF_PATH="$HOME/.config/rr"
-INCLUDE_FOLDER="$HOME/.local/include/_fsanitize"
+CFLAGS="-std=c++17 -DTDEBUG -ggdb3"
+DIFF_PATH="$HOME/.cache/rr"
+INCLUDE_FOLDER="$HOME/.local/include/_ggdb3"
 
 if [ $# -lt 1 ]; then
     echo "usage: ${0##*/} file" >&2
@@ -23,9 +23,7 @@ DIFF_FILE="$DIFF_PATH/$PWD/$1.cpp"
  
 [ -f "$DIFF_FILE" ] && rm "$DIFF_FILE"
 
-echo "Compiling: g++ $CFLAGS" >&2
 g++ $CFLAGS -I"$INCLUDE_FOLDER" -o $1 $1.cpp
-echo "Done!" >&2
 
-./$1
+gdb $1
 exit $?

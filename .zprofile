@@ -1,15 +1,17 @@
-export EDITOR=nvim || export EDITOR=vim
-#export _JAVA_OPTIONS="-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Dswing.crossplatformlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel ${_JAVA_OPTIONS}"
-export PATH=$PATH:$HOME/.local/bin:$HOME/.cabal/bin:$HOME/.npm/bin
-export GTK_USE_PORTAL="1"
-
+export EDITOR=nvim
 export GOPATH=~/.local/gopath
-export PATH=$PATH:$HOME/.local/gopath/bin
 
 export QT_QPA_PLATFORMTHEME=qt5ct
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
-[ -f "$HOME/.tm/_load-path.sh" ] &&
-    source "$HOME/.tm/_load-path.sh"
+## XDG Base Directories
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_CACHE_HOME=$HOME/.cache
+export XDG_DATA_HOME=$HOME/.local/share
+export XDG_STATE_HOME=$HOME/.local/state
+
+# Firefox disable RDD sandbox
+export MOZ_DISABLE_RDD_SANDBOX=1
 
 # if [ -z "$SSH_AUTH_SOCK" ] ; then
 # 	eval `ssh-agent -s`

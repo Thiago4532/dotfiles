@@ -2,7 +2,7 @@
 
 # Custom flags
 CFLAGS="-O2 -std=c++17 -DTDEBUG"
-DIFF_PATH="$HOME/.config/rr"
+DIFF_PATH="$HOME/.cache/rr"
 INCLUDE_FOLDER="$HOME/.local/include"
 
 if [ $# -lt 1 ]; then

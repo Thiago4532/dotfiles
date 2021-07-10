@@ -1,11 +1,13 @@
 -- IMPORTS
 import Xmobar
+import Control.Exception (try, SomeException)
 import Data.List (intercalate)
+import System.Environment (getEnv)
 
 join :: [[a]] -> [a]
 join = intercalate []
 
------------------------------------------------
+----------------------------------------------
 -- Utils
 --
 
@@ -15,7 +17,17 @@ mAction action s = join ["<action=`", action, "`>", s, "</action>"]
 mSeparator = mColor "#7c6f64" "  |  "
 mLeftRightSep = "}{"
 
-osIcon = mColor "#7daea3" "\xf303  Arch Linux"
+-- Colors
+myBlack = "#32302f"
+myRed = "#ea6962"
+myGreen = "#a9b665"
+myYellow = "#d8a657"
+myBlue = "#7daea3"
+myMagenta = "#d3869b"
+myCyan = "#89b482"
+myWhite = "#d4be98"
+
+osIcon = mColor myBlue "\xf303  Arch Linux"
 
 -----------------------------------------------
 -- Configuration
@@ -28,39 +40,42 @@ config = defaultConfig {
         , borderColor = "black"
         , border = TopB
         , bgColor = "#282828"
-        , fgColor = "#d4be98"
+        , fgColor = myWhite
         , position = TopW L 100
         , iconRoot = ".config/xmobar/icons"
-        , commands = [ Run $ Cpu ["-t", "\xf108  cpu: (<total>%)", "-L","3","-H","50","--high","#ea6962"] 20
+        , commands = [ Run $ Cpu ["-t", "\xf108  cpu: (<total>%)", "-L","3","-H","50","--high",myRed] 20
                         , Run $ Memory ["-t","\xf233  mem: <used>M (<usedratio>%)"] 20
                         , Run $ Com "uname" ["-r"] "" 36000
                         , Run $ Date "\xf133  %b %d %Y - (%H:%M) " "date" 50
                         , Run $ Alsa "default" "Master" ["-t", "\xf028  vol: (<volume>%)<status>", "--", "-O", "", "-o", " [MUTE]", "-c", "red"]
                         , Run $ Battery ["-t", "\xf241   bat: (<left>% <acstatus>)"] 50
                         , Run $ Com "./.config/xmobar/scripts/trayer-padding-icon.sh" [] "trayerpad" 10
-                        , Run StdinReader
+                        , Run $ Kbd []
+                        , Run $ UnsafeStdinReader
                         ]
         , sepChar = "%"
         , alignSep = mLeftRightSep
-        , template = join [ mAction "dmenu_run" osIcon
+        , template = join [ mAction "j4-dmenu-desktop" osIcon
                            , mSeparator
-                           , "%StdinReader%"
+                           , "%UnsafeStdinReader%"
                            , mLeftRightSep
                            , "\xe712 %uname%"
                            , mSeparator
-                           , mColor "#d8a657" $ mAction "kitty -e htop" "%cpu%"
+                           , mColor myCyan $ mAction "keyboard cycle" "\xf11c  key: %kbd%"
                            , mSeparator
-                           , mColor "#ea6962" $ mAction "kitty -e htop" "%memory%"
+                           , mColor myYellow $ mAction "kitty -e htop" "%cpu%"
                            , mSeparator
-                           , mColor "#a9b665" $ "%battery%"
+                           , mColor myRed $ mAction "kitty -e htop" "%memory%"
                            , mSeparator
-                           , mColor "#d386b9" $ mAction "pavucontrol" "%alsa:default:Master%"
+                           , mColor myGreen $ "%battery%"
                            , mSeparator
-                           , mColor "#7daea3" "%date%"
+                           , mColor myMagenta $ mAction "pavucontrol" "%alsa:default:Master%"
+                           , mSeparator
+                           , mColor myBlue "%date%"
                            , mSeparator
                            , "%trayerpad%"
                            ]
         }
 
 main :: IO()
-main = xmobar config
+main = xmobar config 

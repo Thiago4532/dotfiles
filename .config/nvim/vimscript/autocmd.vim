@@ -6,7 +6,7 @@ augroup END
 
 autocmd VimEnter * set title
 
-autocmd Filetype markdown let b:autopairs_enabled = 0
+autocmd Filetype markdown,vimwiki let b:autopairs_enabled = 0
 
 augroup neovim_terminal
     autocmd!

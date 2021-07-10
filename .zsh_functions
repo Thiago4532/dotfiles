@@ -39,10 +39,6 @@ compdef _files noicMD
 
 # nvim functions
 
-function nvg() {
-    ( neovide $@ & ) > /dev/null 2>&1
-}
-
 function nvim_profile() {
     sed -i 's/^--\(.*profiler\.lua\)/\1/g' ~/.config/nvim/init.lua
     (AK_PROFILER=1 nvim $@ 2>&1 >/dev/null)
@@ -61,4 +57,10 @@ function nvim_clearundo() {
 
     rm -r "$undodir"
     return $?
+}
+
+function nvim_startup() {
+    nvim --startuptime /tmp/nstartup.txt $@ &&
+        nvim /tmp/nstartup.txt
+    rm /tmp/nstartup.txt
 }

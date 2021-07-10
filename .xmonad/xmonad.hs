@@ -1,7 +1,8 @@
+{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, PatternGuards, TypeSynonymInstances, DeriveDataTypeable, LambdaCase, MultiWayIf #-}
 -- IMPORTS
 
 -- Base
-import XMonad hiding ( (|||) )
+import XMonad
 import Control.Monad
 import Data.List
 import Data.Maybe
@@ -14,13 +15,19 @@ import qualified XMonad.StackSet as W
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
 
 -- Layouts
+import XMonad.Layout.Accordion
 import XMonad.Layout.GridVariants
-import XMonad.Layout.LayoutCombinators
+import XMonad.Layout.IndependentScreens (countScreens)
+import XMonad.Layout.LayoutModifier
+import XMonad.Layout.MultiToggle
+import XMonad.Layout.MultiToggle.Instances
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed
 import XMonad.Layout.ResizableTile
+import XMonad.Layout.Spacing
 
 -- Actions
 
@@ -99,11 +106,35 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch dmenu
     , ((modm,               xK_p     ), spawn "dmenu_run")
 
+    -- launch networkmanager_dmenu
+    , ((modm,               xK_y     ), spawn "networkmanager_dmenu")
+    
+    -- launch firefox
+    , ((modm              , xK_f     ), spawn "firefox &")
+
+    -- launch qalc
+    , ((modm              , xK_o     ), spawn "kitty -e qalc &")
+
+    -- launch htop
+    , ((modm .|. shiftMask, xK_h     ), spawn "kitty -e htop &")
+
+    -- launch pavucontrol
+    , ((modm .|. shiftMask, xK_p     ), spawn "pavucontrol")
+
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
 
     -- Rotate through the available layout algorithms
     , ((modm,               xK_space ), sendMessage NextLayout)
+
+    -- Toggle mirror
+    , ((modm .|. shiftMask, xK_m     ), sendMessage $ Toggle MIRROR)
+    
+    -- Toggle gaps
+    , ((modm .|. shiftMask, xK_g     ), sendMessage $ Toggle SPACING)
+
+    -- Toggle fullscreen
+    , ((modm .|. shiftMask, xK_f     ), sendMessage $ Toggle NBFULL)
 
     --  Reset the layouts on the current workspace to default
     , ((modm .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
@@ -145,10 +176,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_t     ), withFocused $ windows . W.sink)
 
     -- Increment the number of windows in the master area
-    , ((modm              , xK_comma ), sendMessage (IncMasterN 1))
+    , ((modm .|. shiftMask, xK_comma ), sendMessage (IncMasterN 1))
 
     -- Deincrement the number of windows in the master area
-    , ((modm              , xK_period), sendMessage (IncMasterN (-1)))
+    , ((modm .|. shiftMask, xK_period), sendMessage (IncMasterN (-1)))
 
     -- Toggle the status bar gap
     -- Use this binding with avoidStruts from Hooks.ManageDocks.
@@ -156,9 +187,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     --
     , ((modm              , xK_b     ), sendMessage ToggleStruts)
     
-    -- Launch Firefox
-    , ((modm              , xK_f     ), spawn "firefox &")
-
     -- Cycle through keyboard layouts
     , ((modm .|. shiftMask, xK_u     ), spawn "keyboard cycle")
 
@@ -168,6 +196,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Restart xmonad
     , ((modm              , xK_q     ), spawn "xmonad --recompile; pkill xmobar; xmonad --restart")
 
+    -- Session lock
+    , ((modm .|. controlMask, xK_l   ), spawn "loginctl lock-session")
+
+    -- Turn off screen
+    , ((modm .|. shiftMask  , xK_l   ), spawn "notify-send DPMS 'Turning off the screen...'; sleep 1; xset dpms force off")
+
     -- Restart WiFi (M-S-PrtSc)
     , ((modm .|. shiftMask, 0xff61   ), spawn "reset-wifi &")
 
@@ -176,6 +210,18 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Take a screenshot (M-PrtSc)
     , ((modm              , 0xff61   ), spawn "maim --format=png | xclip -selection clipboard -t image/png && notify-send -t 1000 'Copied screenshot to clipboard!'")
+    
+    -- OCR script
+    , ((modm .|. shiftMask, xK_o     ), spawn "ocr")
+
+    -- dunst: Pop one notification from history
+    , ((modm              , xK_comma ), spawn "dunstctl history-pop")
+
+    -- dunst: Close the last notification
+    , ((modm           , xK_semicolon), spawn "dunstctl close")
+
+    -- dunst: Action
+    , ((modm              , xK_period), spawn "dunstctl action")
     
     -- Play/Pause music (XF86AudioPlay)
     , ((noModMask         ,0x1008ff14), spawn "playerctl play-pause")
@@ -214,11 +260,11 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     ++
 
     --
-    -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
-    -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
+    -- mod-{w,e}, Switch to physical/Xinerama screens 1, 2
+    -- mod-shift-{w,e}, Move client to screen 1, 2
     --
     [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+        | (key, sc) <- zip [xK_e, xK_w] [0..]
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
@@ -244,16 +290,32 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 ------------------------------------------------------------------------
 -- Layouts:
 
-tall = renamed [Replace "Tall"]
-       $ smartBorders
-       $ ResizableTall 1 (3/100) (1/2) []
-grid = smartBorders
-       $ Grid (16/10)
+-- mySmartBorders :: LayoutClass l a =>
+--      l a -> ModifiedLayout (ConfigurableBorder Ambiguity) l a
+-- mySmartBorders = lessBorders OtherIndicated
 
-myLayoutHook = avoidStruts $ myLayout
+mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
+mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
+
+data SPACING = SPACING deriving (Read, Show, Eq, Typeable)
+instance Transformer SPACING Window where
+    transform _ x k = k (mySpacing 10 x) (\(ModifiedLayout _ x') -> x')
+
+tall      = renamed [Replace "Tall"]
+            $ smartBorders
+            $ ResizableTall 1 (3/100) (1/2) []
+grid      = smartBorders
+            $ Grid (16/10)
+accordion = smartBorders
+            $ Accordion
+
+myLayoutHook = avoidStruts $ mkToggle (single MIRROR)
+                           $ mkToggle (single NBFULL)
+                           $ mkToggle (single SPACING) 
+                           $ myLayout
     where myLayout =     tall
                      ||| grid
-                     ||| noBorders Full
+                     ||| accordion
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -282,25 +344,31 @@ myStartupHook = do
     setFullscreenSupported
 
     spawnOnce "lxsession &"
+    spawnOnce "xss-lock -- i3lock -B 5 --composite --nofork --indicator --pass-screen-keys --pass-volume-keys &"
 
     spawnOnce "nitrogen --restore &"
-    spawnOnce "picom &"
+    spawnOnce "picom --experimental-backends &"
     spawnOnce "nm-applet &"
-    spawnOnce "trayer --edge top --distance 2 --align right --widthtype request --iconspacing 8 --padding 6 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x282828 --height 16 &"
-
+    spawnOnce "trayer --edge top --distance 2 --monitor primary --align right --widthtype request --iconspacing 8 --padding 6 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x282828 --height 16 &"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
 
+clickableWorkspaces =
+    flip xmobarAction "1" =<< wrap "xdotool key 'super+" "'"
+
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 main = do
+    n <- countScreens
     xmproc <- spawnPipe "xmobar"
+
     xmonad $ ewmh $ docks defaults {
         logHook = dynamicLogWithPP $ xmobarPP
                             { ppOutput = hPutStrLn xmproc
                             , ppCurrent = xmobarColor "#d8a657" "" . wrap "[" "]"
                             , ppTitle = xmobarColor "#a9b665" "" . shorten 50
+                            , ppHidden = clickableWorkspaces
                             }
     }
 
@@ -332,4 +400,3 @@ defaults = def {
         handleEventHook    = myEventHook,
         startupHook        = myStartupHook
     }
-

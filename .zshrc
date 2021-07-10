@@ -19,7 +19,7 @@ bindkey -e
 zstyle :compinstall filename "$HOME/.zshrc"
 
 autoload -Uz compinit
-compinit
+compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
 # End of lines added by compinstall
 
 # Environment variables
@@ -59,7 +59,6 @@ zplug romkatv/powerlevel10k, as:theme, depth:1 # Powerlevel10k theme
 zplug zsh-users/zsh-completions
 zplug Aloxaf/fzf-tab
 zplug zsh-users/zsh-autosuggestions
-# zplug zsh-users/zsh-syntax-highlighting, defer:2
 # zplug jeffreytse/zsh-vi-mode
 zplug zdharma/fast-syntax-highlighting, defer:2
 
