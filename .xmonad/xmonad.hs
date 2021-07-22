@@ -112,6 +112,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch firefox
     , ((modm              , xK_f     ), spawn "firefox &")
 
+    -- launch vimwiki
+    , ((modm              , xK_v     ), spawn "kitty nvim -- ~/Documents/vimwiki/index.wiki &")
+
     -- launch qalc
     , ((modm              , xK_o     ), spawn "kitty -e qalc &")
 
@@ -324,7 +327,7 @@ myManageHook = composeAll [
       className =? "MPlayer"                             --> doFloat
     , className =? "Gimp"                                --> doFloat
     , className =? "notification"                        --> doFloat
-    , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat
+    , title     =? "Picture-in-Picture"                  --> doFloat
     , resource  =? "desktop_window"                      --> doIgnore
     , resource  =? "kdesktop"                            --> doIgnore
     , className =? "discord"                             --> doShift ( myWorkspaces !! 8 )
@@ -339,16 +342,16 @@ myEventHook = fullscreenEventHook
 -- Startup hook
 
 myStartupHook = do
-    spawnOnce "xset r rate 300 30 &"
+    -- spawnOnce "xset r rate 300 30 &" -- lxsession
     spawnOnce "setxkbmap -option altwin:swap_alt_win &"
     setFullscreenSupported
 
-    spawnOnce "lxsession &"
-    spawnOnce "xss-lock -- i3lock -B 5 --composite --nofork --indicator --pass-screen-keys --pass-volume-keys &"
+    spawnOnce "lxsession -s xmonad &"
+    spawnOnce "xss-lock -- mylock &"
 
     spawnOnce "nitrogen --restore &"
     spawnOnce "picom --experimental-backends &"
-    spawnOnce "nm-applet &"
+    -- spawnOnce "nm-applet &" -- lxsession
     spawnOnce "trayer --edge top --distance 2 --monitor primary --align right --widthtype request --iconspacing 8 --padding 6 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x282828 --height 16 &"
 
 ------------------------------------------------------------------------
