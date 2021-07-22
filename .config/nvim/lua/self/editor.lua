@@ -6,9 +6,6 @@ bo.softtabstop, o.softtabstop = 4, 4
 bo.shiftwidth, o.shiftwidth = 4, 4
 bo.expandtab, o.expandtab = true, true
 
--- Use arrows to jump lines
-o.whichwrap = '<,>,[,]'
-
 -- Show line numbers
 wo.number, o.number = true, true
 wo.relativenumber, o.relativenumber = true, true

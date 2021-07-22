@@ -36,6 +36,5 @@ Plug 'nvim-lua/popup.nvim'
 " " Taking notes
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 Plug 'vimwiki/vimwiki'
-Plug 'jbyuki/nabla.nvim'
 
 call plug#end()

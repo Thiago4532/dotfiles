@@ -43,16 +43,31 @@ map('n', '<leader>ff', ":lua require('telescope.builtin').find_files()<cr>", opt
 map('n', '<leader>fg', ":lua require('telescope.builtin').live_grep()<cr>", opts)
 map('n', '<leader>fh', ":lua require('telescope.builtin').help_tags()<cr>", opts)
 
--- nabla.nvim keybindings
-map('n', '<F5>', ':lua require"nabla".action()<CR>', opts)
-
 map('i', '<C-Space>', "<C-x><C-o>", opts)
+
+-- window keybindings
+map('n', '<M-h>',           '<C-w>h', opts)
+map('n', '<M-j>',           '<C-w>j', opts)
+map('n', '<M-k>',           '<C-w>k', opts)
+map('n', '<M-l>',           '<C-w>l', opts)
+map('n', '<M-H>',           '<C-w>H', opts)
+map('n', '<M-J>',           '<C-w>J', opts)
+map('n', '<M-K>',           '<C-w>K', opts)
+map('n', '<M-L>',           '<C-w>L', opts)
+map('n', '<M-Tab>',         '<C-w>w', opts)
+map('n', '<M-S-Tab>',       '<C-w>W', opts)
+map('n', '<M-s>',           '<C-w>s', opts)
+map('n', '<M-v>',           '<C-w>v', opts)
+map('n', '<M-=>',           '<C-w>+', opts)
+map('n', '<M-->',           '<C-w>-', opts)
+map('n', '<M-Backspace>',   '<C-w>=', opts)
+map('n', '<M-,>',           '<C-w><', opts)
+map('n', '<M-.>',           '<C-w>>', opts)
 
 -- terminal keybindings
 map('t', '<Esc>', '<C-\\><C-n>', opts)
 
 -- utility keybindings
-map('n', 'mm', ':exe "normal ".(virtcol("$")/2)."|"<CR>', opts)
 map('n', 'gQ', 'i<C-m><Esc>', opts)
 map('n', '<leader>tw', [[
 &wrap ? ':set nowrap<CR>:echo "Wrap disabled!"<CR>' : ':set wrap<CR>:echo "Wrap enabled!"<CR>'
