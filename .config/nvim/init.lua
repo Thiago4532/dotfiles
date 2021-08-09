@@ -12,9 +12,10 @@ g.loaded_ruby_provider = 0
 g.loaded_node_provider = 0
 g.loaded_perl_provider = 0
 
-cmd'noremap , <Nop>'
+cmd'noremap , "+'
 g.mapleader = ','
 g.AutoPairsOpenBalanceBlacklist = {'{'}
+g.suda_smart_edit = 1 
 
 -- vim-plug: Source all plugins
 cmd'source ~/.config/nvim/vimscript/plugins.vim'
@@ -28,6 +29,12 @@ cmd[[
 source ~/.config/nvim/vimscript/ui.vim
 source ~/.config/nvim/vimscript/autocmd.vim
 ]]
+
+require'telescope'.setup{
+    defaults = { 
+        file_ignore_patterns = {'build/.*', 'compile_commands.json'},
+    },
+}
 
 require'nvim-treesitter.configs'.setup {
     highlight = {

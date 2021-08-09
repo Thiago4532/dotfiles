@@ -1,29 +1,19 @@
-#!/bin/sh
+#!/bin/zsh
 
-backlightPath="/sys/class/backlight/intel_backlight"
-brightnessFile="$backlightPath/brightness"
-
-brightness=`<$brightnessFile`
-maxBrightness=`<$backlightPath/max_brightness`
-
-step=$(($maxBrightness / 20)) # step 5%
+step='5%'
 
 case "$1" in
     'up')
-        newBrightness=$(($brightness + $step))
-        [ $newBrightness -gt $maxBrightness ] && newBrightness=$maxBrightness
+        cmd="$step+"
         ;;
     'down')
-        newBrightness=$(($brightness - $step))
-        [ $newBrightness -lt 0 ] && newBrightness=0
+        cmd="$step-"
         ;;
     *)
         exit 1
         ;;
 esac
 
-echo $newBrightness > "$brightnessFile"
-
-brightnessPercentage=$(($newBrightness * 100 / $maxBrightness))
-dunstify -i notification-display-brightness -h string:x-dunst-stack-tag:brightness -t 1000 \
-    -u normal "Brightness: ${brightnessPercentage}%"
+time brightnessctl -m s $cmd | cut -d',' -f4 |
+    xargs -i dunstify -i notification-display-brightness -h string:x-dunst-stack-tag:brightness -t 1000 \
+    -u normal "Brightness: {}"

@@ -2,7 +2,6 @@ local vim = vim
 
 require'lspconfig'.ccls.setup { 
     init_options = {
-        compilationDatabaseDirectory = 'build';
         index = {
             threads = 0;
         };

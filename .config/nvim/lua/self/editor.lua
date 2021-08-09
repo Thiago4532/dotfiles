@@ -19,8 +19,12 @@ o.laststatus = 2
 o.showmode = false
 o.ruler = false
 
+
 -- Mouse features
 o.mouse = ''
+
+-- Disable cursor shape on Insert Mode
+o.guicursor = ''
 
 -- Don't wrap long lines
 wo.wrap, o.wrap = false, false

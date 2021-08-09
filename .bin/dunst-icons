@@ -1,0 +1,25 @@
+#!/bin/bash
+# List all available icons in the dunst icon path.
+
+DUNSTRC="$HOME/.config/dunst/dunstrc"
+cd $HOME # Relative to HOME
+
+O_PATH=false
+
+case "$1" in
+    -p|--path)
+        O_PATH=true
+        ;;
+    *)
+        ;;
+esac
+
+awk '($1 == "icon_path"){print $3}' $DUNSTRC | while read -r -d ':' iPath
+do
+    find $iPath -xtype f -print0 | while IFS= read -r -d '' fPath
+    do
+        filename=${fPath##*/}
+        basename=${filename%.*}
+        [ "$O_PATH" = true ] && echo $fPath || echo $basename
+    done
+done | sort -u

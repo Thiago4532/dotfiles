@@ -9,7 +9,7 @@ VOLUME_HIGH=55
 volume_notification_send() {
     local notification_icon
 
-    if [ "$2" == "off" ]; then
+    if [ "$2" = "off" ]; then
         notification_icon='notification-audio-volume-muted'
     elif [ $1 -le $VOLUME_LOW ]; then
         notification_icon='notification-audio-volume-low'
@@ -23,14 +23,30 @@ volume_notification_send() {
         -t 1000 -u normal "Volume: $1%"
 }
 
-case "$1" in
+mode=""
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -s|--step)
+            shift
+            [ -z "${1##*[!0-9]*}" ] && exit 1
+            STEP=$1
+            ;;
+        *)
+            [ -z "$mode" ] && mode="$1" || exit 1
+            ;;
+    esac
+    shift
+done
+
+case "$mode" in
     'down')
         cVolume=`amixer sset Master "${STEP}%-,${STEP}%-" |
             grep 'Left:' |
             awk -F'[][]' '{print substr($2, 0, length($2)-1) " " $4}'`
 
         volume_notification_send $cVolume
-        paplay "$SOUND_CHANGE"
+        paplay "$SOUND_CHANGE" &
         ;;
     'up')
         cVolume=`amixer sset Master "${STEP}%+,${STEP}%+" |
@@ -38,7 +54,7 @@ case "$1" in
             awk -F'[][]' '{print substr($2, 0, length($2)-1) " " $4}'`
 
         volume_notification_send $cVolume
-        paplay "$SOUND_CHANGE"
+        paplay "$SOUND_CHANGE" &
         ;;
     'mute')
         cVolume=`amixer set Master toggle,toggle |

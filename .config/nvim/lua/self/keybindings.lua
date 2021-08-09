@@ -15,15 +15,13 @@ map('n', '<F4>', [[
 &ic ? ':set noic<CR>:echo "Case-sensitive"<CR>' : ':set ic<CR>:echo "Case-insensitive"<CR>'
 ]], optexpr)
 
--- Markdown Preview
-map('n', '<F9>', '<plug>MarkdownPreview', {})
-
 -- lsp keybindings
 map('n', 'gD', ':lua vim.lsp.buf.declaration()<CR>', opts)
 map('n', 'gd', ':lua vim.lsp.buf.definition()<CR>', opts)
 map('n', 'K', ':lua vim.lsp.buf.hover()<CR>', opts)
 map('n', 'gi', ':lua vim.lsp.buf.implementation()<CR>', opts)
 map('n', '<C-k>', ':lua vim.lsp.buf.signature_help()<CR>', opts)
+map('i', '<C-k>', '<C-o>:lua vim.lsp.buf.signature_help()<CR>', opts)
 map('n', '<space>wa', ':lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
 map('n', '<space>wr', ':lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
 map('n', '<space>wl', ':lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
@@ -63,6 +61,7 @@ map('n', '<M-->',           '<C-w>-', opts)
 map('n', '<M-Backspace>',   '<C-w>=', opts)
 map('n', '<M-,>',           '<C-w><', opts)
 map('n', '<M-.>',           '<C-w>>', opts)
+map('n', '<M-q>',           '<C-w>q', opts)
 
 -- terminal keybindings
 map('t', '<Esc>', '<C-\\><C-n>', opts)

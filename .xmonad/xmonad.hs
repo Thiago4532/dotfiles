@@ -7,11 +7,13 @@ import Control.Monad
 import Data.List
 import Data.Maybe
 import Data.Monoid
+import GHC.IO.Handle.Types (Handle)
 import System.Exit
 import qualified Data.Map        as M
 import qualified XMonad.StackSet as W
 
 -- Hooks
+import XMonad.Hooks.DynamicBars
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
@@ -20,7 +22,7 @@ import XMonad.Hooks.ManageHelpers
 -- Layouts
 import XMonad.Layout.Accordion
 import XMonad.Layout.GridVariants
-import XMonad.Layout.IndependentScreens (countScreens)
+import XMonad.Layout.IndependentScreens
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
@@ -32,6 +34,7 @@ import XMonad.Layout.Spacing
 -- Actions
 
 -- Utility
+import XMonad.Util.Loggers
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
 
@@ -77,6 +80,11 @@ myFocusedBorderColor = "#d152ab"
 -- Utility functions
 --
 
+picomCmd = "picom --experimental-backends"
+
+picomToggle :: X()
+picomToggle = spawn $ "pkill -x picom || " ++ picomCmd
+
 -- Fullscreen support
 -- https://www.reddit.com/r/xmonad/comments/gc4b9i/what_is_the_best_way_to_make_xmonad_respect_true/
 --
@@ -103,6 +111,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm .|. controlMask,  xK_t  ), spawn $ XMonad.terminal conf)
     , ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
 
+    -- toggle picom
+    , ((modm .|. shiftMask, xK_F12   ), picomToggle)
+
     -- launch dmenu
     , ((modm,               xK_p     ), spawn "dmenu_run")
 
@@ -117,9 +128,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch qalc
     , ((modm              , xK_o     ), spawn "kitty -e qalc &")
-
-    -- launch htop
-    , ((modm .|. shiftMask, xK_h     ), spawn "kitty -e htop &")
 
     -- launch pavucontrol
     , ((modm .|. shiftMask, xK_p     ), spawn "pavucontrol")
@@ -202,9 +210,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Session lock
     , ((modm .|. controlMask, xK_l   ), spawn "loginctl lock-session")
 
-    -- Turn off screen
-    , ((modm .|. shiftMask  , xK_l   ), spawn "notify-send DPMS 'Turning off the screen...'; sleep 1; xset dpms force off")
-
     -- Restart WiFi (M-S-PrtSc)
     , ((modm .|. shiftMask, 0xff61   ), spawn "reset-wifi &")
 
@@ -239,10 +244,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((noModMask         ,0x1008ff12), spawn "volume mute")
 
     -- Volume down (XF86AudioLowerVolume)
-    , ((noModMask         ,0x1008ff11), spawn "volume down")
+    , ((noModMask         ,0x1008ff11), spawn "volume -s 5 down")
 
     -- Volume up (XF86AudioRaiseVolume)
-    , ((noModMask         ,0x1008ff13), spawn "volume up")
+    , ((noModMask         ,0x1008ff13), spawn "volume -s 5 up")
 
     -- Brightness down (XF86MonBrightnessDown)
     , ((noModMask         ,0x1008ff03), spawn "brightness down")
@@ -293,11 +298,11 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 ------------------------------------------------------------------------
 -- Layouts:
 
--- mySmartBorders :: LayoutClass l a =>
---      l a -> ModifiedLayout (ConfigurableBorder Ambiguity) l a
--- mySmartBorders = lessBorders OtherIndicated
+mySmartBorders :: LayoutClass l a =>
+     l a -> ModifiedLayout (ConfigurableBorder Ambiguity) l a
+mySmartBorders = lessBorders OtherIndicated
 
-mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
+mySpacing :: Integer -> l a -> ModifiedLayout Spacing l a
 mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
 
 data SPACING = SPACING deriving (Read, Show, Eq, Typeable)
@@ -305,11 +310,11 @@ instance Transformer SPACING Window where
     transform _ x k = k (mySpacing 10 x) (\(ModifiedLayout _ x') -> x')
 
 tall      = renamed [Replace "Tall"]
-            $ smartBorders
+            $ mySmartBorders
             $ ResizableTall 1 (3/100) (1/2) []
-grid      = smartBorders
+grid      = mySmartBorders
             $ Grid (16/10)
-accordion = smartBorders
+accordion = mySmartBorders
             $ Accordion
 
 myLayoutHook = avoidStruts $ mkToggle (single MIRROR)
@@ -327,6 +332,7 @@ myManageHook = composeAll [
       className =? "MPlayer"                             --> doFloat
     , className =? "Gimp"                                --> doFloat
     , className =? "notification"                        --> doFloat
+    , title     =? "LearnOpenGL"                         --> doFloat
     , title     =? "Picture-in-Picture"                  --> doFloat
     , resource  =? "desktop_window"                      --> doIgnore
     , resource  =? "kdesktop"                            --> doIgnore
@@ -341,40 +347,64 @@ myEventHook = fullscreenEventHook
 ------------------------------------------------------------------------
 -- Startup hook
 
+xmobarSpawn :: ScreenId -> IO Handle
+xmobarSpawn 0 = spawnPipe "xmobar"
+xmobarSpawn 1 = spawnPipe "xmobar ~/.config/xmobar/xmobar-1.hs"
+
 myStartupHook = do
-    -- spawnOnce "xset r rate 300 30 &" -- lxsession
-    spawnOnce "setxkbmap -option altwin:swap_alt_win &"
+    spawnOnce "setxkbmap -option altwin:swap_alt_win"
     setFullscreenSupported
 
-    spawnOnce "lxsession -s xmonad &"
-    spawnOnce "xss-lock -- mylock &"
+    spawnOnce "lxsession -s xmonad"
+    spawnOnce "xss-lock -- slock"
+    spawnOnce "clingo"
 
-    spawnOnce "nitrogen --restore &"
-    spawnOnce "picom --experimental-backends &"
-    -- spawnOnce "nm-applet &" -- lxsession
-    spawnOnce "trayer --edge top --distance 2 --monitor primary --align right --widthtype request --iconspacing 8 --padding 6 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x282828 --height 16 &"
+    spawnOnce "nitrogen --restore"
+    spawnOnce picomCmd
+
+    dynStatusBarStartup xmobarSpawn mempty
+
+    spawnOnce "trayer --edge top --distance 2 --monitor primary --align right --widthtype request --iconspacing 8 --padding 6 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x282828 --height 16"
 
 ------------------------------------------------------------------------
--- Now run xmonad with all the defaults we set up.
+-- Log hook
 
+-- Clickable workspaces
+clickableWorkspaces :: String -> String
 clickableWorkspaces =
     flip xmobarAction "1" =<< wrap "xdotool key 'super+" "'"
 
--- Run xmonad with the settings you specify. No need to modify this.
---
-main = do
-    n <- countScreens
-    xmproc <- spawnPipe "xmobar"
-
-    xmonad $ ewmh $ docks defaults {
-        logHook = dynamicLogWithPP $ xmobarPP
-                            { ppOutput = hPutStrLn xmproc
-                            , ppCurrent = xmobarColor "#d8a657" "" . wrap "[" "]"
-                            , ppTitle = xmobarColor "#a9b665" "" . shorten 50
-                            , ppHidden = clickableWorkspaces
-                            }
+-- Xmobar PP
+myXmobarPP currentColor = xmobarPP
+    { ppCurrent = xmobarColor currentColor "" . wrap "[" "]"
+    , ppVisible = wrap "(" ")"
+    , ppTitle = xmobarColor "#a9b665" "" . shorten 50
+    , ppSep = xmobarColor "#7c6f64" "" "  |  "
+    , ppLayout = xmobarAction "xdotool key 'super+space'"   "1"
+               . xmobarAction "xdotool key 'super+shift+m'" "2"
+               . xmobarAction "xdotool key 'super+shift+g'" "3"
+               . xmobarColor "#d3869b" ""
     }
 
+-- Active Xmobar
+activeBar = myPP {
+          ppCurrent =  ppCurrent myPP
+        , ppVisible = ppVisible myPP . clickableWorkspaces
+        , ppHidden = clickableWorkspaces
+        } where myPP = myXmobarPP "#d8a657"
+
+-- Non-active Xmobar
+nonActiveBar = myXmobarPP "#ea6962"
+
+------------------------------------------------------------------------
+-- Run xmonad with the settings you specify.
+--
+
+main = do
+    xmonad $ ewmh $ docks defaults {
+        logHook = multiPP activeBar nonActiveBar
+        }
+    
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will

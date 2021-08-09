@@ -41,7 +41,7 @@ config = defaultConfig {
         , border = TopB
         , bgColor = "#282828"
         , fgColor = myWhite
-        , position = TopW L 100
+        , position = OnScreen 1 $ TopW L 100
         , iconRoot = ".config/xmobar/icons"
         , commands = [ Run $ Cpu ["-t", "\xf108  cpu: (<total>%)", "-L","3","-H","50","--high",myRed] 20
                         , Run $ Memory ["-t","\xf233  mem: <used>M (<usedratio>%)"] 20
@@ -49,7 +49,6 @@ config = defaultConfig {
                         , Run $ Date "\xf133  %b %d %Y - (%H:%M) " "date" 50
                         , Run $ Alsa "default" "Master" ["-t", "\xf028  vol: (<volume>%)<status>", "--", "-O", "", "-o", " [MUTE]", "-c", "red"]
                         , Run $ Battery ["-t", "\xf241   bat: (<left>% <acstatus>)"] 50
-                        , Run $ Com "./.config/xmobar/scripts/trayer-padding-icon.sh" [] "trayerpad" 10
                         , Run $ Kbd []
                         , Run $ UnsafeStdinReader
                         ]
@@ -72,8 +71,6 @@ config = defaultConfig {
                            , mColor myMagenta $ mAction "pavucontrol" "%alsa:default:Master%"
                            , mSeparator
                            , mColor myBlue $ mAction "kitty -e calcurse" "%date%"
-                           , mSeparator
-                           , "%trayerpad%"
                            ]
         }
 

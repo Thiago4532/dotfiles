@@ -1,0 +1,25 @@
+#!/bin/bash
+# Alarm notification
+
+sighandler() {
+    kill `jobs -p` >/dev/null 2>&1
+}
+
+trap sighandler exit
+
+loop_paplay() {
+(
+    sighandler() {
+        kill `jobs -p` >/dev/null 2>&1
+    }
+
+    trap sighandler exit
+
+    while true; do
+        paplay "$@"
+    done
+) &
+}
+
+loop_paplay /usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga
+dunstify -b -u critical "$@"

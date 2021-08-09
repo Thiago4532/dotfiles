@@ -18,6 +18,11 @@ function! s:gruvbox_material_custom() abort
     highlight! link TSRepeat Repeat
     highlight! link TSException Exception
 
+    " Terminal
+    let g:terminal_color_0  = '#32302f'
+    let g:terminal_color_8  = '#504945'
+    let g:terminal_color_11 = '#e78a4e'
+
     " Javascript
     highlight! link javascriptTSVariable Blue
     highlight! link javascriptTSParameter Blue
