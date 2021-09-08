@@ -1,4 +1,5 @@
 #!/bin/sh
+# Depends on pamixer
 
 SOUND_CHANGE=/usr/share/sounds/freedesktop/stereo/audio-volume-change.oga
 STEP=5
@@ -8,19 +9,23 @@ VOLUME_HIGH=55
 
 volume_notification_send() {
     local notification_icon
+    local volume
+    local isMuted
 
-    if [ "$2" = "off" ]; then
+    read isMuted volume < <(pamixer --get-mute --get-volume)
+
+    if [ "$isMuted" = "true" ]; then
         notification_icon='notification-audio-volume-muted'
-    elif [ $1 -le $VOLUME_LOW ]; then
+    elif [ $volume -le $VOLUME_LOW ]; then
         notification_icon='notification-audio-volume-low'
-    elif [ $1 -lt $VOLUME_HIGH ]; then
+    elif [ $volume -lt $VOLUME_HIGH ]; then
         notification_icon='notification-audio-volume-medium'
     else
         notification_icon='notification-audio-volume-high'
     fi
 
     dunstify -i "$notification_icon" -h string:x-dunst-stack-tag:sound \
-        -t 1000 -u normal "Volume: $1%"
+        -t 1000 -u normal "Volume: $volume%"
 }
 
 mode=""
@@ -41,27 +46,21 @@ done
 
 case "$mode" in
     'down')
-        cVolume=`amixer sset Master "${STEP}%-,${STEP}%-" |
-            grep 'Left:' |
-            awk -F'[][]' '{print substr($2, 0, length($2)-1) " " $4}'`
+        pamixer -d $STEP
 
-        volume_notification_send $cVolume
         paplay "$SOUND_CHANGE" &
+        volume_notification_send
         ;;
     'up')
-        cVolume=`amixer sset Master "${STEP}%+,${STEP}%+" |
-            grep 'Left:' |
-            awk -F'[][]' '{print substr($2, 0, length($2)-1) " " $4}'`
+        pamixer -i $STEP
 
-        volume_notification_send $cVolume
         paplay "$SOUND_CHANGE" &
+        volume_notification_send
         ;;
     'mute')
-        cVolume=`amixer set Master toggle,toggle |
-            grep 'Left:' |
-            awk -F'[][]' '{print substr($2, 0, length($2)-1) " " $4}'`
+        pamixer -t
 
-        volume_notification_send $cVolume
+        volume_notification_send
         ;;
     *)
         exit 1
