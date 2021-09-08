@@ -67,6 +67,16 @@ map('n', '<M-q>',           '<C-w>q', opts)
 map('t', '<Esc>', '<C-\\><C-n>', opts)
 
 -- utility keybindings
+
+-- add j/k to jumplist
+map('n', 'j', [[(v:count > 1 ? "m'" . v:count : '') . 'j']], optexpr)
+map('n', 'k', [[(v:count > 1 ? "m'" . v:count : '') . 'k']], optexpr)
+
+-- move between buffers
+map('n', '<leader>n', ':bn<CR>', opts)
+map('n', '<leader>p', ':bp<CR>', opts)
+
+
 map('n', 'gQ', 'i<C-m><Esc>', opts)
 map('n', '<leader>tw', [[
 &wrap ? ':set nowrap<CR>:echo "Wrap disabled!"<CR>' : ':set wrap<CR>:echo "Wrap enabled!"<CR>'

@@ -3,17 +3,17 @@ call plug#begin()
 
 Plug 'tweekmonster/startuptime.vim'
 Plug 'gennaro-tedesco/nvim-peekup'
-Plug 'lambdalisue/suda.vim'
 
 " " Language Server Protocol
 Plug 'neovim/nvim-lspconfig'
 
 " " Syntax Highlight
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter', {'branch': '0.5-compat' ,'do': ':TSUpdate'}
 Plug 'nvim-treesitter/playground'
 Plug 'vim-jp/vim-cpp'
-Plug 'neovimhaskell/haskell-vim'
 Plug 'bfrg/vim-cpp-modern'
+Plug 'tikhomirov/vim-glsl'
+Plug 'neovimhaskell/haskell-vim'
 Plug 'jackguo380/vim-lsp-cxx-highlight' " Semantic syntax highlighting for C/C++
 
 " " UI

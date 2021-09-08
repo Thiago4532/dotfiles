@@ -32,10 +32,12 @@ import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing
 
 -- Actions
+import XMonad.Actions.SpawnOn
 
 -- Utility
 import XMonad.Util.Loggers
 import XMonad.Util.Run
+import XMonad.Util.NamedScratchpad
 import XMonad.Util.SpawnOnce
 
 -- The preferred terminal program, which is used in a binding below and by
@@ -69,7 +71,7 @@ myModMask       = mod4Mask
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
-myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
+myWorkspaces    = ["1","2","3","4","5","6","7","8","9","NSP"]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
@@ -108,14 +110,16 @@ setFullscreenSupported = addSupported ["_NET_WM_STATE", "_NET_WM_STATE_FULLSCREE
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch a terminal
-    [ ((modm .|. controlMask,  xK_t  ), spawn $ XMonad.terminal conf)
-    , ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
+    [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
 
     -- toggle picom
     , ((modm .|. shiftMask, xK_F12   ), picomToggle)
 
-    -- launch dmenu
-    , ((modm,               xK_p     ), spawn "dmenu_run")
+    -- launch rofi
+    , ((modm,               xK_p     ), spawn "rofi -modi run -show")
+
+    -- launch rofi (desktop entries)
+    , ((modm .|. shiftMask, xK_p     ), spawn "rofi -modi drun -show")
 
     -- launch networkmanager_dmenu
     , ((modm,               xK_y     ), spawn "networkmanager_dmenu")
@@ -123,14 +127,20 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch firefox
     , ((modm              , xK_f     ), spawn "firefox &")
 
+    -- launch KeePassXC
+    , ((modm .|. shiftMask, xK_h     ), namedScratchpadAction scratchpads "keepassxc")
+
+    -- launch popup terminal
+    , ((modm .|. shiftMask,   xK_t   ), namedScratchpadAction scratchpads "popupTerminal")
+
+    -- launch calculator
+    , ((modm              , xK_o     ), namedScratchpadAction scratchpads "calculator")
+
+    -- launch music player
+    , ((modm .|. shiftMask, xK_m     ), namedScratchpadAction scratchpads "cmus")
+
     -- launch vimwiki
     , ((modm              , xK_v     ), spawn "kitty nvim -- ~/Documents/vimwiki/index.wiki &")
-
-    -- launch qalc
-    , ((modm              , xK_o     ), spawn "kitty -e qalc &")
-
-    -- launch pavucontrol
-    , ((modm .|. shiftMask, xK_p     ), spawn "pavucontrol")
 
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
@@ -139,7 +149,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_space ), sendMessage NextLayout)
 
     -- Toggle mirror
-    , ((modm .|. shiftMask, xK_m     ), sendMessage $ Toggle MIRROR)
+    -- , ((modm .|. shiftMask, xK_m     ), sendMessage $ Toggle MIRROR)
     
     -- Toggle gaps
     , ((modm .|. shiftMask, xK_g     ), sendMessage $ Toggle SPACING)
@@ -218,6 +228,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Take a screenshot (M-PrtSc)
     , ((modm              , 0xff61   ), spawn "maim --format=png | xclip -selection clipboard -t image/png && notify-send -t 1000 'Copied screenshot to clipboard!'")
+
+    -- OCR script
+    , ((modm              , xK_g     ), spawn "cgrab")
     
     -- OCR script
     , ((modm .|. shiftMask, xK_o     ), spawn "ocr")
@@ -328,16 +341,36 @@ myLayoutHook = avoidStruts $ mkToggle (single MIRROR)
 ------------------------------------------------------------------------
 -- Window rules:
 
-myManageHook = composeAll [
-      className =? "MPlayer"                             --> doFloat
-    , className =? "Gimp"                                --> doFloat
-    , className =? "notification"                        --> doFloat
-    , title     =? "LearnOpenGL"                         --> doFloat
-    , title     =? "Picture-in-Picture"                  --> doFloat
-    , resource  =? "desktop_window"                      --> doIgnore
-    , resource  =? "kdesktop"                            --> doIgnore
-    , className =? "discord"                             --> doShift ( myWorkspaces !! 8 )
-    ]
+(=*) :: Eq a => Query [a] -> [a] -> Query Bool
+q =* x = fmap (isInfixOf x) q
+
+popupFloat = customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3) 
+scratchpads = [ NS "keepassxc" "keepassxc"
+                    (className =? "KeePassXC")
+                    popupFloat,
+                NS "popupTerminal" "kitty --class popup-terminal"
+                    (className =? "popup-terminal")
+                    popupFloat,
+                NS "calculator" "kitty --class CalculatorCLI -e qalc"
+                    (className =? "CalculatorCLI")
+                    popupFloat,
+                NS "cmus" "kitty --class CmusKitty -e cmus"
+                    (className =? "CmusKitty")
+                    popupFloat
+              ]
+
+myManageHook = composeOne [
+      className =? "notification"                        -?> doFloat
+    , className =? "MPlayer"                             -?> doFloat
+    , className =? "Gimp"                                -?> doFloat
+    , title     =? "LearnOpenGL"                         -?> doCenterFloat
+    , title     =? "Picture-in-Picture"                  -?> doFloat
+    , resource  =? "desktop_window"                      -?> doIgnore
+    , resource  =? "kdesktop"                            -?> doIgnore
+    , className =? "TelegramDesktop"                     -?> popupFloat
+    , className =? "discord"                             -?> doShift ( myWorkspaces !! 8 )
+    ] <+> manageSpawn
+      <+> namedScratchpadManageHook scratchpads
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -359,6 +392,8 @@ myStartupHook = do
     spawnOnce "xss-lock -- slock"
     spawnOnce "clingo"
 
+    spawnAndDoOnce (popupFloat <+> doShift "NSP") "keepassxc"
+
     spawnOnce "nitrogen --restore"
     spawnOnce picomCmd
 
@@ -375,7 +410,7 @@ clickableWorkspaces =
     flip xmobarAction "1" =<< wrap "xdotool key 'super+" "'"
 
 -- Xmobar PP
-myXmobarPP currentColor = xmobarPP
+myXmobarPP currentColor = namedScratchpadFilterOutWorkspacePP $ xmobarPP
     { ppCurrent = xmobarColor currentColor "" . wrap "[" "]"
     , ppVisible = wrap "(" ")"
     , ppTitle = xmobarColor "#a9b665" "" . shorten 50

@@ -12,10 +12,12 @@ g.loaded_ruby_provider = 0
 g.loaded_node_provider = 0
 g.loaded_perl_provider = 0
 
-cmd'noremap , "+'
+cmd[[
+noremap , "+
+nnoremap ,, ,
+]]
 g.mapleader = ','
 g.AutoPairsOpenBalanceBlacklist = {'{'}
-g.suda_smart_edit = 1 
 
 -- vim-plug: Source all plugins
 cmd'source ~/.config/nvim/vimscript/plugins.vim'
@@ -34,6 +36,16 @@ require'telescope'.setup{
     defaults = { 
         file_ignore_patterns = {'build/.*', 'compile_commands.json'},
     },
+    pickers = {
+        buffers = {
+            sort_lastused = true,
+            mappings = {
+                i = { ["<c-d>"] = "delete_buffer" },
+                n = { ["<c-d>"] = "delete_buffer" }
+            },
+            initial_mode = "normal"
+        }
+    }
 }
 
 require'nvim-treesitter.configs'.setup {
@@ -49,4 +61,3 @@ require'nvim-treesitter.configs'.setup {
 require('kommentary.config').configure_language("default", {
     prefer_single_line_comments = true,
 })
-

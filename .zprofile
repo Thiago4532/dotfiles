@@ -15,6 +15,11 @@ export GOPATH=$XDG_DATA_HOME/go
 # Firefox disable RDD sandbox
 export MOZ_DISABLE_RDD_SANDBOX=1
 
+if [ -n "$DESKTOP_SESSION" ]; then
+    eval `gnome-keyring-daemon --start`
+    export SSH_AUTH_SOCK
+fi
+
 if [ -z "$SSH_AUTH_SOCK" ] ; then
     eval `ssh-agent -s`
 fi
