@@ -6,7 +6,7 @@ color=`grabc` || exit $?
 echo -n $color | xclip -i -selection clipboard
 
 # Create an image of a circle
-tmpfile=`mktemp /tmp/cgrab-XXXXXX.png`
+tmpfile=`mktemp /tmp/cgrab-XXXXXX.png` || exit 1
 convert -size 64x64 xc:"#ffffff00" -fill $color -draw 'circle 32,32 32,62' $tmpfile
 
 # Send notification
