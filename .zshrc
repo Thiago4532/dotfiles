@@ -18,6 +18,9 @@ bindkey -e
 # The following lines were added by compinstall
 zstyle :compinstall filename "$HOME/.zshrc"
 
+[ -d "$HOME/.zsh-completions" ] &&
+    fpath=($HOME/.zsh-completions $fpath)
+
 autoload -Uz compinit
 compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
 # End of lines added by compinstall
@@ -71,10 +74,11 @@ source ~/.zsh_aliases
 # Functions
 source ~/.zsh_functions
 
+# Non-public scripts
+[ -f ~/.zsh_priv ] && source ~/.zsh_priv
+
+# Extra completions
+compdef _htracker htracker
+
 # precmd
 precmd () { print -Pn "\e]0;zsh: %~\a" }
-
-
-# BEGIN_KITTY_SHELL_INTEGRATION
-if test -e "/usr/lib/kitty/shell-integration/kitty.zsh"; then source "/usr/lib/kitty/shell-integration/kitty.zsh"; fi
-# END_KITTY_SHELL_INTEGRATION

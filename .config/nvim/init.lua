@@ -3,9 +3,11 @@ local g = vim.g
 local cmd = vim.cmd
 local fn = vim.fn
 
-g.polyglot_disabled = {'sensible'}
+-- vimwiki
 g.vimwiki_list = {{path = '~/Documents/vimwiki', path_html = '~/Documents/HTML'}}
+-- g.vimwiki_ext2syntax = {[vim.type_idx] = vim.types.dictionary}
 
+-- disable providers
 g.loaded_python_provider = 0
 g.loaded_python3_provider = 0
 g.loaded_ruby_provider = 0
@@ -23,7 +25,6 @@ g.AutoPairsOpenBalanceBlacklist = {'{'}
 cmd'source ~/.config/nvim/vimscript/plugins.vim'
 
 require 'self.lsp'
-require 'self.statusline'
 require 'self.editor'
 require 'self.keybindings'
 
@@ -32,8 +33,29 @@ source ~/.config/nvim/vimscript/ui.vim
 source ~/.config/nvim/vimscript/autocmd.vim
 ]]
 
+require'lualine'.setup {
+    options = {
+        theme = 'gruvbox_material'
+    },
+    sections = {
+        lualine_x = {
+            {
+                'diagnostics',
+                sources = {'nvim_lsp'},
+                sections = {'error', 'warn'},
+                color_error = '#ea6962',
+                color_warn = '#d8a657'
+            },
+            'encoding',
+            'fileformat',
+            'filetype'
+        },
+    },
+    extensions = {'nvim-tree'}
+}
+
 require'telescope'.setup{
-    defaults = { 
+    defaults = {
         file_ignore_patterns = {'build/.*', 'compile_commands.json'},
     },
     pickers = {
@@ -48,6 +70,8 @@ require'telescope'.setup{
     }
 }
 
+require'nvim-tree'.setup {}
+
 require'nvim-treesitter.configs'.setup {
     highlight = {
         enable = true,
@@ -61,3 +85,4 @@ require'nvim-treesitter.configs'.setup {
 require('kommentary.config').configure_language("default", {
     prefer_single_line_comments = true,
 })
+

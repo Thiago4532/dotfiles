@@ -1,0 +1,28 @@
+#compdef htracker
+_htracker() {
+    _arguments -C \
+        '1:mode:->mode' \
+        '*:: :->args'
+
+    case "$state" in
+        (mode)
+            local modes; modes=(
+                'add:add a task'
+                'delete:delete the last task'
+                'change:change the last task'
+                'list:list all tasks'
+                'view:view the data file'
+                "edit:edit the data file using ${EDITOR-/usr/bin/vim}"
+            )
+
+            _describe 'mode' modes
+            ;;
+        (args)
+            local tasks=("${(@f)$(htracker list)}")
+
+            _describe 'task' tasks
+            ;;
+    esac
+}
+
+_htracker

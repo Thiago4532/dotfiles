@@ -1,5 +1,4 @@
 set termguicolors
-
 let g:gruvbox_material_enable_bold = 1
 let g:gruvbox_material_enable_italic = 1
 let g:gruvbox_material_better_performance = 1
@@ -27,13 +26,8 @@ function! s:gruvbox_material_custom() abort
     highlight! link javascriptTSVariable Blue
     highlight! link javascriptTSParameter Blue
 
-    " VimWiki
-    highlight! link VimwikiHeader1 OrangeBold
-    highlight! link VimwikiHeader2 GreenBold
-    highlight! link VimwikiHeader3 BlueBold
-    highlight! link VimwikiHeader4 PurpleBold
-    highlight! link VimwikiHeader5 AquaBold
-    highlight! link VimwikiHeader6 YellowBold
+    " Vimwiki
+    highlight! link textSnipTEX Special
 endfunction
 
 augroup GruvboxMaterialCustom

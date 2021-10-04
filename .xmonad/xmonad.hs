@@ -40,6 +40,9 @@ import XMonad.Util.Run
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.SpawnOnce
 
+-- System
+import System.Posix.Env (putEnv)
+
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
@@ -119,7 +122,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_p     ), spawn "rofi -modi run -show")
 
     -- launch rofi (desktop entries)
-    , ((modm .|. shiftMask, xK_p     ), spawn "rofi -modi drun -show")
+    , ((modm .|. shiftMask, xK_p     ), spawn "rofi -modi drun -show-icons -show")
 
     -- launch networkmanager_dmenu
     , ((modm,               xK_y     ), spawn "networkmanager_dmenu")
@@ -132,12 +135,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch popup terminal
     , ((modm .|. shiftMask,   xK_t   ), namedScratchpadAction scratchpads "popupTerminal")
-
-    -- launch calculator
-    , ((modm              , xK_o     ), namedScratchpadAction scratchpads "calculator")
-
-    -- launch music player
-    , ((modm .|. shiftMask, xK_m     ), namedScratchpadAction scratchpads "cmus")
 
     -- launch vimwiki
     , ((modm              , xK_v     ), spawn "kitty nvim -- ~/Documents/vimwiki/index.wiki &")
@@ -350,12 +347,6 @@ scratchpads = [ NS "keepassxc" "keepassxc"
                     popupFloat,
                 NS "popupTerminal" "kitty --class popup-terminal"
                     (className =? "popup-terminal")
-                    popupFloat,
-                NS "calculator" "kitty --class CalculatorCLI -e qalc"
-                    (className =? "CalculatorCLI")
-                    popupFloat,
-                NS "cmus" "kitty --class CmusKitty -e cmus"
-                    (className =? "CmusKitty")
                     popupFloat
               ]
 
@@ -394,7 +385,7 @@ myStartupHook = do
 
     spawnAndDoOnce (popupFloat <+> doShift "NSP") "keepassxc"
 
-    spawnOnce "nitrogen --restore"
+    spawnOnce "nitrogen --restore && conky"
     spawnOnce picomCmd
 
     dynStatusBarStartup xmobarSpawn mempty
@@ -435,11 +426,16 @@ nonActiveBar = myXmobarPP "#ea6962"
 -- Run xmonad with the settings you specify.
 --
 
+javaHack :: XConfig l -> XConfig l
+javaHack conf = conf
+  { startupHook = startupHook conf
+                    *> io (putEnv "_JAVA_AWT_WM_NONREPARENTING=1")
+  }
+
 main = do
-    xmonad $ ewmh $ docks defaults {
+    xmonad $ javaHack $ ewmh $ docks defaults {
         logHook = multiPP activeBar nonActiveBar
         }
-    
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will

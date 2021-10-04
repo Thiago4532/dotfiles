@@ -13,11 +13,13 @@ Plug 'nvim-treesitter/playground'
 Plug 'vim-jp/vim-cpp'
 Plug 'bfrg/vim-cpp-modern'
 Plug 'tikhomirov/vim-glsl'
+Plug 'jbyuki/nabla.nvim'
 Plug 'neovimhaskell/haskell-vim'
-Plug 'jackguo380/vim-lsp-cxx-highlight' " Semantic syntax highlighting for C/C++
+Plug 'Thiago4532/vim-lsp-cxx-highlight' " Semantic syntax highlighting for C/C++
 
 " " UI
 Plug 'sainnhe/gruvbox-material'
+Plug 'sainnhe/everforest'
 Plug 'hoob3rt/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'

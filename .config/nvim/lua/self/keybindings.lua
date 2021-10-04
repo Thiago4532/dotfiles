@@ -2,9 +2,6 @@ local map = vim.api.nvim_set_keymap
 local opts = { noremap = true, silent = true }
 local optexpr = { silent = true, noremap = true, expr = true }
 
--- Codeforces template
-map('n', 'cpp', 'ggdG:-1read ~/CP-Problems/Codeforces/base.cpp<CR>17zt23gg', opts)
-
 -- Toggle nvim-tree 
 map('', '<C-n>', ':NvimTreeToggle<CR>', opts) 
 
@@ -72,12 +69,10 @@ map('t', '<Esc>', '<C-\\><C-n>', opts)
 map('n', 'j', [[(v:count > 1 ? "m'" . v:count : '') . 'j']], optexpr)
 map('n', 'k', [[(v:count > 1 ? "m'" . v:count : '') . 'k']], optexpr)
 
--- move between buffers
-map('n', '<leader>n', ':bn<CR>', opts)
-map('n', '<leader>p', ':bp<CR>', opts)
-
-
+map('n', 'Y', 'y$', opts)
 map('n', 'gQ', 'i<C-m><Esc>', opts)
 map('n', '<leader>tw', [[
 &wrap ? ':set nowrap<CR>:echo "Wrap disabled!"<CR>' : ':set wrap<CR>:echo "Wrap enabled!"<CR>'
 ]], optexpr)
+
+map('n', '<F8>', ":DetectIndent<CR>",opts)

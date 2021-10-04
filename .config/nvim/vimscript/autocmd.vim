@@ -14,3 +14,9 @@ augroup neovim_terminal
     autocmd TermOpen * :set nonumber norelativenumber
 augroup END
 
+" Commands
+command DetectIndent lua require'self.util'.detect_indent()
+
+function WriteIndentModeline()
+    lua require'self.util'.write_indent_modeline()
+endfunction

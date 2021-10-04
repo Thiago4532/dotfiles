@@ -3,7 +3,7 @@
 eval "$(fasd --init posix-alias zsh-ccomp zsh-ccomp-install)"
 
 _fasd_preexec() {
-    { eval "fasd --proc \$(fasd --sanitize \$2)"; } &|
+    { eval "fasd --proc \$(fasd --sanitize \$2)" 2>/dev/null; } &|
 }
 autoload -Uz add-zsh-hook
 add-zsh-hook preexec _fasd_preexec

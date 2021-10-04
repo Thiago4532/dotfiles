@@ -39,13 +39,13 @@ compdef _files noicMD
 
 # nvim functions
 
-function nvim_profile() {
+function nvim-profile() {
     sed -i 's/^--\(.*profiler\.lua\)/\1/g' ~/.config/nvim/init.lua
     (AK_PROFILER=1 nvim $@ 2>&1 >/dev/null)
     sed -i 's/^\(.*profiler\.lua\)/--\1/g' ~/.config/nvim/init.lua
 }
 
-function nvim_clearundo() {
+function nvim-clearundo() {
     tmpfile=`mktemp`
 
     nvim --headless \
@@ -55,12 +55,12 @@ function nvim_clearundo() {
     undodir=`<"$tmpfile"`
     rm -f "$tmpfile"
 
-    rm -r "$undodir"
+    rm -Ir "$undodir"
     return $?
 }
 
-function nvim_startup() {
+function nvim-startup() {
     nvim --startuptime /tmp/nstartup.txt $@ &&
-        nvim /tmp/nstartup.txt
+        nvim -u NORC /tmp/nstartup.txt
     rm /tmp/nstartup.txt
 }
