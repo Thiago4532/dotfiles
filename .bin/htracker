@@ -1,0 +1,52 @@
+#!/bin/bash
+
+data="$HOME/.htracker"
+
+EDITOR=${EDITOR-/usr/bin/vim}
+name="${0##*/}"
+
+check_executable() {
+    command -v "$1" > /dev/null
+}
+
+usage() {
+    [ $# -gt 0 ] && echo "$name: $1" >&2
+    echo "Usage: $name [mode]" >&2
+    exit 
+}
+
+if ! [ -f "$data" ]; then
+    touch "$data" || usage "failed to create data file!"
+    chmod 600 "$data" || usage "failed to change data file permission!"
+fi
+
+mode="$1"
+shift
+
+ctime=`date '+%F %T'`
+case "$mode" in
+    a*) # add
+        echo "$ctime|$*" >> $data || usage "failed to append to data file!"
+        ;;
+    d*) # delete
+        tail -1 $data
+        sed -i '$d' $data
+        ;;
+    c) # change
+        sed -i "\$s/|.*/|$*/g" $data || usage "failed to append to data file!"
+        ;;
+    l*) # list
+        cat $data | cut -d'|' -f2 | sort -u | sed '/^$/d'
+        ;;
+    v*) # view
+        cat $data
+        ;;
+    e*) # edit
+        check_executable "$EDITOR" ||
+            usage "\$EDITOR is an invalid editor! ($EDITOR)"
+        $EDITOR $data
+        ;;
+    *)
+        usage "invalid mode!"
+        ;;
+esac

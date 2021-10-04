@@ -1,0 +1,87 @@
+#!/bin/sh
+# A pomodoro timer
+# Dependencies: at, alarm(script)
+
+timer="25min"
+short_break="5min"
+long_break="30min"
+
+mode=""
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -t)
+            shift
+            custom="$1"
+            ;;
+        *)
+            [ -z "$mode" ] && mode="$1" || exit 1
+            ;;
+    esac
+    shift
+done
+
+print_job() {
+    atq | awk '($1 == "'$1'"){print $2 ", " $3 "/" $4 "/" $6 " - " $5 }'
+}
+
+case "$mode" in
+    start)
+        [ -z "${custom+x}" ] &&
+            c_timer=$timer ||
+            c_timer=$custom
+
+        at_job=`echo "alarm -i pomodoro-indicator Pomodoro 'Hora de uma pausa\!'" |
+            at now + $c_timer 2>&1 >/dev/null | tail -1 | cut -d' ' -f2`
+        echo $at_job >> /tmp/pomodoro_jobs.txt
+
+        echo "Pomodoro: Timer was started! ($c_timer)"
+        print_job $at_job
+        ;;
+    short)
+        [ -z "${custom+x}" ] &&
+            c_timer=$short_break ||
+            c_timer=$custom
+
+        at_job=`echo "alarm -i pomodoro-indicator Pomodoro 'Fim da pausa\!'" |
+            at now + $c_timer 2>&1 >/dev/null | tail -1 | cut -d' ' -f2`
+        echo $at_job >> /tmp/pomodoro_jobs.txt
+        
+        echo "Pomodoro: Short break! ($c_timer)"
+        print_job $at_job
+        ;;
+    long)
+        [ -z "${custom+x}" ] &&
+            c_timer=$long_break ||
+            c_timer=$custom
+
+        at_job=`echo "alarm -i pomodoro-indicator Pomodoro 'Fim da pausa\!'" |
+            at now + $c_timer 2>&1 >/dev/null | tail -1 | cut -d' ' -f2`
+        echo $at_job >> /tmp/pomodoro_jobs.txt
+
+        echo "Pomodoro: Long break! ($c_timer)"
+        print_job $at_job
+        ;;
+    stop)
+        [ -f /tmp/pomodoro_jobs.txt ] || exit 1
+
+        deleted=false
+        for i in `cat /tmp/pomodoro_jobs.txt`; do
+            if atrm $i >/dev/null 2>&1; then
+                echo "at: job $i deleted!"
+                deleted=true
+            fi
+        done
+        [ "$deleted" = true ] || exit 1
+        ;;
+    list)
+        [ -f /tmp/pomodoro_jobs.txt ] || exit 1
+
+        for i in `cat /tmp/pomodoro_jobs.txt`; do
+            print_job $i
+        done
+        ;;
+    *)
+        exit 1
+        ;;
+esac
