@@ -2,7 +2,6 @@
 call plug#begin()
 
 Plug 'tweekmonster/startuptime.vim'
-Plug 'gennaro-tedesco/nvim-peekup'
 
 " " Language Server Protocol
 Plug 'neovim/nvim-lspconfig'
@@ -12,14 +11,14 @@ Plug 'nvim-treesitter/nvim-treesitter', {'branch': '0.5-compat' ,'do': ':TSUpdat
 Plug 'nvim-treesitter/playground'
 Plug 'vim-jp/vim-cpp'
 Plug 'bfrg/vim-cpp-modern'
+Plug 'akinsho/bufferline.nvim'
 Plug 'tikhomirov/vim-glsl'
-Plug 'jbyuki/nabla.nvim'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'Thiago4532/vim-lsp-cxx-highlight' " Semantic syntax highlighting for C/C++
 
+Plug 'hkupty/iron.nvim'
 " " UI
 Plug 'sainnhe/gruvbox-material'
-Plug 'sainnhe/everforest'
 Plug 'hoob3rt/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'

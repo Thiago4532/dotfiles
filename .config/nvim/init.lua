@@ -1,11 +1,11 @@
---dofile(vim.fn.expand('~/.config/nvim/lua/profiler.lua'))
+-- dofile(vim.fn.expand('~/.config/nvim/lua/profiler.lua'))
+require 'impatient'
 local g = vim.g
 local cmd = vim.cmd
 local fn = vim.fn
 
 -- vimwiki
 g.vimwiki_list = {{path = '~/Documents/vimwiki', path_html = '~/Documents/HTML'}}
--- g.vimwiki_ext2syntax = {[vim.type_idx] = vim.types.dictionary}
 
 -- disable providers
 g.loaded_python_provider = 0
@@ -54,6 +54,8 @@ require'lualine'.setup {
     extensions = {'nvim-tree'}
 }
 
+require'bufferline'.setup{}
+
 require'telescope'.setup{
     defaults = {
         file_ignore_patterns = {'build/.*', 'compile_commands.json'},
@@ -63,7 +65,7 @@ require'telescope'.setup{
             sort_lastused = true,
             mappings = {
                 i = { ["<c-d>"] = "delete_buffer" },
-                n = { ["<c-d>"] = "delete_buffer" }
+                n = { ["<c-d>"] = "delete_buffer", ["<c-c>"] = "close" }
             },
             initial_mode = "normal"
         }
