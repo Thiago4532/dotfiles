@@ -15,17 +15,18 @@ map('n', '<F4>', [[
 -- Buffer keybindings
 map('n', '<Left>', ':bp<CR>', opts);
 map('n', '<Right>', ':bn<CR>', opts);
-map('n', '<leader>bd', ':bd<CR>', opts);
+map('n', '<C-h>', ':bp<CR>', opts);
+map('n', '<C-l>', ':bn<CR>', opts);
 
-map('n', '<leader>1', ':b1<CR>', opts);
-map('n', '<leader>2', ':b2<CR>', opts);
-map('n', '<leader>3', ':b3<CR>', opts);
-map('n', '<leader>4', ':b4<CR>', opts);
-map('n', '<leader>5', ':b5<CR>', opts);
-map('n', '<leader>6', ':b6<CR>', opts);
-map('n', '<leader>7', ':b7<CR>', opts);
-map('n', '<leader>8', ':b8<CR>', opts);
-map('n', '<leader>9', ':b9<CR>', opts);
+map('n', '<leader>1', ':BufferLineGoToBuffer 1<CR>', opts);
+map('n', '<leader>2', ':BufferLineGoToBuffer 2<CR>', opts);
+map('n', '<leader>3', ':BufferLineGoToBuffer 3<CR>', opts);
+map('n', '<leader>4', ':BufferLineGoToBuffer 4<CR>', opts);
+map('n', '<leader>5', ':BufferLineGoToBuffer 5<CR>', opts);
+map('n', '<leader>6', ':BufferLineGoToBuffer 6<CR>', opts);
+map('n', '<leader>7', ':BufferLineGoToBuffer 7<CR>', opts);
+map('n', '<leader>8', ':BufferLineGoToBuffer 8<CR>', opts);
+map('n', '<leader>9', ':BufferLineGoToBuffer 9<CR>', opts);
 
 -- lsp keybindings
 map('n', 'gD', ':lua vim.lsp.buf.declaration()<CR>', opts)

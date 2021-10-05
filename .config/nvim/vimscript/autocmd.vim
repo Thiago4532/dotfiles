@@ -14,6 +14,11 @@ augroup neovim_terminal
     autocmd TermOpen * :set nonumber norelativenumber
 augroup END
 
+augroup packer_user_config
+    autocmd!
+    autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+augroup end
+
 " Commands
 command DetectIndent lua require'self.util'.detect_indent()
 

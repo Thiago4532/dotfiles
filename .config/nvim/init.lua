@@ -23,6 +23,7 @@ g.AutoPairsOpenBalanceBlacklist = {'{'}
 
 -- vim-plug: Source all plugins
 cmd'source ~/.config/nvim/vimscript/plugins.vim'
+-- require 'self.plugins'
 
 require 'self.lsp'
 require 'self.editor'

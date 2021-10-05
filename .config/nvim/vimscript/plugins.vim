@@ -1,8 +1,6 @@
 " vim-plug
 call plug#begin()
 
-Plug 'tweekmonster/startuptime.vim'
-
 " " Language Server Protocol
 Plug 'neovim/nvim-lspconfig'
 
@@ -16,7 +14,6 @@ Plug 'tikhomirov/vim-glsl'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'Thiago4532/vim-lsp-cxx-highlight' " Semantic syntax highlighting for C/C++
 
-Plug 'hkupty/iron.nvim'
 " " UI
 Plug 'sainnhe/gruvbox-material'
 Plug 'hoob3rt/lualine.nvim'
