@@ -20,8 +20,8 @@ augroup packer_user_config
 augroup end
 
 " Commands
-command DetectIndent lua require'self.util'.detect_indent()
+command DetectIndent lua require'util'.detect_indent()
 
 function WriteIndentModeline()
-    lua require'self.util'.write_indent_modeline()
+    lua require'util'.write_indent_modeline()
 endfunction

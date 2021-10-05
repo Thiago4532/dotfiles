@@ -16,19 +16,30 @@ dotfiles config --local status.showUntrackedFiles no
 dotfiles checkout --force
 ```
 
-### Zsh dotfiles
+### ZSH
 
-Install zplug to manage zsh plugins:
-```zsh
+Install [zplug](https://github.com/zplug/zplug) to manage zsh plugins:
+```sh
 curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 ```
 
 After that, run `zplug install` to install all zsh plugins.
 
-### Neovim dotfiles ( Lua )
-##### Requirements: neovim-nightly
+### Neovim
 
-Install plugins to nvim using vim-plug.
+Install [packer.nvim](https://github.com/wbthomason/packer.nvim):
+```sh
+# Unix instructions
+git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+ ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 ```
-:PlugInstall
+
+After installing packer.nvim, run this command to install all the NeoVim plugins:
+```lua
+:lua require'plugins'.install()
+```
+
+Now, you must run this command to install all [treesitter](https://github.com/nvim-treesitter/nvim-treesitter) parsers:
+```vim
+:TSInstall maintained
 ```

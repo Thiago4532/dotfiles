@@ -3,7 +3,7 @@ local opts = { noremap = true, silent = true }
 local optexpr = { silent = true, noremap = true, expr = true }
 
 -- Toggle nvim-tree 
-map('', '<C-n>', ':NvimTreeToggle<CR>', opts) 
+map('n', '<C-n>', ':NvimTreeToggle<CR>', opts) 
 
 -- Highlight keybindings
 map('n', '<F1>', ':TSHighlightCapturesUnderCursor<CR>', opts)

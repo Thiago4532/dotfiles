@@ -69,36 +69,190 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
+  ["auto.pairs"] = {
+    config = { "vim.g.AutoPairsOpenBalanceBlacklist = {'{'}" },
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/auto.pairs"
+  },
+  ["bufferline.nvim"] = {
+    config = { "require'bufferline'.setup{}" },
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/bufferline.nvim"
+  },
+  ["gruvbox-material"] = {
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/gruvbox-material"
+  },
+  ["haskell-vim"] = {
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/haskell-vim"
+  },
   ["impatient.nvim"] = {
     loaded = true,
     path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/impatient.nvim"
   },
+  kommentary = {
+    config = { "require'config.kommentary'" },
+    keys = { { "n", "gc" }, { "x", "gc" }, { "n", "gcc" } },
+    loaded = false,
+    needs_bufread = false,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/opt/kommentary"
+  },
+  ["lualine.nvim"] = {
+    config = { "require'config.statusline'" },
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/lualine.nvim"
+  },
+  ["nvim-lspconfig"] = {
+    config = { "require'config.lsp'" },
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/nvim-lspconfig"
+  },
+  ["nvim-tree.lua"] = {
+    commands = { "NvimTreeOpen", "NvimTreeToggle" },
+    config = { "require'nvim-tree'.setup{}" },
+    loaded = false,
+    needs_bufread = false,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/opt/nvim-tree.lua"
+  },
+  ["nvim-treesitter"] = {
+    config = { "require'config.treesitter'" },
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/nvim-treesitter"
+  },
+  ["nvim-web-devicons"] = {
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/nvim-web-devicons"
+  },
   ["packer.nvim"] = {
-    commands = { "PackerInstall", "PackerUpdate", "PackerSync", "PackerClean", "PackerCompile" },
-    config = { "require'self.plugins'" },
+    commands = { "PackerInstall", "PackerUpdate", "PackerSync", "PackerClean", "PackerCompile", "PackerLoad" },
+    config = { "require'plugins'" },
     loaded = false,
     needs_bufread = false,
     path = "/home/thiagomm/.local/share/nvim/site/pack/packer/opt/packer.nvim"
+  },
+  playground = {
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/playground"
+  },
+  ["plenary.nvim"] = {
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/plenary.nvim"
+  },
+  ["popup.nvim"] = {
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/popup.nvim"
   },
   ["startuptime.vim"] = {
     commands = { "StartupTime" },
     loaded = false,
     needs_bufread = false,
     path = "/home/thiagomm/.local/share/nvim/site/pack/packer/opt/startuptime.vim"
+  },
+  ["telescope.nvim"] = {
+    config = { "require'config.telescope'" },
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/telescope.nvim"
+  },
+  ["vim-cpp"] = {
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/vim-cpp"
+  },
+  ["vim-cpp-modern"] = {
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/vim-cpp-modern"
+  },
+  ["vim-glsl"] = {
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/vim-glsl"
+  },
+  ["vim-lsp-cxx-highlight"] = {
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/vim-lsp-cxx-highlight"
+  },
+  ["vim-repeat"] = {
+    loaded = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/start/vim-repeat"
+  },
+  ["vim-surround"] = {
+    keys = { { "n", "ds" }, { "n", "cs" }, { "n", "cS" }, { "n", "ys" }, { "n", "yS" }, { "n", "ys" }, { "n", "yS" }, { "n", "yS" }, { "x", "S" }, { "x", "gS" } },
+    loaded = false,
+    needs_bufread = false,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/opt/vim-surround"
+  },
+  vimwiki = {
+    loaded = true,
+    needs_bufread = true,
+    path = "/home/thiagomm/.local/share/nvim/site/pack/packer/opt/vimwiki"
   }
 }
 
 time([[Defining packer_plugins]], false)
+-- Setup for: vim-surround
+time([[Setup for vim-surround]], true)
+vim.g.surround_no_insert_mappings = 1
+time([[Setup for vim-surround]], false)
+-- Setup for: vimwiki
+time([[Setup for vimwiki]], true)
+vim.g.vimwiki_list = {{path = '~/Documents/vimwiki', path_html = '~/Documents/HTML'}}
+time([[Setup for vimwiki]], false)
+time([[packadd for vimwiki]], true)
+vim.cmd [[packadd vimwiki]]
+time([[packadd for vimwiki]], false)
+-- Config for: nvim-lspconfig
+time([[Config for nvim-lspconfig]], true)
+require'config.lsp'
+time([[Config for nvim-lspconfig]], false)
+-- Config for: lualine.nvim
+time([[Config for lualine.nvim]], true)
+require'config.statusline'
+time([[Config for lualine.nvim]], false)
+-- Config for: auto.pairs
+time([[Config for auto.pairs]], true)
+vim.g.AutoPairsOpenBalanceBlacklist = {'{'}
+time([[Config for auto.pairs]], false)
+-- Config for: bufferline.nvim
+time([[Config for bufferline.nvim]], true)
+require'bufferline'.setup{}
+time([[Config for bufferline.nvim]], false)
+-- Config for: telescope.nvim
+time([[Config for telescope.nvim]], true)
+require'config.telescope'
+time([[Config for telescope.nvim]], false)
+-- Config for: nvim-treesitter
+time([[Config for nvim-treesitter]], true)
+require'config.treesitter'
+time([[Config for nvim-treesitter]], false)
 
 -- Command lazy-loads
 time([[Defining lazy-load commands]], true)
+pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file PackerCompile lua require("packer.load")({'packer.nvim'}, { cmd = "PackerCompile", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args> }, _G.packer_plugins)]])
+pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file NvimTreeToggle lua require("packer.load")({'nvim-tree.lua'}, { cmd = "NvimTreeToggle", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args> }, _G.packer_plugins)]])
+pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file NvimTreeOpen lua require("packer.load")({'nvim-tree.lua'}, { cmd = "NvimTreeOpen", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args> }, _G.packer_plugins)]])
+pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file PackerLoad lua require("packer.load")({'packer.nvim'}, { cmd = "PackerLoad", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args> }, _G.packer_plugins)]])
 pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file PackerSync lua require("packer.load")({'packer.nvim'}, { cmd = "PackerSync", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args> }, _G.packer_plugins)]])
 pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file StartupTime lua require("packer.load")({'startuptime.vim'}, { cmd = "StartupTime", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args> }, _G.packer_plugins)]])
-pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file PackerCompile lua require("packer.load")({'packer.nvim'}, { cmd = "PackerCompile", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args> }, _G.packer_plugins)]])
 pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file PackerInstall lua require("packer.load")({'packer.nvim'}, { cmd = "PackerInstall", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args> }, _G.packer_plugins)]])
 pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file PackerUpdate lua require("packer.load")({'packer.nvim'}, { cmd = "PackerUpdate", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args> }, _G.packer_plugins)]])
 pcall(vim.cmd, [[command -nargs=* -range -bang -complete=file PackerClean lua require("packer.load")({'packer.nvim'}, { cmd = "PackerClean", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args> }, _G.packer_plugins)]])
 time([[Defining lazy-load commands]], false)
+
+-- Keymap lazy-loads
+time([[Defining lazy-load keymaps]], true)
+vim.cmd [[nnoremap <silent> gc <cmd>lua require("packer.load")({'kommentary'}, { keys = "gc", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[nnoremap <silent> gcc <cmd>lua require("packer.load")({'kommentary'}, { keys = "gcc", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[xnoremap <silent> S <cmd>lua require("packer.load")({'vim-surround'}, { keys = "S", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[nnoremap <silent> cs <cmd>lua require("packer.load")({'vim-surround'}, { keys = "cs", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[nnoremap <silent> cS <cmd>lua require("packer.load")({'vim-surround'}, { keys = "cS", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[nnoremap <silent> ys <cmd>lua require("packer.load")({'vim-surround'}, { keys = "ys", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[nnoremap <silent> yS <cmd>lua require("packer.load")({'vim-surround'}, { keys = "yS", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[nnoremap <silent> yS <cmd>lua require("packer.load")({'vim-surround'}, { keys = "yS", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[xnoremap <silent> gS <cmd>lua require("packer.load")({'vim-surround'}, { keys = "gS", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[nnoremap <silent> ds <cmd>lua require("packer.load")({'vim-surround'}, { keys = "ds", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[nnoremap <silent> ys <cmd>lua require("packer.load")({'vim-surround'}, { keys = "ys", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[nnoremap <silent> yS <cmd>lua require("packer.load")({'vim-surround'}, { keys = "yS", prefix = "" }, _G.packer_plugins)<cr>]]
+vim.cmd [[xnoremap <silent> gc <cmd>lua require("packer.load")({'kommentary'}, { keys = "gc", prefix = "" }, _G.packer_plugins)<cr>]]
+time([[Defining lazy-load keymaps]], false)
 
 if should_profile then save_profiles() end
 
