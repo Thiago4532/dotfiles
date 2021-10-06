@@ -49,7 +49,7 @@ return require'packer'.startup(function()
             'akinsho/bufferline.nvim',
             requires = 'kyazdani42/nvim-web-devicons',
 
-            config = [[require'bufferline'.setup{}]]
+            config = [[require'config.bufferline']]
         }
     }
 

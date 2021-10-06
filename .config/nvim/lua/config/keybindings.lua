@@ -13,11 +13,13 @@ map('n', '<F4>', [[
 ]], optexpr)
 
 -- Buffer keybindings
-map('n', '<Left>', ':bp<CR>', opts);
-map('n', '<Right>', ':bn<CR>', opts);
-map('n', '<C-h>', ':bp<CR>', opts);
-map('n', '<C-l>', ':bn<CR>', opts);
+map('n', 'H', ':BufferLineCyclePrev<CR>', opts);
+map('n', 'L', ':BufferLineCycleNext<CR>', opts);
+map('n', '<C-h>', ':BufferLineMovePrev<CR>', opts)
+map('n', '<C-l>', ':BufferLineMoveNext<CR>', opts)
 
+
+map('n', '<leader>q', ':bdelete<CR>', opts);
 map('n', '<leader>1', ':BufferLineGoToBuffer 1<CR>', opts);
 map('n', '<leader>2', ':BufferLineGoToBuffer 2<CR>', opts);
 map('n', '<leader>3', ':BufferLineGoToBuffer 3<CR>', opts);

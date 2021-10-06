@@ -1,11 +1,7 @@
--- dofile(vim.fn.expand('~/.config/nvim/lua/profiler.lua'))
 require 'impatient'
 local g = vim.g
 local cmd = vim.cmd
 local fn = vim.fn
-
--- vimwiki
-g.vimwiki_list = {{path = '~/Documents/vimwiki', path_html = '~/Documents/HTML'}}
 
 -- disable providers
 g.loaded_python_provider = 0
