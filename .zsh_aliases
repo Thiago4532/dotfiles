@@ -1,7 +1,7 @@
 #!/bin/zsh
 alias sudo='sudo '
 command -v exa > /dev/null && alias ls='exa' || alias ls='ls --color=auto'
-command -v rg > /dev/null && alias grep='rg'
+command -v rg > /dev/null && alias grep=rg
 alias tssh='TERM=xterm-256color \ssh'
 if [[ $TERM == "xterm-kitty" ]]; then alias ssh='kitty +kitten ssh'; fi
 alias open='xdg-open'

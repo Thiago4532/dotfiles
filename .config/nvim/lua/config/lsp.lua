@@ -12,7 +12,6 @@ require'lspconfig'.ccls.setup {
             directory = vim.fn.expand('~/.cache/ccls-cache');
         };
     };
-    no_wait = true;
 }
 
 require'lspconfig'.jedi_language_server.setup{}

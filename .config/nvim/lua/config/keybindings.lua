@@ -2,6 +2,9 @@ local map = vim.api.nvim_set_keymap
 local opts = { noremap = true, silent = true }
 local optexpr = { silent = true, noremap = true, expr = true }
 
+-- Disable Ex-mode
+map('n', 'Q', '<Nop>', opts)
+
 -- Toggle nvim-tree 
 map('n', '<C-n>', ':NvimTreeToggle<CR>', opts) 
 
@@ -18,8 +21,8 @@ map('n', 'L', ':BufferLineCycleNext<CR>', opts);
 map('n', '<C-h>', ':BufferLineMovePrev<CR>', opts)
 map('n', '<C-l>', ':BufferLineMoveNext<CR>', opts)
 
-
 map('n', '<leader>q', ':bdelete<CR>', opts);
+map('n', '<leader>QQ', ':bdelete!<CR>', opts);
 map('n', '<leader>1', ':BufferLineGoToBuffer 1<CR>', opts);
 map('n', '<leader>2', ':BufferLineGoToBuffer 2<CR>', opts);
 map('n', '<leader>3', ':BufferLineGoToBuffer 3<CR>', opts);
@@ -88,7 +91,6 @@ map('n', 'j', [[(v:count > 1 ? "m'" . v:count : '') . 'j']], optexpr)
 map('n', 'k', [[(v:count > 1 ? "m'" . v:count : '') . 'k']], optexpr)
 
 map('n', 'Y', 'y$', opts)
-map('n', 'gQ', 'i<C-m><Esc>', opts)
 map('n', '<leader>tw', [[
 &wrap ? ':set nowrap<CR>:echo "Wrap disabled!"<CR>' : ':set wrap<CR>:echo "Wrap enabled!"<CR>'
 ]], optexpr)
