@@ -55,7 +55,7 @@ function nvim-clearundo() {
     undodir=`<"$tmpfile"`
     rm -f "$tmpfile"
 
-    rm -Ir "$undodir"
+    [ -z "$undodir" ] || rm -r "$undodir"
     return $?
 }
 

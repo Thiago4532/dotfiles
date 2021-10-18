@@ -1,6 +1,8 @@
 local vim = vim
 local api = vim.api
-local getreg = vim.fn.getreg
+local uv = vim.loop
+
+local dirpath = debug.getinfo(1, 'S').source:match("@(.*/)")
 
 function put_snippet(snippet, args)
     assert(snippet, "invalid snippet!")
@@ -30,9 +32,6 @@ function put_snippet(snippet, args)
             return string.format("\n%s%s", ind, c)
         end)
     end
-
-    -- Remove newline
-    snippet = snippet:sub(2)
 
     local has_cursor = false
 
@@ -69,18 +68,26 @@ function put_snippet(snippet, args)
         snippet = snippet .. "\x1b`'\"_x"
     end
 
+    -- Remove newline
+    snippet = snippet:sub(2)
+    
     vim.cmd("normal! i" .. snippet)
-
     api.nvim_buf_set_option(0, "indentexpr", old_indentexpr)
 end
 
-local _opfunc_snippet, _opfunc_args
-local function _opfunc()
-
+local function readFileSync(path)
+    local fd = assert(uv.fs_open(path, "r", 438))
+    local stat = assert(uv.fs_fstat(fd))
+    local data = assert(uv.fs_read(fd, stat.size, 0))
+    assert(uv.fs_close(fd))
+    return data
 end
 
-local function call(language, snippet, ...)
-    local data = require('snippets.' .. language)[snippet]
+local function call(snippet, ...)
+    local data = readFileSync(string.format('%s/%s.snip', dirpath, snippet))
+    if data:sub(-1, -1) == '\n' then
+        data = data:sub(1, -2)
+    end
 
     args = {...}
     return put_snippet(data, args)

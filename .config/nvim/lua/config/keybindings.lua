@@ -16,10 +16,10 @@ map('n', '<F4>', [[
 ]], optexpr)
 
 -- Buffer keybindings
-map('n', 'H', ':BufferLineCyclePrev<CR>', opts);
-map('n', 'L', ':BufferLineCycleNext<CR>', opts);
-map('n', '<C-h>', ':BufferLineMovePrev<CR>', opts)
-map('n', '<C-l>', ':BufferLineMoveNext<CR>', opts)
+map('n', '<C-h>', ':BufferLineCyclePrev<CR>', opts);
+map('n', '<C-l>', ':BufferLineCycleNext<CR>', opts);
+map('n', 'H', ':BufferLineMovePrev<CR>', opts)
+map('n', 'L', ':BufferLineMoveNext<CR>', opts)
 
 map('n', '<leader>q', ':bdelete<CR>', opts);
 map('n', '<leader>QQ', ':bdelete!<CR>', opts);

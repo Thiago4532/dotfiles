@@ -100,4 +100,10 @@ return require'packer'.startup(function()
 
         setup = [[vim.g.vimwiki_list = {{path = '~/Documents/vimwiki', path_html = '~/Documents/HTML'}}]],
     }
+
+    use {
+        'Thiago4532/lsp-nowait.nvim',
+
+        config = [[require'lspNW'.check()]]
+    }
 end)

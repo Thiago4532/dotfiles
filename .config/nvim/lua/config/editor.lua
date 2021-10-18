@@ -19,7 +19,6 @@ o.laststatus = 2
 o.showmode = false
 o.ruler = false
 
-
 -- Mouse features
 o.mouse = ''
 

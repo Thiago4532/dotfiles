@@ -93,7 +93,6 @@ picomToggle = spawn $ "pkill -x picom || " ++ picomCmd
 -- Fullscreen support
 -- https://www.reddit.com/r/xmonad/comments/gc4b9i/what_is_the_best_way_to_make_xmonad_respect_true/
 --
-
 setFullscreenSupported :: X ()
 setFullscreenSupported = addSupported ["_NET_WM_STATE", "_NET_WM_STATE_FULLSCREEN"]
     where
@@ -104,6 +103,15 @@ setFullscreenSupported = addSupported ["_NET_WM_STATE", "_NET_WM_STATE_FULLSCREE
             io $ do
               supportedList <- fmap (join . maybeToList) $ getWindowProperty32 dpy a r
               changeProperty32 dpy r a aTOM propModeReplace (nub $ newSupportedList ++ supportedList)
+
+-- Float and center the window
+-- https://www.reddit.com/r/xmonad/comments/gzq316/how_can_i_centre_a_floating_window_without/
+--
+centerWindow :: Window -> X ()
+centerWindow win = do
+    (_, W.RationalRect x y w h) <- floatLocation win
+    windows $ W.float win (W.RationalRect ((1 - w) / 2) ((1 - h) / 2) w h)
+    return ()
 
 ------------------------------------------------------------------------
 
@@ -146,7 +154,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_space ), sendMessage NextLayout)
 
     -- Toggle mirror
-    -- , ((modm .|. shiftMask, xK_m     ), sendMessage $ Toggle MIRROR)
+    , ((modm .|. shiftMask, xK_m     ), sendMessage $ Toggle MIRROR)
     
     -- Toggle gaps
     , ((modm .|. shiftMask, xK_g     ), sendMessage $ Toggle SPACING)
@@ -192,6 +200,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Push window back into tiling
     , ((modm,               xK_t     ), withFocused $ windows . W.sink)
+
+    -- Float and center the window
+    , ((modm .|. shiftMask, xK_a     ), withFocused centerWindow)
 
     -- Increment the number of windows in the master area
     , ((modm .|. shiftMask, xK_comma ), sendMessage (IncMasterN 1))
