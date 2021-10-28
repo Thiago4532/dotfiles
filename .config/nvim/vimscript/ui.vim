@@ -16,6 +16,10 @@ function! s:gruvbox_material_custom() abort
     highlight! link TSConditional Conditional
     highlight! link TSRepeat Repeat
     highlight! link TSException Exception
+    highlight! link TSInclude Include
+
+    " indent-blankline
+    highlight IndentBlanklineChar guifg=#32302f gui=nocombine
 
     " Terminal
     let g:terminal_color_0  = '#32302f'
@@ -28,6 +32,11 @@ function! s:gruvbox_material_custom() abort
 
     " Vimwiki
     highlight! link textSnipTEX Special
+
+    " lsp-semantic
+    highlight! link LspSemanticNamespace TSNamespace
+    highlight! link LspSemanticEnumMember TSStructure
+    highlight! link LspSemanticParameter Blue
 endfunction
 
 augroup GruvboxMaterialCustom
@@ -36,7 +45,3 @@ augroup GruvboxMaterialCustom
 augroup END
 
 colorscheme gruvbox-material
-
-highlight default link LspCxxHlGroupNamespace TSNamespace
-highlight default link LspCxxHlSymVariable Normal
-highlight link cppSTLVariable LspCxxHlSymVariable

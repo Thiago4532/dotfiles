@@ -1,5 +1,11 @@
-local vim = vim
-local cmd = vim.cmd
+local nvim_nightly = (vim.fn.has("nvim-0.6") == 1)
+
+local function backwards_compatibility(var)
+    if nvim_nightly then
+        return nil
+    end
+    return var
+end
 
 return require'packer'.startup(function()
     use {
@@ -7,7 +13,7 @@ return require'packer'.startup(function()
 
         config = [[require'plugins']],
         cmd = { 'PackerInstall', 'PackerUpdate', 'PackerSync',
-        'PackerClean', 'PackerCompile', 'PackerLoad' }
+        'PackerClean', 'PackerCompile', 'PackerLoad', 'PackerProfile' }
     }
 
     use 'lewis6991/impatient.nvim'
@@ -17,10 +23,14 @@ return require'packer'.startup(function()
     use {
         {
             'nvim-treesitter/nvim-treesitter',
-            branch = '0.5-compat',
+            branch = backwards_compatibility('0.5-compat'),
             config = [[require'config.treesitter']],
             requires = {
                 'nvim-treesitter/playground',
+                {
+                    'nvim-treesitter/nvim-treesitter-textobjects',
+                    branch = backwards_compatibility('0.5-compat')
+                }
             },
 
             run = ':TSUpdate'
@@ -28,7 +38,6 @@ return require'packer'.startup(function()
 
         'vim-jp/vim-cpp',
         'bfrg/vim-cpp-modern',
-        'Thiago4532/vim-lsp-cxx-highlight',
 
         'neovimhaskell/haskell-vim',
         'tikhomirov/vim-glsl'
@@ -67,6 +76,9 @@ return require'packer'.startup(function()
 
     use { 'Krasjet/auto.pairs', config = [[vim.g.AutoPairsOpenBalanceBlacklist = {'{'}]] }
 
+    -- Editorconfig
+    use { 'editorconfig/editorconfig-vim' }
+
     use {
         'b3nj5m1n/kommentary',
 
@@ -101,9 +113,8 @@ return require'packer'.startup(function()
         setup = [[vim.g.vimwiki_list = {{path = '~/Documents/vimwiki', path_html = '~/Documents/HTML'}}]],
     }
 
-    use {
-        'Thiago4532/lsp-nowait.nvim',
+    use { 'lambdalisue/suda.vim' }
+    use { 'lukas-reineke/indent-blankline.nvim' }
 
-        config = [[require'lspNW'.check()]]
-    }
+    use '/home/thiagomm/GitHub/lsp-semantic.nvim'
 end)

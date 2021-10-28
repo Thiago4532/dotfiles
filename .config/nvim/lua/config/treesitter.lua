@@ -3,7 +3,7 @@ return require'nvim-treesitter.configs'.setup {
         enable = true,
         disable = {'c', 'cpp', 'bash', 'haskell', 'vim'}
     },
-    --[[ playground = {
+    playground = {
         enable = true,
-    }, ]]
+    },
 }

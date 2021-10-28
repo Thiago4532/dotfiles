@@ -1,15 +1,27 @@
+local normal_mode = {
+    initial_mode = "normal"
+}
+
 require'telescope'.setup{
     defaults = {
-        file_ignore_patterns = {'build/.*', 'compile_commands.json'},
+        mappings = {
+            n = { ["<c-c>"] = "close" },
+        }
     },
     pickers = {
         buffers = {
             sort_lastused = true,
             mappings = {
                 i = { ["<c-d>"] = "delete_buffer" },
-                n = { ["<c-d>"] = "delete_buffer", ["<c-c>"] = "close" }
+                n = { ["<c-d>"] = "delete_buffer" }
             },
             initial_mode = "normal"
-        }
+        }, 
+        lsp_references = normal_mode,
+        lsp_implementations = normal_mode,
+        lsp_definitions = normal_mode,
+        lsp_type_definitions = normal_mode,
+        lsp_workspace_diagnostics = normal_mode,
+        lsp_code_actions = normal_mode,
     }
 }

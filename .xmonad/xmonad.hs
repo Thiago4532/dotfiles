@@ -394,7 +394,7 @@ myStartupHook = do
     spawnOnce "xss-lock -- slock"
     spawnOnce "clingo"
 
-    spawnAndDoOnce (popupFloat <+> doShift "NSP") "keepassxc"
+    spawnAndDoOnce (doShift "NSP" <+> popupFloat) "keepassxc"
 
     spawnOnce "nitrogen --restore && conky"
     spawnOnce picomCmd

@@ -25,6 +25,9 @@ autoload -Uz compinit
 compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
 # End of lines added by compinstall
 
+autoload -U select-word-style
+select-word-style bash
+
 # Environment variables
 ZLE_RPROMPT_INDENT=0
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=4"
