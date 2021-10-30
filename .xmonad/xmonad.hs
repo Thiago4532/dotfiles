@@ -24,15 +24,20 @@ import XMonad.Layout.Accordion
 import XMonad.Layout.GridVariants
 import XMonad.Layout.IndependentScreens
 import XMonad.Layout.LayoutModifier
+import XMonad.Layout.Minimize
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing
+import XMonad.Layout.Simplest
+import qualified XMonad.Layout.BoringWindows as BW
 
 -- Actions
+import XMonad.Actions.Commands
 import XMonad.Actions.SpawnOn
+import XMonad.Actions.Minimize
 
 -- Utility
 import XMonad.Util.Loggers
@@ -113,6 +118,11 @@ centerWindow win = do
     windows $ W.float win (W.RationalRect ((1 - w) / 2) ((1 - h) / 2) w h)
     return ()
 
+actionList :: [(String, X())]
+actionList = 
+    [ ("mirror: Mirror the current layout",          sendMessage $ Toggle MIRROR)
+    , ("float: Float and center the focused window", withFocused $ centerWindow )] 
+
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
@@ -126,11 +136,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- toggle picom
     , ((modm .|. shiftMask, xK_F12   ), picomToggle)
 
+    -- launch rofi (run)
+    , ((modm,               xK_p     ), spawn "rofi -modi run -no-show-icons -show")
+    
     -- launch rofi
-    , ((modm,               xK_p     ), spawn "rofi -modi run -show")
-
-    -- launch rofi (desktop entries)
-    , ((modm .|. shiftMask, xK_p     ), spawn "rofi -modi drun -show-icons -show")
+    , ((modm .|. shiftMask, xK_p     ), spawn "rofi -show")
+    , ((modm .|. shiftMask, xK_r     ), spawn "rofi -show window")
 
     -- launch networkmanager_dmenu
     , ((modm,               xK_y     ), spawn "networkmanager_dmenu")
@@ -152,10 +163,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Rotate through the available layout algorithms
     , ((modm,               xK_space ), sendMessage NextLayout)
-
-    -- Toggle mirror
-    , ((modm .|. shiftMask, xK_m     ), sendMessage $ Toggle MIRROR)
-    
+ 
     -- Toggle gaps
     , ((modm .|. shiftMask, xK_g     ), sendMessage $ Toggle SPACING)
 
@@ -169,16 +177,17 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_n     ), refresh)
 
     -- Move focus to the next window
-    , ((modm,               xK_Tab   ), windows W.focusDown)
+    , ((modm,               xK_Tab   ), BW.focusDown)
 
     -- Move focus to the next window
-    , ((modm,               xK_j     ), windows W.focusDown)
+    , ((modm,               xK_j     ), BW.focusDown)
 
     -- Move focus to the previous window
-    , ((modm,               xK_k     ), windows W.focusUp  )
+    , ((modm,               xK_k     ), BW.focusUp  )
 
     -- Move focus to the master window
-    , ((modm,               xK_m     ), windows W.focusMaster  )
+    , ((modm,               xK_m     ), withFocused minimizeWindow  )
+    , ((modm .|. shiftMask, xK_m     ), withLastMinimized maximizeWindowAndFocus)
 
     -- Swap the focused window and the master window
     , ((modm,               xK_Return), windows W.swapMaster)
@@ -201,8 +210,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Push window back into tiling
     , ((modm,               xK_t     ), withFocused $ windows . W.sink)
 
-    -- Float and center the window
-    , ((modm .|. shiftMask, xK_a     ), withFocused centerWindow)
+    -- Action dmenu
+    , ((modm .|. shiftMask, xK_a     ), runCommand actionList  )
 
     -- Increment the number of windows in the master area
     , ((modm .|. shiftMask, xK_comma ), sendMessage (IncMasterN 1))
@@ -227,9 +236,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Session lock
     , ((modm .|. controlMask, xK_l   ), spawn "loginctl lock-session")
-
-    -- Restart WiFi (M-S-PrtSc)
-    , ((modm .|. shiftMask, 0xff61   ), spawn "reset-wifi &")
 
     -- Take a interactive screenshot (PrtSc)
     , ((noModMask         , 0xff61   ), spawn "maim -s --format=png | xclip -selection clipboard -t image/png && notify-send -t 1000 'Copied screenshot to clipboard!'")
@@ -338,7 +344,8 @@ grid      = mySmartBorders
 accordion = mySmartBorders
             $ Accordion
 
-myLayoutHook = avoidStruts $ mkToggle (single MIRROR)
+myLayoutHook = avoidStruts $ BW.boringWindows
+                           $ mkToggle (single MIRROR)
                            $ mkToggle (single NBFULL)
                            $ mkToggle (single SPACING) 
                            $ myLayout

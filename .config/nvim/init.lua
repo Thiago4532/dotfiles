@@ -1,4 +1,4 @@
-require 'impatient'
+-- require 'impatient'
 local g = vim.g
 local cmd = vim.cmd
 local fn = vim.fn
@@ -11,7 +11,8 @@ g.loaded_perl_provider = 0
 
 cmd[[
 noremap , "+
-nnoremap ,, ,
+noremap ,, ,
+noremap <Space> <Nop>
 ]]
 g.mapleader = ','
 

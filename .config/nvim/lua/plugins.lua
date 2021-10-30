@@ -1,10 +1,11 @@
 local nvim_nightly = (vim.fn.has("nvim-0.6") == 1)
 
-local function backwards_compatibility(var)
+-- Backwards compatibility (0.5 <= nvim < 0.6)
+local function backwards_compat(a, b)
     if nvim_nightly then
-        return nil
+        return b
     end
-    return var
+    return a
 end
 
 return require'packer'.startup(function()
@@ -23,13 +24,15 @@ return require'packer'.startup(function()
     use {
         {
             'nvim-treesitter/nvim-treesitter',
-            branch = backwards_compatibility('0.5-compat'),
+            branch = backwards_compat('0.5-compat'),
             config = [[require'config.treesitter']],
             requires = {
-                'nvim-treesitter/playground',
+                {
+                    'nvim-treesitter/playground',
+                },
                 {
                     'nvim-treesitter/nvim-treesitter-textobjects',
-                    branch = backwards_compatibility('0.5-compat')
+                    branch = backwards_compat('0.5-compat')
                 }
             },
 

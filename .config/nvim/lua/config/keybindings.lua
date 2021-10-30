@@ -36,7 +36,7 @@ map('n', '<leader>9', ':BufferLineGoToBuffer 9<CR>', opts);
 -- lsp keybindings
 map('n', 'K', ':lua vim.lsp.buf.hover()<CR>', opts)
 map('n', '<C-k>', ':lua vim.lsp.buf.signature_help()<CR>', opts)
-map('i', '<C-k>', '<C-o>:lua vim.lsp.buf.signature_help()<CR>', opts)
+map('i', '<C-k>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
 map('n', '<space>wa', ':lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
 map('n', '<space>wr', ':lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
 map('n', '<space>wl', ':lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
@@ -46,6 +46,7 @@ map('n', '[d', ':lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
 map('n', ']d', ':lua vim.lsp.diagnostic.goto_next()<CR>', opts)
 map('n', '<space>q', ':lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 map("n", "<space>f", ":lua vim.lsp.buf.formatting()<CR>", opts)
+map('n', '<leader>s', ':ClangdSwitchSourceHeader<CR>', opts)
 
 -- telescope keybindings
 map('n', '<leader>;', ":lua require('telescope.builtin').buffers()<cr>", opts)
@@ -86,13 +87,12 @@ map('n', '<M-q>',           '<C-w>q', opts)
 -- terminal keybindings
 map('t', '<Esc>', '<C-\\><C-n>', opts)
 
--- utility keybindings
-
 -- add j/k to jumplist
 map('n', 'j', [[(v:count > 1 ? "m'" . v:count : '') . 'j']], optexpr)
 map('n', 'k', [[(v:count > 1 ? "m'" . v:count : '') . 'k']], optexpr)
 
 map('n', 'Y', 'y$', opts)
+
 map('n', '<leader>tw', [[
 &wrap ? ':set nowrap<CR>:echo "Wrap disabled!"<CR>' : ':set wrap<CR>:echo "Wrap enabled!"<CR>'
 ]], optexpr)

@@ -30,7 +30,9 @@ end
 
 local function detect_indent()
     -- Reading at most 100 lines
-    local lines = api.nvim_buf_get_lines(0, 0, 100, false)
+
+    local crow = api.nvim_win_get_cursor(0)[1] - 1
+    local lines = api.nvim_buf_get_lines(0, crow, crow + 100, false)
 
     local use_tab = false
     local spaces = nil
@@ -59,6 +61,10 @@ local function detect_indent()
             print("Space indentation was detected! Using", spaces, "spaces to indent.")
         end
     elseif use_tab then
+        bo.expandtab = false
+        bo.tabstop = bo.shiftwidth
+        bo.softtabstop = 0
+
         print ("TAB indentation was detected! Using tab size of", bo.shiftwidth, "characters.")
     else
         print("No indentation was detected!")

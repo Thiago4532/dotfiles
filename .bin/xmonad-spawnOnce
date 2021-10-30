@@ -4,4 +4,4 @@
 [ $# -eq 0 ] && exit 1
 
 APP=`cat ~/.xmonad/xmonad.hs | grep 'spawnOnce.*'"$@" | cut -d\" -f2`
-( eval "$APP" & )
+( eval "exec $APP" & )
