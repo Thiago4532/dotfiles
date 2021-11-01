@@ -53,8 +53,7 @@ o.showtabline = 0
 o.shortmess = o.shortmess .. 'I'
 
 -- Omnicompletion menu
-bo.omnifunc, o.omnifunc = 'v:lua.vim.lsp.omnifunc', 'v:lua.vim.lsp.omnifunc'
-o.completeopt = 'menuone,noinsert,noselect'
+o.completeopt = 'menu,menuone,noselect'
 
 -- Split right
 o.splitright = true

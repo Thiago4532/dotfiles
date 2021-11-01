@@ -147,7 +147,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_y     ), spawn "networkmanager_dmenu")
     
     -- launch firefox
-    , ((modm              , xK_f     ), spawn "firefox &")
+    , ((modm              , xK_f     ), spawn "brave")
 
     -- launch KeePassXC
     , ((modm .|. shiftMask, xK_h     ), namedScratchpadAction scratchpads "keepassxc")
@@ -156,7 +156,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask,   xK_t   ), namedScratchpadAction scratchpads "popupTerminal")
 
     -- launch vimwiki
-    , ((modm              , xK_v     ), spawn "kitty nvim -- ~/Documents/vimwiki/index.wiki &")
+    , ((modm              , xK_v     ), spawn "kitty nvim -- ~/Documents/vimwiki/index.wiki")
 
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
@@ -397,9 +397,10 @@ myStartupHook = do
     spawnOnce "setxkbmap -option altwin:swap_alt_win"
     setFullscreenSupported
 
-    spawnOnce "lxsession -s xmonad"
+    spawn "xset r rate 300 33"
     spawnOnce "xss-lock -- slock"
     spawnOnce "clingo"
+    spawnOnce "dex -a"
 
     spawnAndDoOnce (doShift "NSP" <+> popupFloat) "keepassxc"
 

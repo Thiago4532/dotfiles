@@ -36,7 +36,6 @@ map('n', '<leader>9', ':BufferLineGoToBuffer 9<CR>', opts);
 -- lsp keybindings
 map('n', 'K', ':lua vim.lsp.buf.hover()<CR>', opts)
 map('n', '<C-k>', ':lua vim.lsp.buf.signature_help()<CR>', opts)
-map('i', '<C-k>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
 map('n', '<space>wa', ':lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
 map('n', '<space>wr', ':lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
 map('n', '<space>wl', ':lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
@@ -62,7 +61,7 @@ map('n', 'gr', ":lua require'telescope.builtin'.lsp_references()<CR>", opts)
 map('n', '<space>E', ":lua require'telescope.builtin'.lsp_workspace_diagnostics()<CR>", opts)
 map('n', '<space>a', ":lua require'telescope.builtin'.lsp_code_actions()<CR>", opts)
 
-map('i', '<C-Space>', "<C-x><C-o>", opts)
+-- map('i', '<C-Space>', "<C-x><C-o>", opts)
 
 -- window keybindings
 map('n', '<M-h>',           '<C-w>h', opts)
@@ -98,6 +97,6 @@ map('n', '<leader>tw', [[
 ]], optexpr)
 
 -- repeat last search command on replace mode
-map('n', '<leader>r', 'q/kyy:q<CR>:%s/<C-r>"', { noremap = true })
+map('n', '<leader>R', 'q/kyy:q<CR>:%s/<C-r>"', { noremap = true })
 
 map('n', '<F8>', ":DetectIndent<CR>",opts)

@@ -1,14 +1,13 @@
 local nvim_nightly = (vim.fn.has("nvim-0.6") == 1)
 
 -- Backwards compatibility (0.5 <= nvim < 0.6)
-local function backwards_compat(a, b)
-    if nvim_nightly then
+local function backwards_compat(a, b) if nvim_nightly then
         return b
     end
     return a
 end
 
-return require'packer'.startup(function()
+return require'packer'.startup({function()
     use {
         'wbthomason/packer.nvim',
 
@@ -47,7 +46,17 @@ return require'packer'.startup(function()
     }
 
     -- Language Server Protocol
-    use { 'neovim/nvim-lspconfig', config = [[require'config.lsp']] }
+    use {
+        'neovim/nvim-lspconfig',
+        config = [[require'config.lsp']],
+
+        requires = {
+            'ray-x/lsp_signature.nvim',
+            'hrsh7th/nvim-cmp',
+            'hrsh7th/cmp-nvim-lsp',
+            'Thiago4532/lsp-semantic.nvim'
+        }
+    }
 
     -- Statusline and bufferline
     use {
@@ -119,5 +128,10 @@ return require'packer'.startup(function()
     use { 'lambdalisue/suda.vim' }
     use { 'lukas-reineke/indent-blankline.nvim' }
 
-    use '/home/thiagomm/GitHub/lsp-semantic.nvim'
-end)
+    use { 'github/copilot.vim', cmd = 'Copilot' }
+end,
+config = {
+    profile = {
+        enable = false
+    },
+}})
