@@ -145,4 +145,9 @@ configuration {
       sorting-method:    "name";
   }
 }
+
 @theme "/home/thiagomm/.config/rofi/themes/gruvbox-material-dark.rasi"
+
+#window {
+    border-radius: 10px;
+}
