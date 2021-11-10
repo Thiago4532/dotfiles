@@ -4,7 +4,7 @@ local uv = vim.loop
 
 local dirpath = debug.getinfo(1, 'S').source:match("@(.*[/\\])")
 
-function put_snippet(snippet, args)
+local function put_snippet(snippet, args)
     assert(snippet, "invalid snippet!")
     args = args or {}
 

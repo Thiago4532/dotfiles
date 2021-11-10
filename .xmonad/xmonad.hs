@@ -1,7 +1,6 @@
 {-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, PatternGuards, TypeSynonymInstances, DeriveDataTypeable, LambdaCase, MultiWayIf #-}
 -- IMPORTS
 
--- Base
 import XMonad
 import Control.Monad
 import Data.List
@@ -90,7 +89,7 @@ myFocusedBorderColor = "#d152ab"
 -- Utility functions
 --
 
-picomCmd = "picom --experimental-backends"
+picomCmd = "picom"
 
 picomToggle :: X()
 picomToggle = spawn $ "pkill -x picom || " ++ picomCmd
@@ -142,9 +141,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch rofi
     , ((modm .|. shiftMask, xK_p     ), spawn "rofi -show")
     , ((modm .|. shiftMask, xK_r     ), spawn "rofi -show window")
+    
+    -- emoji picker
+    , ((modm .|. shiftMask, xK_e     ), spawn "rofimoji")
 
     -- launch networkmanager_dmenu
-    , ((modm,               xK_y     ), spawn "networkmanager_dmenu")
+    , ((modm,               xK_w     ), spawn "networkmanager_dmenu")
     
     -- launch firefox
     , ((modm              , xK_f     ), spawn "brave")
@@ -233,6 +235,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Restart xmonad
     , ((modm              , xK_q     ), spawn "xmonad --recompile; pkill xmobar; xmonad --restart")
+    
+    -- Reset wifi
+    , ((modm .|. shiftMask, xK_minus   ), spawn "reset-wifi")
 
     -- Session lock
     , ((modm .|. controlMask, xK_l   ), spawn "loginctl lock-session")
@@ -299,7 +304,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- mod-shift-{w,e}, Move client to screen 1, 2
     --
     [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_e, xK_w] [0..]
+        | (key, sc) <- zip [xK_d, xK_s] [0..]
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 

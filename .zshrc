@@ -61,7 +61,7 @@ zplug romkatv/powerlevel10k, as:theme, depth:1 # Powerlevel10k theme
 zplug zsh-users/zsh-completions
 zplug Aloxaf/fzf-tab
 zplug zsh-users/zsh-autosuggestions
-zplug zdharma/fast-syntax-highlighting, defer:2
+zplug zdharma-continuum/fast-syntax-highlighting, defer:2
 
 # Then, source plugins and add commands to $PATH
 zplug load
@@ -83,3 +83,8 @@ compdef _htracker htracker
 
 # precmd
 precmd () { print -Pn "\e]0;zsh: %~\a" }
+
+
+# BEGIN_KITTY_SHELL_INTEGRATION
+if test -e "/usr/lib/kitty/shell-integration/kitty.zsh"; then source "/usr/lib/kitty/shell-integration/kitty.zsh"; fi
+# END_KITTY_SHELL_INTEGRATION

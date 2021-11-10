@@ -1,3 +1,4 @@
+vim.cmd [[packadd packer.nvim]]
 local nvim_nightly = (vim.fn.has("nvim-0.6") == 1)
 
 -- Backwards compatibility (0.5 <= nvim < 0.6)
@@ -17,7 +18,7 @@ return require'packer'.startup({function()
     }
 
     use 'lewis6991/impatient.nvim'
-    use { 'tweekmonster/startuptime.vim', cmd = 'StartupTime' }
+    use { 'dstein64/vim-startuptime', cmd = 'StartupTime' }
 
     -- Syntax Highlighting
     use {
@@ -35,14 +36,14 @@ return require'packer'.startup({function()
                 }
             },
 
-            run = ':TSUpdate'
+            run = ':TSUpdate',
         },
 
         'vim-jp/vim-cpp',
         'bfrg/vim-cpp-modern',
 
         'neovimhaskell/haskell-vim',
-        'tikhomirov/vim-glsl'
+        'tikhomirov/vim-glsl',
     }
 
     -- Language Server Protocol
@@ -51,10 +52,12 @@ return require'packer'.startup({function()
         config = [[require'config.lsp']],
 
         requires = {
-            'ray-x/lsp_signature.nvim',
-            'hrsh7th/nvim-cmp',
+            { 'hrsh7th/nvim-cmp', config = [[require'config.complete']] },
             'hrsh7th/cmp-nvim-lsp',
-            'Thiago4532/lsp-semantic.nvim'
+            'hrsh7th/vim-vsnip',
+            'hrsh7th/cmp-vsnip',
+            'ray-x/lsp_signature.nvim',
+            'Thiago4532/lsp-semantic.nvim',
         }
     }
 
@@ -64,13 +67,13 @@ return require'packer'.startup({function()
             'hoob3rt/lualine.nvim',
             requires = 'kyazdani42/nvim-web-devicons',
 
-            config = [[require'config.statusline']]
+            config = [[require'config.statusline']],
         },
         {
             'akinsho/bufferline.nvim',
             requires = 'kyazdani42/nvim-web-devicons',
 
-            config = [[require'config.bufferline']]
+            config = [[require'config.bufferline']],
         }
     }
 
@@ -83,10 +86,12 @@ return require'packer'.startup({function()
         requires = 'kyazdani42/nvim-web-devicons',
 
         config = [[require'nvim-tree'.setup{}]],
-        cmd = { 'NvimTreeOpen', 'NvimTreeToggle' }
+        cmd = { 'NvimTreeOpen', 'NvimTreeToggle' },
     }
 
     use { 'Krasjet/auto.pairs', config = [[vim.g.AutoPairsOpenBalanceBlacklist = {'{'}]] }
+    
+    -- use { 'windwp/nvim-autopairs', config = [[require'nvim-autopairs'.setup{}]] }
 
     -- Editorconfig
     use { 'editorconfig/editorconfig-vim' }
@@ -95,7 +100,7 @@ return require'packer'.startup({function()
         'b3nj5m1n/kommentary',
 
         config = [[require'config.kommentary']],
-        keys = { {'n', 'gc'}, {'x', 'gc'}, {'n', 'gcc'} }
+        keys = { {'n', 'gc'}, {'x', 'gc'}, {'n', 'gcc'} },
     }
 
     -- Fuzzy finding
@@ -103,7 +108,7 @@ return require'packer'.startup({function()
         'nvim-telescope/telescope.nvim',
         requires = { 'nvim-lua/plenary.nvim', 'nvim-lua/popup.nvim' },
 
-        config = [[require'config.telescope']]
+        config = [[require'config.telescope']],
     }
 
     use {
@@ -115,20 +120,32 @@ return require'packer'.startup({function()
         }
     }
 
-    -- Repeat commands using '.'
+    -- Repeat commands using '.',
     use { 'tpope/vim-repeat' }
 
-    -- Personal wiki
     use {
-        'vimwiki/vimwiki',
+        'plasticboy/vim-markdown',
+        opt = true,
+        setup = [[
+        vim.g.vim_markdown_math = 1
+        vim.g.vim_markdown_folding_disabled = 1
+        vim.api.nvim_command'autocmd FileType markdown setlocal conceallevel=2'
+        ]],
 
-        setup = [[vim.g.vimwiki_list = {{path = '~/Documents/vimwiki', path_html = '~/Documents/HTML'}}]],
+        ft = 'markdown',
+        requires = { 'godlygeek/tabular' },
     }
 
     use { 'lambdalisue/suda.vim' }
     use { 'lukas-reineke/indent-blankline.nvim' }
 
     use { 'github/copilot.vim', cmd = 'Copilot' }
+
+    use {'/home/thiagomm/GitHub/lsp-tree.nvim'}
+
+    if nvim_nightly then
+        use 'nathom/filetype.nvim'
+    end
 end,
 config = {
     profile = {

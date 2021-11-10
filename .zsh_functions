@@ -8,12 +8,6 @@ function ccat() {
 }
 compdef _files ccat
 
-function fork() {
-    ( eval "$@" & )
-}
-compdef _precommand fork
-alias ff='fork'
-
 function noicMD() {
     local CONFIG
     CONFIG=$HOME/.config

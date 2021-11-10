@@ -1,36 +1,42 @@
 local vim = vim
 local util = require'lspconfig/util'
-local cmp = require'cmp'
-
-cmp.setup {
-    completion = {
-        autocomplete = false,
-    },
-    sources = {
-        { name = 'nvim_lsp' },
-    },
-    mapping = {
-        ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-    }
-}
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities['textDocument']['foldingRange'] = { dynamicRegistration = false }
 
+-- C/C++
 require'lspconfig'.clangd.setup {
     before_init = require'lsp-semantic.configs'.clangd.before_init,
+    on_attach = require'lsp-tree'.on_attach,
     capabilities = capabilities,
     root_dir = function(fname)
         local root_pattern = util.root_pattern('compile_commands.json', 'compile_flags.txt')
 
         return root_pattern(fname)
         or root_pattern(vim.fn.getcwd())
-        or util.path.dirname(fname)
+        or os.getenv("GOPATH")
     end
 }
 
+-- Python
 require'lspconfig'.jedi_language_server.setup{
     capabilities = capabilities
+}
+
+-- Golang
+require'lspconfig'.gopls.setup{
+    capabilities = capabilities,
+    root_dir = function(fname)
+        local root_pattern = util.root_pattern('go.mod', '.git')
+
+        local gopath = vim.fn.getenv("GOPATH")
+
+        vim.g.thiago = gopath
+        return root_pattern(fname)
+        or root_pattern(vim.fn.getcwd())
+        or util.path.dirname(fname)
+    end
 }
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -41,5 +47,5 @@ vim.lsp.diagnostic.on_publish_diagnostics, {
 
 require'lsp_signature'.setup{
     hint_enable = false,
-    toggle_key = '<C-k>'
+    toggle_key = '<C-k>',
 }

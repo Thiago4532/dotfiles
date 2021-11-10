@@ -1,19 +1,24 @@
+local disabled_list = {'c', 'cpp', 'bash', 'haskell', 'vim'}
+
 return require'nvim-treesitter.configs'.setup {
     highlight = {
         enable = true,
-        disable = {'c', 'cpp', 'bash', 'haskell', 'vim'}
+        disable = disabled_list,
     },
     incremental_selection = {
         enable = true,
+        disable = disabled_list,
     },
     playground = {
         enable = true,
+        disable = disabled_list,
     },
     textobjects = {
         select = {
             enable = true,
+            disable = disabled_list,
 
-            lookahead = true,
+            lookahead = false,
 
             keymaps = {
                  ["af"] = "@function.outer",
@@ -21,6 +26,6 @@ return require'nvim-treesitter.configs'.setup {
                  ["ac"] = "@class.outer",
                  ["ic"] = "@class.inner",
             }
-        }
+        },
     }
 }
