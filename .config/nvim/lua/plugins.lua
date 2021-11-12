@@ -1,14 +1,18 @@
 vim.cmd [[packadd packer.nvim]]
-local nvim_nightly = (vim.fn.has("nvim-0.6") == 1)
+local packer = require'packer'
 
--- Backwards compatibility (0.5 <= nvim < 0.6)
-local function backwards_compat(a, b) if nvim_nightly then
-        return b
+local function executable(...)
+    for i=1,select('#', ...) do
+        local arg = select(i, ...)
+        if vim.fn.executable(arg) == 0 then
+            return false
+        end
     end
-    return a
+    return true
 end
 
-return require'packer'.startup({function()
+local nvim_nightly = (vim.fn.has("nvim-0.6") == 1)
+return packer.startup({function()
     use {
         'wbthomason/packer.nvim',
 
@@ -24,7 +28,7 @@ return require'packer'.startup({function()
     use {
         {
             'nvim-treesitter/nvim-treesitter',
-            branch = backwards_compat('0.5-compat'),
+            branch = not nvim_nightly and '0.5-compat',
             config = [[require'config.treesitter']],
             requires = {
                 {
@@ -32,7 +36,7 @@ return require'packer'.startup({function()
                 },
                 {
                     'nvim-treesitter/nvim-treesitter-textobjects',
-                    branch = backwards_compat('0.5-compat')
+                    branch = not nvim_nightly and '0.5-compat'
                 }
             },
 
@@ -141,11 +145,16 @@ return require'packer'.startup({function()
 
     use { 'github/copilot.vim', cmd = 'Copilot' }
 
-    use {'/home/thiagomm/GitHub/lsp-tree.nvim'}
+    use '/home/thiagomm/GitHub/lsp-tree.nvim'
 
-    if nvim_nightly then
-        use 'nathom/filetype.nvim'
-    end
+    use { 'nathom/filetype.nvim', disable = not nvim_nightly }
+
+    use { 
+        'iamcco/markdown-preview.nvim',
+        disable = not executable'yarn',
+
+        run = 'cd app && yarn install',
+    }
 end,
 config = {
     profile = {
