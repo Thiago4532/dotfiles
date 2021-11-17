@@ -1,1 +1,2 @@
 highlight link cppSTLVariable Normal
+highlight link LspSemanticNamespace cppSTLNamespace

@@ -1,2 +1,5 @@
 .dotfiles
 .config/nvim/plugin/packer_compiled.lua
+
+*.o
+*.hi

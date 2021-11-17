@@ -1,5 +1,6 @@
 -- IMPORTS
 import Xmobar
+import Self.Colors as C
 import Control.Exception (try, SomeException)
 import Data.List (intercalate)
 import System.Environment (getEnv)
@@ -14,20 +15,10 @@ join = intercalate []
 mColor color s = join ["<fc=", color, ">", s, "</fc>"]
 mAction action s = join ["<action=`", action, "`>", s, "</action>"]
 
-mSeparator = mColor "#7c6f64" "  |  "
+mSeparator = mColor C.separator "  |  "
 mLeftRightSep = "}{"
 
--- Colors
-myBlack = "#32302f"
-myRed = "#ea6962"
-myGreen = "#a9b665"
-myYellow = "#d8a657"
-myBlue = "#7daea3"
-myMagenta = "#d3869b"
-myCyan = "#89b482"
-myWhite = "#d4be98"
-
-osIcon = mColor myBlue "\xf303  Arch Linux"
+osIcon = mColor C.blue "\xf303  Arch Linux"
 
 -----------------------------------------------
 -- Configuration
@@ -36,14 +27,14 @@ osIcon = mColor myBlue "\xf303  Arch Linux"
 config :: Config
 config = defaultConfig {
         font = "xft:Ubuntu Nerd Font:weight=bold:pixelsize=12:antialias=true:hinting=true"
-        , additionalFonts = [ "xft:Noto Color Emoji:pixelsize=12:antialias=true:hinting=true" ]
+        , additionalFonts = [ "xft:Noto Color Emoji:pixelsize=12::antialias=true:hinting=true" ]
         , borderColor = "black"
         , border = TopB
         , bgColor = "#282828"
-        , fgColor = myWhite
+        , fgColor = C.white
         , position = TopW L 100
         , iconRoot = ".config/xmobar/icons"
-        , commands = [ Run $ Cpu ["-t", "\xf108  cpu: (<total>%)", "-L","3","-H","50","--high",myRed] 20
+        , commands = [ Run $ Cpu ["-t", "\xf108  cpu: (<total>%)", "-L","3","-H","50","--high",C.red] 20
                         , Run $ Memory ["-t","\xf233  mem: <used>M (<usedratio>%)"] 20
                         , Run $ Com "uname" ["-r"] "" 36000
                         , Run $ Date "\xf133  %b %d %Y - (%H:%M) " "date" 10
@@ -61,17 +52,17 @@ config = defaultConfig {
                            , mLeftRightSep
                            , "\xe712 %uname%"
                            , mSeparator
-                           , mColor myCyan $ mAction "keyboard cycle" "\xf11c  key: %kbd%"
+                           , mColor C.cyan $ mAction "keyboard cycle" "\xf11c  key: %kbd%"
                            , mSeparator
-                           , mColor myYellow $ mAction "kitty -e htop" "%cpu%"
+                           , mColor C.yellow $ mAction "kitty -e htop" "%cpu%"
                            , mSeparator
-                           , mColor myRed $ mAction "kitty -e htop" "%memory%"
+                           , mColor C.red $ mAction "kitty -e htop" "%memory%"
                            , mSeparator
-                           , mColor myGreen $ "%battery%"
+                           , mColor C.green $ "%battery%"
                            , mSeparator
-                           , mColor myMagenta $ mAction "pavucontrol" "%alsa:default:Master%"
+                           , mColor C.magenta $ mAction "pavucontrol" "%alsa:default:Master%"
                            , mSeparator
-                           , mColor myBlue $ mAction "kitty -e calcurse" "%date%"
+                           , mColor C.blue $ mAction "kitty -e calcurse" "%date%"
                            , mSeparator
                            , "%trayerpad%"
                            ]

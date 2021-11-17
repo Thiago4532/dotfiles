@@ -11,7 +11,6 @@ g.loaded_perl_provider = 0
 
 cmd[[
 noremap , "+
-noremap ,, ,
 noremap <Space> <Nop>
 ]]
 g.mapleader = ','

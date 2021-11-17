@@ -21,8 +21,8 @@ map('n', '<C-l>', ':BufferLineCycleNext<CR>', opts);
 map('n', 'H', ':BufferLineMovePrev<CR>', opts)
 map('n', 'L', ':BufferLineMoveNext<CR>', opts)
 
-map('n', '<leader>q', ':bdelete<CR>', opts);
-map('n', '<leader>QQ', ':bdelete!<CR>', opts);
+map('n', '<leader>q', ':Bdelete<CR>', opts);
+map('n', '<leader>QQ', ':Bdelete!<CR>', opts);
 map('n', '<leader>1', ':BufferLineGoToBuffer 1<CR>', opts);
 map('n', '<leader>2', ':BufferLineGoToBuffer 2<CR>', opts);
 map('n', '<leader>3', ':BufferLineGoToBuffer 3<CR>', opts);
@@ -36,31 +36,31 @@ map('n', '<leader>9', ':BufferLineGoToBuffer 9<CR>', opts);
 -- lsp keybindings
 map('n', 'K', ':lua vim.lsp.buf.hover()<CR>', opts)
 map('n', '<C-k>', ':lua vim.lsp.buf.signature_help()<CR>', opts)
--- map('i', '<C-k>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-map('n', '<space>wa', ':lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-map('n', '<space>wr', ':lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-map('n', '<space>wl', ':lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-map('n', '<space>rn', ':lua vim.lsp.buf.rename()<CR>', opts)
+map('i', '<C-k>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+-- map('n', '<space>wa', ':lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+-- map('n', '<space>wr', ':lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+-- map('n', '<space>wl', ':lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+map('n', '<Space>rn', ':lua vim.lsp.buf.rename()<CR>', opts)
 map('n', '<space>e', ':lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+map('n', '<space>E', ":lua require'telescope.builtin'.lsp_workspace_diagnostics()<CR>", opts)
 map('n', '[d', ':lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
 map('n', ']d', ':lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-map('n', '<space>q', ':lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+-- map('n', '<space>q', ':lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 map("n", "<space>f", ":lua vim.lsp.buf.formatting()<CR>", opts)
 map('n', '<leader>s', ':ClangdSwitchSourceHeader<CR>', opts)
 
 -- telescope keybindings
 map('n', '<leader>;', ":lua require('telescope.builtin').buffers()<cr>", opts)
 map('n', '<C-p>', ":lua require('telescope.builtin').find_files()<cr>", opts)
-map('n', '<leader>g', ":lua require('telescope.builtin').live_grep()<cr>", opts)
-map('n', '<leader>h', ":lua require('telescope.builtin').help_tags()<cr>", opts)
+map('n', '<space>g', ":lua require('telescope.builtin').live_grep()<cr>", opts)
+map('n', '<space>h', ":lua require('telescope.builtin').help_tags()<cr>", opts)
 map('n', '""', ":lua require('telescope.builtin').registers()<cr>", opts)
 map('n', 'gD', ":lua vim.lsp.buf.declaration()<CR>", opts)
 map('n', 'gd', ":lua require'telescope.builtin'.lsp_definitions()<CR>", opts)
-map('n', '<space>D', ":lua require'telescope.builtin'.lsp_type_definitions()<CR>", opts)
+map('n', '<leader>D', ":lua require'telescope.builtin'.lsp_type_definitions()<CR>", opts)
 map('n', 'gi', ":lua require'telescope.builtin'.lsp_implementations()<CR>", opts)
 map('n', 'gr', ":lua require'telescope.builtin'.lsp_references()<CR>", opts)
-map('n', '<space>E', ":lua require'telescope.builtin'.lsp_workspace_diagnostics()<CR>", opts)
-map('n', '<space>a', ":lua require'telescope.builtin'.lsp_code_actions()<CR>", opts)
+map('n', '<leader>a', ":lua require'telescope.builtin'.lsp_code_actions()<CR>", opts)
 
 -- map('i', '<C-Space>', "<C-x><C-o>", opts)
 
@@ -84,6 +84,10 @@ map('n', '<M-,>',           '<C-w><', opts)
 map('n', '<M-.>',           '<C-w>>', opts)
 map('n', '<M-q>',           '<C-w>q', opts)
 
+-- Hop
+map('n', '<leader>w', ":HopWord<CR>", opts)
+map('n', '<leader>l', ":HopLineStart<CR>", opts)
+
 -- terminal keybindings
 map('t', '<Esc>', '<C-\\><C-n>', opts)
 
@@ -98,6 +102,9 @@ map('n', 'Y', 'y$', opts)
 map('n', '<leader>tw', [[
 &wrap ? ':set nowrap<CR>:echo "Wrap disabled!"<CR>' : ':set wrap<CR>:echo "Wrap enabled!"<CR>'
 ]], optexpr)
+
+-- UndoTree
+map('n', 'U', ":UndotreeToggle<CR>", opts)
 
 -- Indent after paste
 map('n', '<leader>=', '=`]', opts)

@@ -47,6 +47,9 @@ import XMonad.Util.SpawnOnce
 -- System
 import System.Posix.Env (putEnv)
 
+-- Self
+import Self.Colors as C
+
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
@@ -82,8 +85,8 @@ myWorkspaces    = ["1","2","3","4","5","6","7","8","9","NSP"]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
-myNormalBorderColor  = "#32302f"
-myFocusedBorderColor = "#d152ab"
+myNormalBorderColor  = C.normalBorder
+myFocusedBorderColor = C.focusedBorder
 
 ------------------------------------------------------------------------
 -- Utility functions
@@ -428,12 +431,12 @@ clickableWorkspaces =
 myXmobarPP currentColor = namedScratchpadFilterOutWorkspacePP $ xmobarPP
     { ppCurrent = xmobarColor currentColor "" . wrap "[" "]"
     , ppVisible = wrap "(" ")"
-    , ppTitle = xmobarColor "#a9b665" "" . shorten 50
-    , ppSep = xmobarColor "#7c6f64" "" "  |  "
+    , ppTitle = xmobarColor C.green "" . shorten 50
+    , ppSep = xmobarColor C.separator "" "  |  "
     , ppLayout = xmobarAction "xdotool key 'super+space'"   "1"
                . xmobarAction "xdotool key 'super+shift+m'" "2"
                . xmobarAction "xdotool key 'super+shift+g'" "3"
-               . xmobarColor "#d3869b" ""
+               . xmobarColor C.magenta ""
     }
 
 -- Active Xmobar
@@ -441,10 +444,10 @@ activeBar = myPP {
           ppCurrent =  ppCurrent myPP
         , ppVisible = ppVisible myPP . clickableWorkspaces
         , ppHidden = clickableWorkspaces
-        } where myPP = myXmobarPP "#d8a657"
+        } where myPP = myXmobarPP C.yellow
 
 -- Non-active Xmobar
-nonActiveBar = myXmobarPP "#ea6962"
+nonActiveBar = myXmobarPP C.red
 
 ------------------------------------------------------------------------
 -- Run xmonad with the settings you specify.

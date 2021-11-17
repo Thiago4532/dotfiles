@@ -94,8 +94,41 @@ local function write_indent_modeline(detect)
     api.nvim_buf_set_lines(0, -1, -1, true, {comment:format(modeline)})
 end
 
+local clock = nil
+local function clock_reset()
+    clock = uv.hrtime()
+end
+
+local function clock_print()
+    if clock then
+        local time = (uv.hrtime() - clock) / 1e6
+        print("Clock:", time)
+    end
+end
+
+local function clock_notify()
+    if clock then
+        local time = (uv.hrtime() - clock) / 1e6
+        vim.notify("Clock:", time)
+    end 
+end
+
+local function clock_dunst()
+    if clock then
+        local time = (uv.hrtime() - clock) / 1e6
+        uv.spawn('dunstify', {
+            args = {'-r', '674532', '-i', 'nvim', 'Clock', time},
+            detach = true,
+        })
+    end
+end
+
 return {
     cf_int_ll = cf_int_ll,
     detect_indent = detect_indent,
-    write_indent_modeline = write_indent_modeline
+    write_indent_modeline = write_indent_modeline,
+    clock_reset = clock_reset,
+    clock_print = clock_print,
+    clock_notify = clock_notify,
+    clock_dunst = clock_dunst,
 }

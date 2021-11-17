@@ -1,0 +1,1 @@
+/home/thiagomm/.xmonad/lib/Self/Colors.hs

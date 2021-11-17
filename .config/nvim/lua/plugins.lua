@@ -45,6 +45,8 @@ return packer.startup({function()
 
         'vim-jp/vim-cpp',
         'bfrg/vim-cpp-modern',
+        'pangloss/vim-javascript',
+        'HerringtonDarkholme/yats.vim',
 
         'neovimhaskell/haskell-vim',
         'tikhomirov/vim-glsl',
@@ -60,7 +62,7 @@ return packer.startup({function()
             'hrsh7th/cmp-nvim-lsp',
             'hrsh7th/vim-vsnip',
             'hrsh7th/cmp-vsnip',
-            'ray-x/lsp_signature.nvim',
+            -- 'ray-x/lsp_signature.nvim',
             'Thiago4532/lsp-semantic.nvim',
         }
     }
@@ -83,6 +85,7 @@ return packer.startup({function()
 
     -- Colorscheme
     use 'sainnhe/gruvbox-material'
+    use 'folke/tokyonight.nvim'
 
     -- File explorer
     use {
@@ -90,7 +93,7 @@ return packer.startup({function()
         requires = 'kyazdani42/nvim-web-devicons',
 
         config = [[require'nvim-tree'.setup{}]],
-        cmd = { 'NvimTreeOpen', 'NvimTreeToggle' },
+        cmd = { 'NvimTreeOpen', 'NvimTreeToggle', 'NvimTreeClose' },
     }
 
     use { 'Krasjet/auto.pairs', config = [[vim.g.AutoPairsOpenBalanceBlacklist = {'{'}]] }
@@ -143,11 +146,17 @@ return packer.startup({function()
     use { 'lambdalisue/suda.vim' }
     use { 'lukas-reineke/indent-blankline.nvim' }
 
+    use { 'mbbill/undotree', config = [[vim.g.undotree_WindowLayout = 3]] }
+
     use { 'github/copilot.vim', cmd = 'Copilot' }
 
     use '/home/thiagomm/GitHub/lsp-tree.nvim'
 
     use { 'nathom/filetype.nvim', disable = not nvim_nightly }
+
+    use { 'famiu/bufdelete.nvim' }
+
+    use { 'phaazon/hop.nvim', config = [[require'hop'.setup{}]] }
 
     use { 
         'iamcco/markdown-preview.nvim',

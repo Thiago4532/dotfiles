@@ -3,7 +3,6 @@ local util = require'lspconfig/util'
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
-capabilities['textDocument']['foldingRange'] = { dynamicRegistration = false }
 
 -- C/C++
 require'lspconfig'.clangd.setup {
@@ -11,11 +10,11 @@ require'lspconfig'.clangd.setup {
     on_attach = require'lsp-tree'.on_attach,
     capabilities = capabilities,
     root_dir = function(fname)
+        local filename = util.path.is_absolute(fname) and fname or util.path.join(vim.loop.cwd(), fname)
         local root_pattern = util.root_pattern('compile_commands.json', 'compile_flags.txt')
 
-        return root_pattern(fname)
-        or root_pattern(vim.fn.getcwd())
-        or os.getenv("GOPATH")
+        return root_pattern(filename)
+        or root_pattern(vim.loop.cwd())
     end
 }
 
@@ -30,9 +29,6 @@ require'lspconfig'.gopls.setup{
     root_dir = function(fname)
         local root_pattern = util.root_pattern('go.mod', '.git')
 
-        local gopath = vim.fn.getenv("GOPATH")
-
-        vim.g.thiago = gopath
         return root_pattern(fname)
         or root_pattern(vim.fn.getcwd())
         or util.path.dirname(fname)
@@ -45,7 +41,7 @@ vim.lsp.diagnostic.on_publish_diagnostics, {
 }
 )
 
-require'lsp_signature'.setup{
-    hint_enable = false,
-    toggle_key = '<C-k>',
-}
+-- require'lsp_signature'.setup{
+--     hint_enable = false,
+--     toggle_key = '<C-k>',
+-- }
