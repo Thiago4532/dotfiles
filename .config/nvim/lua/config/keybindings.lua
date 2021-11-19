@@ -9,8 +9,7 @@ map('n', 'Q', '<Nop>', opts)
 map('n', '<C-n>', ':NvimTreeToggle<CR>', opts) 
 
 -- Highlight keybindings
-map('n', '<F1>', ':TSHighlightCapturesUnderCursor<CR>', opts)
-map('n', '<F3>', ':noh<CR>', opts)
+map('n', '<F1>', ':TSHighlightCapturesUnderCursor<CR>', opts) map('n', '<F3>', ':noh<CR>', opts)
 map('n', '<F4>', [[
 &ic ? ':set noic<CR>:echo "Case-sensitive"<CR>' : ':set ic<CR>:echo "Case-insensitive"<CR>'
 ]], optexpr)
@@ -113,3 +112,5 @@ map('n', '<leader>=', '=`]', opts)
 map('n', '<leader>R', 'q/kyy:q<CR>:%s/<C-r>"', { noremap = true })
 
 map('n', '<F8>', ":DetectIndent<CR>",opts)
+map('n', '<F9>', ":MarkdownPreview<CR>",opts)
+

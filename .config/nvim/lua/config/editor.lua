@@ -7,9 +7,7 @@ bo.shiftwidth, o.shiftwidth = 4, 4
 bo.expandtab, o.expandtab = true, true
 
 -- Show line numbers
-wo.number, o.number = true, true
-wo.relativenumber, o.relativenumber = true, true
-
+wo.number, o.number = true, true wo.relativenumber, o.relativenumber = true, true
 -- No ESC delay
 o.timeoutlen = 500
 o.ttimeoutlen = 0
@@ -21,6 +19,9 @@ o.ruler = false
 
 -- Mouse features
 o.mouse = ''
+
+-- Disable automatic EOL
+o.fixendofline, bo.fixendofline = false, false
 
 -- Disable cursor shape on Insert Mode
 o.guicursor = ''
