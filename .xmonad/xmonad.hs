@@ -48,7 +48,7 @@ import XMonad.Util.SpawnOnce
 import System.Posix.Env (putEnv)
 
 -- Self
-import Self.Colors as C
+import qualified Self.Colors as C
 
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
@@ -83,11 +83,6 @@ myModMask       = mod4Mask
 --
 myWorkspaces    = ["1","2","3","4","5","6","7","8","9","NSP"]
 
--- Border colors for unfocused and focused windows, respectively.
---
-myNormalBorderColor  = C.normalBorder
-myFocusedBorderColor = C.focusedBorder
-
 ------------------------------------------------------------------------
 -- Utility functions
 --
@@ -96,6 +91,9 @@ picomCmd = "picom"
 
 picomToggle :: X()
 picomToggle = spawn $ "pkill -x picom || " ++ picomCmd
+
+join' :: [[a]] -> [a]
+join' = intercalate []
 
 -- Fullscreen support
 -- https://www.reddit.com/r/xmonad/comments/gc4b9i/what_is_the_best_way_to_make_xmonad_respect_true/
@@ -120,10 +118,10 @@ centerWindow win = do
     windows $ W.float win (W.RationalRect ((1 - w) / 2) ((1 - h) / 2) w h)
     return ()
 
-actionList :: [(String, X())]
-actionList = 
-    [ ("mirror: Mirror the current layout",          sendMessage $ Toggle MIRROR)
-    , ("float: Float and center the focused window", withFocused $ centerWindow )] 
+-- actionList :: [(String, X())]
+-- actionList = 
+--     [ ("mirror: Mirror the current layout",          sendMessage $ Toggle MIRROR)
+--     , ("float: Float and center the focused window", withFocused $ centerWindow )] 
 
 ------------------------------------------------------------------------
 
@@ -158,7 +156,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_h     ), namedScratchpadAction scratchpads "keepassxc")
 
     -- launch popup terminal
-    , ((modm .|. shiftMask,   xK_t   ), namedScratchpadAction scratchpads "popupTerminal")
+    , ((modm .|. controlMask, xK_Return), namedScratchpadAction scratchpads "popupTerminal")
 
     -- launch vimwiki
     , ((modm              , xK_v     ), spawn "kitty nvim -- ~/Documents/vimwiki/index.wiki")
@@ -168,7 +166,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Rotate through the available layout algorithms
     , ((modm,               xK_space ), sendMessage NextLayout)
- 
+
+
     -- Toggle gaps
     , ((modm .|. shiftMask, xK_g     ), sendMessage $ Toggle SPACING)
 
@@ -191,8 +190,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_k     ), BW.focusUp  )
 
     -- Move focus to the master window
-    , ((modm,               xK_m     ), withFocused minimizeWindow  )
-    , ((modm .|. shiftMask, xK_m     ), withLastMinimized maximizeWindowAndFocus)
+    -- , ((modm,               xK_m     ), withFocused minimizeWindow  )
+    -- , ((modm .|. shiftMask, xK_m     ), withLastMinimized maximizeWindowAndFocus)
 
     -- Swap the focused window and the master window
     , ((modm,               xK_Return), windows W.swapMaster)
@@ -215,8 +214,14 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Push window back into tiling
     , ((modm,               xK_t     ), withFocused $ windows . W.sink)
 
+    -- Float and center the focused window
+    , ((modm .|. shiftMask, xK_t     ), withFocused $ centerWindow )
+
+    -- Toggle mirror
+    , ((modm .|. shiftMask, xK_m     ), sendMessage $ Toggle MIRROR)
+
     -- Action dmenu
-    , ((modm .|. shiftMask, xK_a     ), runCommand actionList  )
+    -- , ((modm .|. shiftMask, xK_a     ), runCommand actionList  )
 
     -- Increment the number of windows in the master area
     , ((modm .|. shiftMask, xK_comma ), sendMessage (IncMasterN 1))
@@ -417,7 +422,12 @@ myStartupHook = do
 
     dynStatusBarStartup xmobarSpawn mempty
 
-    spawnOnce "trayer --edge top --distance 2 --monitor primary --align right --widthtype request --iconspacing 8 --padding 6 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x282828 --height 16"
+    spawnOnce $ join' ["trayer --edge top --distance 2 --monitor primary"
+                           , " --align right --widthtype request"
+                           , " --iconspacing 8 --padding 6 --SetDockType true"
+                           , " --SetPartialStrut true --expand true --transparent true"
+                           , " --alpha 0 --height 16"
+                           , " --tint ", C.hashtag2hex C.background]
 
 ------------------------------------------------------------------------
 -- Log hook
@@ -478,8 +488,8 @@ defaults = def {
         borderWidth        = myBorderWidth,
         modMask            = myModMask,
         workspaces         = myWorkspaces,
-        normalBorderColor  = myNormalBorderColor,
-        focusedBorderColor = myFocusedBorderColor,
+        normalBorderColor  = C.normalBorder,
+        focusedBorderColor = C.focusedBorder,
 
       -- key bindings
         keys               = myKeys,

@@ -164,6 +164,8 @@ return packer.startup({function()
 
         run = 'cd app && yarn install',
     }
+
+    use 'editorconfig/editorconfig-vim'
 end,
 config = {
     profile = {

@@ -1,19 +1,19 @@
 -- IMPORTS
 import Xmobar
-import Self.Colors as C
-import Control.Exception (try, SomeException)
 import Data.List (intercalate)
 import System.Environment (getEnv)
 
-join :: [[a]] -> [a]
-join = intercalate []
+import qualified Self.Colors as C
+
+join' :: [[a]] -> [a]
+join' = intercalate []
 
 ----------------------------------------------
 -- Utils
 --
 
-mColor color s = join ["<fc=", color, ">", s, "</fc>"]
-mAction action s = join ["<action=`", action, "`>", s, "</action>"]
+mColor color s = join' ["<fc=", color, ">", s, "</fc>"]
+mAction action s = join' ["<action=`", action, "`>", s, "</action>"]
 
 mSeparator = mColor C.separator "  |  "
 mLeftRightSep = "}{"
@@ -30,7 +30,7 @@ config = defaultConfig {
         , additionalFonts = [ "xft:Noto Color Emoji:pixelsize=12::antialias=true:hinting=true" ]
         , borderColor = "black"
         , border = TopB
-        , bgColor = "#282828"
+        , bgColor = C.background
         , fgColor = C.white
         , position = TopW L 100
         , iconRoot = ".config/xmobar/icons"
@@ -46,7 +46,7 @@ config = defaultConfig {
                         ]
         , sepChar = "%"
         , alignSep = mLeftRightSep
-        , template = join [ osIcon
+        , template = join' [ osIcon
                            , mSeparator
                            , "%UnsafeStdinReader%"
                            , mLeftRightSep
