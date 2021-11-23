@@ -1,0 +1,2 @@
+#!/bin/sh
+PATH="$HOME/.ghcup/bin:$PATH" exec xmobar "$@"

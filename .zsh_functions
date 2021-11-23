@@ -54,3 +54,16 @@ function pipxvenv() {
     . "$pkg/bin/activate"
 }
 compdef _pipxvenv pipxvenv
+
+function ghcup-activate() {
+    export PATH="$HOME/.ghcup/bin:$PATH"
+    GHCUP_ENV=1
+
+    function ghcup-deactivate() {
+        PATH=:$PATH:
+        PATH=${PATH//:$HOME\/.ghcup\/bin:/:}
+        PATH=${PATH#:}; PATH=${PATH%:}
+        unset -f ghcup-deactivate
+        unset GHCUP_ENV
+    }
+}

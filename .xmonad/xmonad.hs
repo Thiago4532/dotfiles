@@ -403,8 +403,8 @@ myEventHook = fullscreenEventHook
 -- Startup hook
 
 xmobarSpawn :: ScreenId -> IO Handle
-xmobarSpawn 0 = spawnPipe "xmobar"
-xmobarSpawn 1 = spawnPipe "xmobar ~/.config/xmobar/xmobar-1.hs"
+xmobarSpawn 0 = spawnPipe "xmobar-ghcup"
+xmobarSpawn 1 = spawnPipe "xmobar-ghcup ~/.config/xmobar/xmobar-1.hs"
 
 myStartupHook = do
     spawnOnce "setxkbmap -option altwin:swap_alt_win"
@@ -422,12 +422,12 @@ myStartupHook = do
 
     dynStatusBarStartup xmobarSpawn mempty
 
-    spawnOnce $ join' ["trayer --edge top --distance 2 --monitor primary"
-                           , " --align right --widthtype request"
-                           , " --iconspacing 8 --padding 6 --SetDockType true"
-                           , " --SetPartialStrut true --expand true --transparent true"
-                           , " --alpha 0 --height 16"
-                           , " --tint ", C.hashtag2hex C.background]
+    spawnOnce $ join' ["pkill trayer; trayer --edge top --distance 2 --monitor primary"
+                                         , " --align right --widthtype request"
+                                         , " --iconspacing 8 --padding 6 --SetDockType true"
+                                         , " --SetPartialStrut true --expand true --transparent true"
+                                         , " --alpha 0 --height 16"
+                                         , " --tint ", C.hashtag2hex C.background]
 
 ------------------------------------------------------------------------
 -- Log hook
