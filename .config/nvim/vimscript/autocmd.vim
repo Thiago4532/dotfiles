@@ -19,9 +19,6 @@ augroup packer_user_config
     autocmd BufWritePost plugins.lua source <afile> | PackerCompile
 augroup end
 
-" Commands
-command DetectIndent lua require'util'.detect_indent()
-
 function WriteIndentModeline()
     lua require'util'.write_indent_modeline()
 endfunction

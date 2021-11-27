@@ -28,50 +28,22 @@ local function cf_int_ll()
     end
 end
 
-local function detect_indent()
-    -- Reading at most 100 lines
+local function set_indent(spaces, use_tab)
+    use_tab = use_tab or false
 
-    local crow = api.nvim_win_get_cursor(0)[1] - 1
-    local lines = api.nvim_buf_get_lines(0, crow, crow + 100, false)
+    bo.softtabstop = spaces
+    bo.shiftwidth = spaces
 
-    local use_tab = false
-    local spaces = nil
-
-    for i, line in pairs(lines) do
-        if not use_tab and line:find('^\t') then
-            use_tab = true
-        else
-            len = pattern_size(line, '^ +')
-            if len then
-                if not spaces or len < spaces then
-                    spaces = len
-                end
-            end
-        end
-    end
-
-    if spaces then
-        bo.expandtab = true
-        bo.tabstop = 8
-        bo.softtabstop = spaces
-        bo.shiftwidth = spaces
-        if use_tab then
-            print("Mixed indentation was detected! Using", spaces, "spaces to indent.")
-        else
-            print("Space indentation was detected! Using", spaces, "spaces to indent.")
-        end
-    elseif use_tab then
+    if use_tab then
+        bo.tabstop = spaces
         bo.expandtab = false
-        bo.tabstop = bo.shiftwidth
-        bo.softtabstop = 0
-
-        print ("TAB indentation was detected! Using tab size of", bo.shiftwidth, "characters.")
     else
-        print("No indentation was detected!")
+        bo.tabstop = 8
+        bo.expandtab = true
     end
 end
 
-local function write_indent_modeline(detect)
+local function write_indent_modeline()
     local comment = bo.commentstring
     if comment:len() == 0 then
         api.nvim_err_writeln("Failed to write_indent_modeline: commentstring is empty!")
@@ -80,10 +52,6 @@ local function write_indent_modeline(detect)
 
     -- Trim whitespaces
     comment = comment:gsub(" *(%%s) *", "%1")
-
-    if detect then
-        detect_indent()
-    end
 
     local expandtab = bo.expandtab and "et" or "noet"
     local modeline = string.format(" vim: %s ts=%d sts=%d sw=%d",
@@ -125,7 +93,7 @@ end
 
 return {
     cf_int_ll = cf_int_ll,
-    detect_indent = detect_indent,
+    set_indent = indent,
     write_indent_modeline = write_indent_modeline,
     clock_reset = clock_reset,
     clock_print = clock_print,

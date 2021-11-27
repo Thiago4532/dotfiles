@@ -1,1 +1,0 @@
-../../../../.xmonad/lib/Self/Colors.hs

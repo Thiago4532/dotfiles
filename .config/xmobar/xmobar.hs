@@ -3,7 +3,7 @@ import Xmobar
 import Data.List (intercalate)
 import System.Environment (getEnv)
 
-import qualified Self.Colors as C
+import qualified Cfg.Colors as C
 
 join' :: [[a]] -> [a]
 join' = intercalate []

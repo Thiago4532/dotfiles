@@ -1,4 +1,4 @@
-module Self.Colors where
+module Cfg.Colors where
 
 --------------------------------------
 -- Colors
@@ -24,6 +24,3 @@ separator = "#7c6f64"
 --------------------------------------
 -- Functions
 
--- Convert "#ff0000" to "0xff0000"
-hashtag2hex :: String -> String
-hashtag2hex (_:c) = '0':'x':c

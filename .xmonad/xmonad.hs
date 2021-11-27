@@ -47,8 +47,9 @@ import XMonad.Util.SpawnOnce
 -- System
 import System.Posix.Env (putEnv)
 
--- Self
-import qualified Self.Colors as C
+-- Configuration
+import qualified Cfg.Colors as C
+import qualified Cfg.Util as U
 
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
@@ -92,8 +93,6 @@ picomCmd = "picom"
 picomToggle :: X()
 picomToggle = spawn $ "pkill -x picom || " ++ picomCmd
 
-join' :: [[a]] -> [a]
-join' = intercalate []
 
 -- Fullscreen support
 -- https://www.reddit.com/r/xmonad/comments/gc4b9i/what_is_the_best_way_to_make_xmonad_respect_true/
@@ -150,7 +149,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_w     ), spawn "networkmanager_dmenu")
     
     -- launch firefox
-    , ((modm              , xK_f     ), spawn "brave")
+    , ((modm              , xK_f     ), spawn "firefox")
 
     -- launch KeePassXC
     , ((modm .|. shiftMask, xK_h     ), namedScratchpadAction scratchpads "keepassxc")
@@ -216,7 +215,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Float and center the focused window
     , ((modm .|. shiftMask, xK_t     ), withFocused $ centerWindow )
-
+    
     -- Toggle mirror
     , ((modm .|. shiftMask, xK_m     ), sendMessage $ Toggle MIRROR)
 
@@ -422,12 +421,12 @@ myStartupHook = do
 
     dynStatusBarStartup xmobarSpawn mempty
 
-    spawnOnce $ join' ["pkill trayer; trayer --edge top --distance 2 --monitor primary"
-                                         , " --align right --widthtype request"
-                                         , " --iconspacing 8 --padding 6 --SetDockType true"
-                                         , " --SetPartialStrut true --expand true --transparent true"
-                                         , " --alpha 0 --height 16"
-                                         , " --tint ", C.hashtag2hex C.background]
+    spawnOnce $ join ["pkill trayer; trayer --edge top --distance 2 --monitor primary"
+                                        , " --align right --widthtype request"
+                                        , " --iconspacing 8 --padding 6 --SetDockType true"
+                                        , " --SetPartialStrut true --expand true --transparent true"
+                                        , " --alpha 0 --height 16"
+                                        , " --tint ", U.color2hex C.background]
 
 ------------------------------------------------------------------------
 -- Log hook
