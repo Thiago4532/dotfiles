@@ -1,0 +1,25 @@
+#!/bin/bash
+cd $HOME/.config/xmobar || exit $?
+
+FLAGS=(--make -i -ilib -fforce-recomp -main-is main -v0 -threaded -rtsopts -with-rtsopts -V0 -dynamic)
+
+SOURCE="./xmobar.hs"
+BINARY="./xmobar"
+
+check_recompile() {
+    [ -f "$BINARY" ] || return 0
+    ldd "$BINARY" | grep -q 'not found' && return 0
+
+    [ "$SOURCE" -nt "$BINARY" ] && return 0
+    while read -r -d '' file; do
+        [ "$file" -nt "$BINARY" ] && return 0
+    done < <(find lib -regex '.*\.\(hs\|lhs\|hsc\)' -print0)
+
+    return 1
+}
+
+if check_recompile; then
+    ghc "${FLAGS[@]}" "$SOURCE" -o "$BINARY"
+fi
+
+exec "$BINARY" "$@"

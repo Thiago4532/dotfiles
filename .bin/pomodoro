@@ -1,10 +1,18 @@
-#!/bin/sh
+#!/bin/bash
 # A pomodoro timer
 # Dependencies: at, alarm(script)
 
-timer="25min"
-short_break="5min"
-long_break="30min"
+export LC_TIME=C
+
+timer="25"
+short_break="5"
+long_break="30"
+
+if ! [ -d "$XDG_RUNTIME_DIR" ]; then
+    lock_file="/tmp/pomodoro_$UID.lock"
+else
+    lock_file="${XDG_RUNTIME_DIR}/pomodoro.lock"
+fi
 
 mode=""
 
@@ -21,8 +29,45 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-print_job() {
-    atq | awk '($1 == "'$1'"){print $2 ", " $3 "/" $4 "/" $6 " - " $5 }'
+_run_alarm() {
+    local alarm_pid=$BASHPID
+
+    touch $lock_file
+    trap "unlink $lock_file" EXIT
+
+    echo $alarm_pid > "$lock_file" # pid
+    ps -o comm --no-headers $alarm_pid >> "$lock_file" # comm
+    date >> "$lock_file" # date
+    echo "$1" >> "$lock_file" # timer
+
+    sleep "$1m"
+    alarm -i pomodoro-indicator Pomodoro "$2"
+}
+
+run_alarm() {
+    if [ -f "$lock_file" ]; then
+        echo "Pomodoro: There is a running instance!" >&2
+        return 1
+    fi
+
+    ( _run_alarm "$@" >/dev/null 2>&1 & )
+    return 0
+}
+
+read_lockfile() {
+    if ! [ -f "$lock_file" ]; then
+        echo "Pomodoro: Failed to get information!" >&2
+        exit 1
+    fi
+
+    {
+        read -r p_pid
+        read -r p_comm
+        read -r p_date
+        read -r p_timer
+    } < "$lock_file"
+
+    p_end=`date -d "${p_date} + ${p_timer} minutes"`
 }
 
 case "$mode" in
@@ -31,55 +76,45 @@ case "$mode" in
             c_timer=$timer ||
             c_timer=$custom
 
-        at_job=`echo "alarm -i pomodoro-indicator Pomodoro 'Hora de uma pausa\!'" |
-            at now + $c_timer 2>&1 >/dev/null | tail -1 | cut -d' ' -f2`
-        echo $at_job >> /tmp/pomodoro_jobs.txt
-
-        echo "Pomodoro: Timer was started! ($c_timer)"
-        print_job $at_job
+        run_alarm $c_timer "Hora de uma pausa!" || exit 1
+        echo "Pomodoro: Timer was started! (${c_timer} minutes)"
         ;;
     short)
         [ -z "${custom+x}" ] &&
             c_timer=$short_break ||
             c_timer=$custom
-
-        at_job=`echo "alarm -i pomodoro-indicator Pomodoro 'Fim da pausa\!'" |
-            at now + $c_timer 2>&1 >/dev/null | tail -1 | cut -d' ' -f2`
-        echo $at_job >> /tmp/pomodoro_jobs.txt
-        
-        echo "Pomodoro: Short break! ($c_timer)"
-        print_job $at_job
+ 
+        run_alarm $c_timer "Fim da pausa!" || exit 1
+        echo "Pomodoro: Short break! (${c_timer} minutes)"
         ;;
     long)
         [ -z "${custom+x}" ] &&
             c_timer=$long_break ||
             c_timer=$custom
 
-        at_job=`echo "alarm -i pomodoro-indicator Pomodoro 'Fim da pausa\!'" |
-            at now + $c_timer 2>&1 >/dev/null | tail -1 | cut -d' ' -f2`
-        echo $at_job >> /tmp/pomodoro_jobs.txt
-
-        echo "Pomodoro: Long break! ($c_timer)"
-        print_job $at_job
+        run_alarm $c_timer "Fim da pausa!" || exit 1
+        echo "Pomodoro: Long break! (${c_timer} minutes)"
         ;;
     stop)
-        [ -f /tmp/pomodoro_jobs.txt ] || exit 1
+        read_lockfile
 
-        deleted=false
-        for i in `cat /tmp/pomodoro_jobs.txt`; do
-            if atrm $i >/dev/null 2>&1; then
-                echo "at: job $i deleted!"
-                deleted=true
-            fi
-        done
-        [ "$deleted" = true ] || exit 1
+        if c_comm=`ps -o comm --no-headers $p_pid` && [ "$c_comm" = "$p_comm" ]; then
+            kill $p_pid
+        else
+            echo "WARNING: Failed to validate the process!" >&2
+            echo "The lockfile will be deleted!" >&2
+
+            unlink "$lock_file"
+        fi
+
         ;;
-    list)
-        [ -f /tmp/pomodoro_jobs.txt ] || exit 1
+    show)
+        read_lockfile
 
-        for i in `cat /tmp/pomodoro_jobs.txt`; do
-            print_job $i
-        done
+        echo PID $p_pid
+        echo COMM $p_comm
+        echo DATE $p_date
+        echo END $p_end
         ;;
     *)
         exit 1
