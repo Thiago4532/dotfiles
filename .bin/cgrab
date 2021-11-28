@@ -1,6 +1,6 @@
 #!/bin/sh
 ## cgrab - grabc wrapper that shows a notification
-## Dependencies: xclip libnotify imagemagick
+## Dependencies: xclip libnotify imagemagick grabc
 ## Author: Thiago Mota (github.com/Thiago4532)
 
 color=`grabc` || exit $?
