@@ -1,14 +1,15 @@
 #!/bin/bash
-## xmobar-hs - XMobar build script
+## xmobar-launch - XMobar launch script
 ## Dependencies: ghc xmobar(lib)
 ## Author: Thiago Mota (github.com/Thiago4532)
 
-cd $HOME/.config/xmobar || exit $?
+SCRIPT_PATH=`readlink -f $0`
+cd ${SCRIPT_PATH%/*} || exit $?
 
 FLAGS=(--make -i -ilib -fforce-recomp -main-is main -v0 -threaded -rtsopts -with-rtsopts -V0 -dynamic)
 
-SOURCE="./xmobar.hs"
-BINARY="./xmobar"
+SOURCE="xmobar.hs"
+BINARY="xmobar"
 
 check_recompile() {
     [ -f "$BINARY" ] || return 0
@@ -26,4 +27,8 @@ if check_recompile; then
     ghc "${FLAGS[@]}" "$SOURCE" -o "$BINARY"
 fi
 
-exec "$BINARY" "$@"
+# Detect absolute/relative path
+case "$BINARY" in
+    /*) exec "$BINARY" "$@" ;;
+     *) exec "./$BINARY" "$@" ;;
+esac

@@ -1,7 +1,7 @@
 -- IMPORTS
 import Xmobar
 import Data.List (intercalate)
-import System.Environment (getEnv)
+import System.Environment (getArgs)
 
 import qualified Cfg.Colors as C
 

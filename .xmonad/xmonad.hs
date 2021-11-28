@@ -402,8 +402,8 @@ myEventHook = fullscreenEventHook
 -- Startup hook
 
 xmobarSpawn :: ScreenId -> IO Handle
-xmobarSpawn 0 = spawnPipe "xmobar-hs"
--- xmobarSpawn 1 = spawnPipe "xmobar-hs ~/.config/xmobar/xmobar-1.hs"
+xmobarSpawn 0 = spawnPipe "xmobar-launch"
+-- xmobarSpawn 1 = spawnPipe "xmobar-launch ~/.config/xmobar/xmobar-1.hs"
 
 myStartupHook = do
     spawnOnce "setxkbmap -option altwin:swap_alt_win"
