@@ -1,4 +1,7 @@
-#!/bin/zsh
+#!/bin/sh
+## brightness - Brightness control and notification
+## Dependencies: brightnessctl dunst
+## Author: Thiago Mota (github.com/Thiago4532)
 
 step='5%'
 

@@ -1,4 +1,7 @@
 #!/bin/sh
+## asc - jp2a wrapper
+## Dependencies: curl jp2a
+## Author: Thiago Mota (github.com/Thiago4532)
 
 src="$1"
 shift

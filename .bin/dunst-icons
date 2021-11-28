@@ -1,5 +1,7 @@
 #!/bin/bash
-# List all available icons in the dunst icon path.
+## dunst-icons - List all avaiables icons in the dunst icon path
+## Dependencies: dunst
+## Author: Thiago Mota (github.com/Thiago4532)
 
 DUNSTRC="$HOME/.config/dunst/dunstrc"
 cd $HOME # Relative to HOME

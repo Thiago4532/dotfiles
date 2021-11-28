@@ -1,10 +1,13 @@
 #!/bin/bash
+## keyboard - Change keyboard layout
+## Dependencies: setxkbmap dunst
+## Author: Thiago Mota (github.com/Thiago4532)
 
 layouts=("us" "us")
 variants=("" "intl")
 names=("US" "US Intl.")
 
-extraArgs="-option altwin:swap_alt_win"
+# extraArgs="-option altwin:swap_alt_win"
 
 currentLayout=`setxkbmap -query | awk '($1=="layout:"){print $2}'`
 currentVariant=`setxkbmap -query | awk '($1=="variant:"){print $2}'`

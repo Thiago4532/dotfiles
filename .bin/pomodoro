@@ -1,6 +1,7 @@
 #!/bin/bash
-# A pomodoro timer
-# Dependencies: at, alarm(script)
+## pomodoro - A minimalist pomodoro timer
+## Dependencies: alarm(local) 
+## Author: Thiago Mota (github.com/Thiago4532)
 
 export LC_TIME=C
 

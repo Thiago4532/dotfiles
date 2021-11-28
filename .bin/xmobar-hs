@@ -1,4 +1,8 @@
 #!/bin/bash
+## xmobar-hs - XMobar build script
+## Dependencies: ghc xmobar(lib)
+## Author: Thiago Mota (github.com/Thiago4532)
+
 cd $HOME/.config/xmobar || exit $?
 
 FLAGS=(--make -i -ilib -fforce-recomp -main-is main -v0 -threaded -rtsopts -with-rtsopts -V0 -dynamic)

@@ -1,4 +1,6 @@
 #!/bin/sh
+## bulba - Bulbasaur!
+## Author: Thiago Mota (github.com/Thiago4532)
 
 supports_true_color() {
     ${COLORTERM+"false"} && return 1

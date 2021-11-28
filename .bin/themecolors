@@ -1,4 +1,6 @@
 #!/bin/bash
+## themecolors - Show colors on terminal
+## Author: Thiago Mota (github.com/Thiago4532)
 
 use_bold=false
 

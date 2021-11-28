@@ -1,5 +1,7 @@
 #!/bin/bash
-# Alarm notification
+## Alarm - Alarm notification
+## Dependencies: libpulse sound-theme-freedesktop dunst
+## Author: Thiago Mota (github.com/Thiago4532)
 
 sighandler() {
     kill `jobs -p` >/dev/null 2>&1

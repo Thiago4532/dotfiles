@@ -1,4 +1,6 @@
 #!/bin/bash
+## 256colors - Show 256 colors on terminal
+## Author: Thiago Mota (github.com/Thiago4532)
 
 set_foreground_color() {
     printf "\033[38;5;%dm" $1

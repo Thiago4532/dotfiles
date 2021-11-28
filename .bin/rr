@@ -1,4 +1,7 @@
 #!/bin/sh
+## rr - C++ compile and run
+## Dependencies: g++
+## Author: Thiago Mota (github.com/Thiago4532)
 
 # Custom flags
 CFLAGS="-O2 -std=c++17 -DTDEBUG"

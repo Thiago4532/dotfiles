@@ -1,6 +1,0 @@
-#!/bin/sh
-V1=`pacman -Q xmobar | head -1 | cut -d' ' -f2`
-V2=`pacman -Ss '^xmobar$' | head -1 | cut -d' ' -f2`
-
-echo "xmobar-dynamic: $V1"
-echo "xmobar:         $V2"

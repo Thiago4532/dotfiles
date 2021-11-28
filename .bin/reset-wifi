@@ -1,4 +1,6 @@
 #!/bin/sh
+## reset-wifi - Restarts the wireless connection
+## Author: Thiago Mota (github.com/Thiago4532)
 
 DEVICE=$(rfkill list all | awk -F': ' '$3 ~ "Wireless" {print $1}')
 

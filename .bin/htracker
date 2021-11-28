@@ -1,4 +1,6 @@
 #!/bin/bash
+## htracker - A simple habit tracker
+## Author: Thiago Mota (github.com/Thiago4532)
 
 data="$HOME/.htracker"
 
