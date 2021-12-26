@@ -13,7 +13,9 @@ BINARY="xmobar"
 
 check_recompile() {
     [ -f "$BINARY" ] || return 0
-    ldd "$BINARY" | grep -q 'not found' && return 0
+
+    ## Hack to recompile after update
+    [ /usr/bin/xmobar -nt "$BINARY" ] && return 0
 
     [ "$SOURCE" -nt "$BINARY" ] && return 0
     while read -r -d '' file; do
@@ -23,8 +25,22 @@ check_recompile() {
     return 1
 }
 
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --)
+            shift
+            break
+            ;;
+        --recompile)
+            ghc "${FLAGS[@]}" "$SOURCE" -o "$BINARY"
+            exit $?
+            ;;
+    esac
+    shift
+done
+
 if check_recompile; then
-    ghc "${FLAGS[@]}" "$SOURCE" -o "$BINARY"
+    ghc "${FLAGS[@]}" "$SOURCE" -o "$BINARY" || exit $?
 fi
 
 # Detect absolute/relative path

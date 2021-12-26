@@ -11,7 +11,7 @@ local function executable(...)
     return true
 end
 
-local nvim_nightly = (vim.fn.has("nvim-0.6") == 1)
+local nvim_nightly = (vim.fn.has("nvim-0.7") == 1)
 return packer.startup({function()
     use {
         'wbthomason/packer.nvim',
@@ -28,7 +28,7 @@ return packer.startup({function()
     use {
         {
             'nvim-treesitter/nvim-treesitter',
-            branch = not nvim_nightly and '0.5-compat',
+            branch = '0.5-compat',
             config = [[require'config.treesitter']],
             requires = {
                 {
@@ -36,7 +36,7 @@ return packer.startup({function()
                 },
                 {
                     'nvim-treesitter/nvim-treesitter-textobjects',
-                    branch = not nvim_nightly and '0.5-compat'
+                    branch = '0.5-compat'
                 }
             },
 
@@ -62,7 +62,7 @@ return packer.startup({function()
             'hrsh7th/cmp-nvim-lsp',
             'hrsh7th/vim-vsnip',
             'hrsh7th/cmp-vsnip',
-            -- 'ray-x/lsp_signature.nvim',
+            'ray-x/lsp_signature.nvim',
             'Thiago4532/lsp-semantic.nvim',
         }
     }
@@ -130,17 +130,25 @@ return packer.startup({function()
     -- Repeat commands using '.',
     use { 'tpope/vim-repeat' }
 
-    use {
-        'plasticboy/vim-markdown',
-        opt = true,
-        setup = [[
-        vim.g.vim_markdown_math = 1
-        vim.g.vim_markdown_folding_disabled = 1
-        vim.api.nvim_command'autocmd FileType markdown setlocal conceallevel=2'
-        ]],
+    -- use {
+    --     'Thiago4532/vim-markdown',
+    --     opt = true,
+    --     setup = [[
+    --     vim.g.vim_markdown_math = 1
+    --     vim.g.vim_markdown_folding_disabled = 1
+    --     vim.g.vim_markdown_follow_anchor = 1
+    --     vim.api.nvim_command'autocmd FileType markdown setlocal conceallevel=2'
+    --     ]],
 
-        ft = 'markdown',
-        requires = { 'godlygeek/tabular' },
+    --     ft = 'markdown',
+    --     requires = { 'godlygeek/tabular' },
+    -- }
+    
+    use {
+        'vimwiki/vimwiki',
+
+        setup = [[vim.g.vimwiki_list = {{path = '~/Documents/vimwiki', path_html = '~/Documents/HTML'}}]],
+        event = 'BufNewFile,BufReadPre *.wiki,*.markdown,*.md',
     }
 
     use { 'lambdalisue/suda.vim' }
@@ -167,6 +175,6 @@ return packer.startup({function()
 end,
 config = {
     profile = {
-        enable = false
+        enable = false,
     },
 }})

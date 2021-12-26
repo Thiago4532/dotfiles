@@ -62,6 +62,19 @@ local function write_indent_modeline()
     api.nvim_buf_set_lines(0, -1, -1, true, {comment:format(modeline)})
 end
 
+local function dunst_notify(title, msg, id)
+    local args = {'-i', 'nvim', title, msg}
+    if id ~= nil then
+        args[#args + 1] = '-r'
+        args[#args + 1] = id
+    end
+
+    return uv.spawn('dunstify', {
+        args = args,
+        detach = true,
+    })
+end
+
 local clock = nil
 local function clock_reset()
     clock = uv.hrtime()
@@ -74,20 +87,10 @@ local function clock_print()
     end
 end
 
-local function clock_notify()
-    if clock then
-        local time = (uv.hrtime() - clock) / 1e6
-        vim.notify("Clock:", time)
-    end 
-end
-
 local function clock_dunst()
     if clock then
         local time = (uv.hrtime() - clock) / 1e6
-        uv.spawn('dunstify', {
-            args = {'-r', '674532', '-i', 'nvim', 'Clock', time},
-            detach = true,
-        })
+        dunst_notify('Clock', time, '674532')
     end
 end
 
@@ -95,8 +98,8 @@ return {
     cf_int_ll = cf_int_ll,
     set_indent = indent,
     write_indent_modeline = write_indent_modeline,
+    dunst_notify = dunst_notify,
     clock_reset = clock_reset,
     clock_print = clock_print,
-    clock_notify = clock_notify,
     clock_dunst = clock_dunst,
 }

@@ -21,7 +21,7 @@ require 'config.keybindings'
 cmd[[
 runtime vimscript/ui.vim
 runtime vimscript/autocmd.vim
-]]
+ ]]
 
 function printi(...)
     local tbl = vim.tbl_map(vim.inspect, {...})

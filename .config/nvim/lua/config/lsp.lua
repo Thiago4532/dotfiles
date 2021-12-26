@@ -23,6 +23,17 @@ require'lspconfig'.jedi_language_server.setup{
     capabilities = capabilities
 }
 
+-- Rust
+require'lspconfig'.rust_analyzer.setup{
+    capabilities = capabilities,
+    root_dir = function(fname)
+        local filename = util.path.is_absolute(fname) and fname or util.path.join(vim.loop.cwd(), fname)
+        local root_pattern = util.root_pattern('Cargo.toml')
+
+        return root_pattern(filename)
+    end
+}
+
 -- Golang
 require'lspconfig'.gopls.setup{
     capabilities = capabilities,

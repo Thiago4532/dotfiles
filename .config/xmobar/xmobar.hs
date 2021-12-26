@@ -33,14 +33,14 @@ config = defaultConfig {
         , bgColor = C.background
         , fgColor = C.white
         , position = TopW L 100
-        , iconRoot = ".config/xmobar/icons"
+        , iconRoot = "icons"
         , commands = [ Run $ Cpu ["-t", "\xf108  cpu: (<total>%)", "-L","3","-H","50","--high",C.red] 20
                         , Run $ Memory ["-t","\xf233  mem: <used>M (<usedratio>%)"] 20
                         , Run $ Com "uname" ["-r"] "" 36000
                         , Run $ Date "\xf133  %b %d %Y - (%H:%M) " "date" 10
                         , Run $ Alsa "default" "Master" ["-t", "\xf028  vol: (<volume>%)<status>", "--", "-O", "", "-o", " [MUTE]", "-c", "red"]
                         , Run $ Battery ["-t", "\xf241   bat: (<left>% <acstatus>)"] 50
-                        , Run $ Com "./.config/xmobar/scripts/trayer-padding-icon.sh" [] "trayerpad" 20
+                        , Run $ Com "scripts/trayer-padding-icon.sh" [] "trayerpad" 20
                         , Run $ Kbd []
                         , Run $ UnsafeStdinReader
                         ]

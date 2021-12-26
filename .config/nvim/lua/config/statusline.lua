@@ -17,7 +17,7 @@ return require'lualine'.setup {
         lualine_x = {
             {
                 'diagnostics',
-                sources = {'nvim_lsp'},
+                sources = {'nvim_diagnostic'},
                 sections = {'error', 'warn'},
                 diagnostics_color = {
                     error = { fg = '#ea6962' },
