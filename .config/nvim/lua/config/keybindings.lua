@@ -34,6 +34,7 @@ map('n', '<leader>9', ':BufferLineGoToBuffer 9<CR>', opts);
 
 -- lsp keybindings
 map('n', 'K', ':lua vim.lsp.buf.hover()<CR>', opts)
+map('n', ',cf', ':lua require"lsp-tree".methods.hover_current_function()<CR>', opts)
 map('n', '<C-k>', ':lua vim.lsp.buf.signature_help()<CR>', opts)
 map('i', '<C-k>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
 -- map('n', '<space>wa', ':lua vim.lsp.buf.add_workspace_folder()<CR>', opts)

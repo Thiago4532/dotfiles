@@ -96,7 +96,7 @@ end
 
 return {
     cf_int_ll = cf_int_ll,
-    set_indent = indent,
+    set_indent = set_indent,
     write_indent_modeline = write_indent_modeline,
     dunst_notify = dunst_notify,
     clock_reset = clock_reset,

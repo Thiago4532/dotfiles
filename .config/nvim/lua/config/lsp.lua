@@ -46,6 +46,13 @@ require'lspconfig'.gopls.setup{
     end
 }
 
+-- JavaScript/TypeScript
+require'lspconfig'.tsserver.setup{
+    handlers = {
+        ['textDocument/publishDiagnostics'] = function(...) end
+    }
+}
+
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 vim.lsp.diagnostic.on_publish_diagnostics, {
     virtual_text = false;

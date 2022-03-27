@@ -1,0 +1,14 @@
+#!/bin/bash
+
+CONFIG_FOLDER="$HOME/.config/acscript"
+
+CHECK_AC_SCRIPT="$CONFIG_FOLDER/check-ac"
+BATTERY_SCRIPT="$CONFIG_FOLDER/battery-mode"
+AC_SCRIPT="$CONFIG_FOLDER/ac-mode"
+
+AC_STATE=`$CHECK_AC_SCRIPT`
+if [ $AC_STATE = 1 ]; then
+    exec "$AC_SCRIPT"
+else
+    exec "$BATTERY_SCRIPT"
+fi

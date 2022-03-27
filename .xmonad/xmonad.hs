@@ -143,10 +143,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_r     ), spawn "rofi -show window")
     
     -- emoji picker
-    , ((modm .|. shiftMask, xK_e     ), spawn "rofimoji")
+    , ((mod1Mask           ,xK_period), spawn "rofimoji")
 
-    -- launch networkmanager_dmenu
-    , ((modm,               xK_w     ), spawn "networkmanager_dmenu")
+    -- launch nmtui
+    , ((modm,               xK_y     ), namedScratchpadAction scratchpads "nmtuiTerminal")
     
     -- launch firefox
     , ((modm              , xK_f     ), spawn "firefox")
@@ -311,7 +311,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- mod-shift-{w,e}, Move client to screen 1, 2
     --
     [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_d, xK_s] [0..]
+        | (key, sc) <- zip [xK_e, xK_w] [0..]
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
@@ -377,6 +377,9 @@ scratchpads = [ NS "keepassxc" "keepassxc"
                     popupFloat,
                 NS "popupTerminal" "kitty --class popup-terminal"
                     (className =? "popup-terminal")
+                    popupFloat,
+                NS "nmtuiTerminal" "kitty --class nmtui-terminal -e nmtui-connect"
+                    (className =? "nmtui-terminal")
                     popupFloat
               ]
 
@@ -385,6 +388,7 @@ myManageHook = composeOne [
     , className =? "MPlayer"                             -?> doFloat
     , className =? "Gimp"                                -?> doFloat
     , title     =? "LearnOpenGL"                         -?> doCenterFloat
+    , title     =? "PokeClone"                           -?> doCenterFloat
     , title     =? "Picture-in-Picture"                  -?> doFloat
     , resource  =? "desktop_window"                      -?> doIgnore
     , resource  =? "kdesktop"                            -?> doIgnore
@@ -403,7 +407,7 @@ myEventHook = fullscreenEventHook
 
 xmobarSpawn :: ScreenId -> IO Handle
 xmobarSpawn 0 = spawnPipe "xmobar-launch"
--- xmobarSpawn 1 = spawnPipe "xmobar-launch ~/.config/xmobar/xmobar-1.hs"
+xmobarSpawn 1 = spawnPipe "xmobar-launch-1"
 
 myStartupHook = do
     spawnOnce "setxkbmap -option altwin:swap_alt_win"
@@ -427,6 +431,9 @@ myStartupHook = do
                                         , " --SetPartialStrut true --expand true --transparent true"
                                         , " --alpha 0 --height 16"
                                         , " --tint ", U.color2hex C.background]
+
+    spawnOnce "sleep 30"
+    spawnOnce "systemctl --user start replay-sorcery"
 
 ------------------------------------------------------------------------
 -- Log hook

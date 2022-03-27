@@ -15,6 +15,8 @@ noremap <Space> <Nop>
 ]]
 g.mapleader = ','
 
+util = require'util'
+
 require 'config.editor'
 require 'config.keybindings'
 

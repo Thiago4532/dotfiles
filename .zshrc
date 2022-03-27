@@ -88,7 +88,6 @@ compdef _htracker htracker
 # precmd
 precmd () { print -Pn "\e]0;zsh: %~\a" }
 
-
 # BEGIN_KITTY_SHELL_INTEGRATION
 if test -e "/usr/lib/kitty/shell-integration/kitty.zsh"; then source "/usr/lib/kitty/shell-integration/kitty.zsh"; fi
 # END_KITTY_SHELL_INTEGRATION
