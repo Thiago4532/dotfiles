@@ -1,0 +1,12 @@
+#!/bin/bash
+
+SCRIPT_PATH=`readlink -f $0`
+cd ${SCRIPT_PATH%/*} || exit $?
+
+find ./metadata/library -name '*.srt' -print0 |
+    while IFS= read -r -d '' file; do
+        ffmpeg -i $file ${file%%.srt}.ass || exit $?
+        chown `stat -c '%U:%G' $file` ${file%%.srt}.ass
+        rm $file || exit $?
+    done
+

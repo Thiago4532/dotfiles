@@ -1,45 +1,99 @@
-#!/bin/sh
+#!/bin/bash
 ## rr - C++ compile and run
 ## Dependencies: g++
-## Author: Thiago Mota (github.com/Thiago4532)
+## Author: Thiago Mota (https://github.com/Thiago4532)
 
 # Custom flags
 CFLAGS="-O2 -std=c++17 -DTDEBUG"
-DIFF_PATH="$HOME/.cache/rr"
-INCLUDE_FOLDER="$HOME/.local/include"
+CACHE_FOLDER="$HOME/.cache/rr"
 
+# Program variables
+NORMAL_IPATH="$CACHE_FOLDER/include"
+GDB_IPATH="$CACHE_FOLDER/gdb-include"
+GDB_CFLAGS="$CFLAGS -ggdb3"
+
+shopt -s lastpipe
+mode_precompile_headers() {
+    STDC_PATH=""
+    echo | g++ -x c++ -E -v - 2>&1 | sed -n 's,^ ,,p' | while read -r ipath; do
+        [ -d "$ipath" ] || continue
+        if [ -f "$ipath/bits/stdc++.h" ]; then
+            STDC_PATH="$ipath/bits/stdc++.h"
+            break
+        fi
+    done
+
+    if [ -z "$STDC_PATH" ]; then
+        echo "Failed to precompile headers" >&2
+        exit 1
+    fi
+
+    # Normal mode
+    mkdir -p "$NORMAL_IPATH/bits" || exit $?
+    g++ -H $CFLAGS "$STDC_PATH" -o "$NORMAL_IPATH/bits/stdc++.h.gch" || exit $?
+
+    # GDB mode
+    mkdir -p "$GDB_IPATH/bits" || exit $?
+    g++ -H $GDB_CFLAGS "$STDC_PATH" -o "$GDB_IPATH/bits/stdc++.h.gch" || exit $?
+}
+
+mode_normal() {
+    if [ $# -lt 1 ]; then
+        echo "usage: ${0##*/} file [flags]" >&2
+        exit 64
+    fi
+
+    CFLAGS="$CFLAGS ${@:2}"
+    local SOURCE="$1.cpp"
+    local BINARY="$1"
+
+    if ! [ -f "$SOURCE" ]; then
+        echo "$SOURCE does not exist!" >&2
+        exit 1
+    fi
+
+    if [ "$SOURCE" -nt "$BINARY" ]; then
+        echo "Compiling: g++ $CFLAGS" >&2
+        g++ $CFLAGS -I"$NORMAL_IPATH" -o "$BINARY" "$SOURCE" || exit $?
+        echo "Done!" >&2
+    fi
+
+    exec ./"$BINARY"
+}
+
+mode_gdb() {
+    if [ $# -lt 1 ]; then
+        echo "usage: ${0##*/} -gdb file [flags]" >&2
+        exit 64
+    fi
+
+    CFLAGS="$CFLAGS ${@:2}"
+    local SOURCE="$1.cpp"
+    local BINARY="$1"
+
+    if ! [ -f "$SOURCE" ]; then
+        echo "$SOURCE does not exist!" >&2
+        exit 1
+    fi
+
+    g++ $GDB_CFLAGS -I"$GDB_IPATH" -o "$BINARY" "$SOURCE" || exit $?
+    exec gdb ./"$BINARY"
+}
+
+## Main execution
 if [ $# -lt 1 ]; then
-    echo "usage: ${0##*/} file <flags>" >&2
+    echo "usage: ${0##*/} [mode] file [flags]" >&2
     exit 64
 fi
 
-if [ "$1" = "-setup" ]; then
-    echo $CFLAGS
-    echo $INCLUDE_FOLDER
-    exit 0
-fi
-
-if ! [ -f $1.cpp ]; then
-    echo $1.cpp does not exist! >&2
-    exit 69
-fi
-
-if [ $# -gt 1 ]; then
-    CFLAGS="$CFLAGS ${@:2}"
-fi
-
-DIFF_FILE="$DIFF_PATH/$PWD"
-[ -d "$DIFF_FILE" ] || mkdir -p "$DIFF_FILE"
-DIFF_FILE="$DIFF_FILE/$1.cpp"
-
-if ! [ -f $1 ] || ! diff $1.cpp "$DIFF_FILE" > /dev/null 2> /dev/null; then
-    echo "Compiling: g++ $CFLAGS" >&2
-    g++ $CFLAGS -I"$INCLUDE_FOLDER" -o $1 $1.cpp
-    exit_flag=$?
-    [ $exit_flag -ne 0 ] && exit $exit_flag
-    cp $1.cpp "$DIFF_FILE"
-    echo "Done!" >&2
-fi
-
-./$1
-exit $?
+case "$1" in
+    -headers)
+        mode_precompile_headers
+        ;;
+    -gdb)
+        mode_gdb "${@:2}"
+        ;;
+    *)
+        mode_normal "$@"
+        ;;
+esac
