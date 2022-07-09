@@ -7,6 +7,7 @@ alias tssh='TERM=xterm-256color \ssh'
 alias nssh='TERM=kitty \ssh'
 if [[ $TERM == "xterm-kitty" ]]; then alias ssh='kitty +kitten ssh'; fi
 alias open='xdg-open'
+alias rdb='rr -gdb'
 
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 

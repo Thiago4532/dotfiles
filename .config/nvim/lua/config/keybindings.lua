@@ -60,7 +60,7 @@ map('n', 'gd', ":lua require'telescope.builtin'.lsp_definitions()<CR>", opts)
 map('n', '<leader>D', ":lua require'telescope.builtin'.lsp_type_definitions()<CR>", opts)
 map('n', 'gi', ":lua require'telescope.builtin'.lsp_implementations()<CR>", opts)
 map('n', 'gr', ":lua require'telescope.builtin'.lsp_references()<CR>", opts)
-map('n', '<leader>a', ":lua require'telescope.builtin'.lsp_code_actions()<CR>", opts)
+map('n', '<leader>a', ":lua vim.lsp.buf.code_action()<CR>", opts)
 
 -- map('i', '<C-Space>', "<C-x><C-o>", opts)
 

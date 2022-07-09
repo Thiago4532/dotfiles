@@ -28,7 +28,7 @@ return packer.startup({function()
     use {
         {
             'nvim-treesitter/nvim-treesitter',
-            branch = '0.5-compat',
+            branch = not nvim_nightly and '0.5-compat' or nil,
             config = [[require'config.treesitter']],
             requires = {
                 {
@@ -36,7 +36,7 @@ return packer.startup({function()
                 },
                 {
                     'nvim-treesitter/nvim-treesitter-textobjects',
-                    branch = '0.5-compat'
+                    branch = not nvim_nightly and '0.5-compat' or nil
                 }
             },
 
@@ -45,7 +45,7 @@ return packer.startup({function()
 
         'vim-jp/vim-cpp',
         'bfrg/vim-cpp-modern',
-        'pangloss/vim-javascript',
+        'neoclide/vim-jsx-improve',
         'HerringtonDarkholme/yats.vim',
 
         'neovimhaskell/haskell-vim',
@@ -60,8 +60,10 @@ return packer.startup({function()
         requires = {
             { 'hrsh7th/nvim-cmp', config = [[require'config.complete']] },
             'hrsh7th/cmp-nvim-lsp',
-            'hrsh7th/vim-vsnip',
-            'hrsh7th/cmp-vsnip',
+            -- 'hrsh7th/vim-vsnip',
+            -- 'hrsh7th/cmp-vsnip',
+            'L3MON4D3/LuaSnip',
+            'saadparwaiz1/cmp_luasnip',
             'ray-x/lsp_signature.nvim',
             'Thiago4532/lsp-semantic.nvim',
         }
@@ -119,6 +121,11 @@ return packer.startup({function()
     }
 
     use {
+        'nvim-telescope/telescope-ui-select.nvim',
+        requires = {'nvim-telescope/telescope.nvim'}
+    }
+
+    use {
         'tpope/vim-surround',
 
         setup = [[vim.g.surround_no_insert_mappings = 1]],
@@ -151,14 +158,24 @@ return packer.startup({function()
         event = 'BufNewFile,BufReadPre *.wiki,*.markdown,*.md',
     }
 
+    use {
+        "nvim-neorg/neorg",
+        config = [[require'config.neorg']],
+        requires = "nvim-lua/plenary.nvim"
+    }
+
+    use {
+        'oberblastmeister/neuron.nvim',
+        config = [[require'config.neuron']],
+        requires = 'nvim-telescope/telescope.nvim'
+    }
+
     use { 'lambdalisue/suda.vim' }
     use { 'lukas-reineke/indent-blankline.nvim' }
 
     use { 'mbbill/undotree', config = [[vim.g.undotree_WindowLayout = 3]] }
 
     use { 'github/copilot.vim', cmd = 'Copilot' }
-
-    use '/home/thiagomm/GitHub/lsp-tree.nvim'
 
     use { 'nathom/filetype.nvim', disable = not nvim_nightly }
 
@@ -168,13 +185,16 @@ return packer.startup({function()
 
     use { 
         'iamcco/markdown-preview.nvim',
+        filetype = 'md',
         disable = not executable'yarn',
 
         run = 'cd app && yarn install',
     }
+
+    use { 'edluffy/hologram.nvim' }
 end,
 config = {
     profile = {
-        enable = false,
+        enable = true,
     },
 }})

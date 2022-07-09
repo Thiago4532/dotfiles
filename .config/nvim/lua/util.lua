@@ -94,6 +94,31 @@ local function clock_dunst()
     end
 end
 
+local function diary_date_prettify(date)
+    local i, j = 1, 0
+
+    j = date:find('-', i)
+    local year = tonumber(date:sub(i, j - 1))
+    i = j + 1
+
+    j = date:find('-', i)
+    local month = tonumber(date:sub(i, j - 1))
+    i = j + 1
+
+    j = date:len() + 1
+    local day = tonumber(date:sub(i, j - 1))
+    i = j + 1
+
+    local epoch = os.time({year = year, month = month, day = day})
+
+    local day_of_the_week = os.date("%A", epoch):gsub("^%l", string.upper)
+    local date = os.date("%x", epoch)
+
+    return string.format("%s - %s", day_of_the_week, date)
+
+    -- return date
+end
+
 return {
     cf_int_ll = cf_int_ll,
     set_indent = set_indent,
@@ -102,4 +127,5 @@ return {
     clock_reset = clock_reset,
     clock_print = clock_print,
     clock_dunst = clock_dunst,
+    diary_date_prettify = diary_date_prettify,
 }

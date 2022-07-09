@@ -143,7 +143,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_r     ), spawn "rofi -show window")
     
     -- emoji picker
-    , ((mod1Mask           ,xK_period), spawn "rofimoji")
+    , ((mod1Mask           ,xK_period), spawn "rofimoji &")
 
     -- launch nmtui
     , ((modm,               xK_y     ), namedScratchpadAction scratchpads "nmtuiTerminal")
@@ -260,6 +260,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     
     -- OCR script
     , ((modm .|. shiftMask, xK_o     ), spawn "ocr")
+    
+    -- On-screen drawing
+    , ((modm .|. shiftMask, xK_d     ), spawn "gromit-mpx")
 
     -- dunst: Pop one notification from history
     , ((modm              , xK_comma ), spawn "dunstctl history-pop")
@@ -425,14 +428,13 @@ myStartupHook = do
 
     dynStatusBarStartup xmobarSpawn mempty
 
-    spawnOnce $ join ["pkill trayer; trayer --edge top --distance 2 --monitor primary"
+    spawn $ join ["pidof trayer || trayer --edge top --distance 2 --monitor primary"
                                         , " --align right --widthtype request"
                                         , " --iconspacing 8 --padding 6 --SetDockType true"
                                         , " --SetPartialStrut true --expand true --transparent true"
                                         , " --alpha 0 --height 16"
                                         , " --tint ", U.color2hex C.background]
 
-    spawnOnce "sleep 30"
     spawnOnce "systemctl --user start replay-sorcery"
 
 ------------------------------------------------------------------------

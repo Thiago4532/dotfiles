@@ -25,3 +25,5 @@ require'telescope'.setup{
         lsp_code_actions = normal_mode,
     }
 }
+
+require("telescope").load_extension("ui-select")

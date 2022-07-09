@@ -7,8 +7,10 @@ capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 -- C/C++
 require'lspconfig'.clangd.setup {
     before_init = require'lsp-semantic.configs'.clangd.before_init,
-    on_attach = require'lsp-tree'.on_attach,
     capabilities = capabilities,
+    init_options = {
+        fallbackFlags = {'-Wno-c++17-extensions'},
+    },
     root_dir = function(fname)
         local filename = util.path.is_absolute(fname) and fname or util.path.join(vim.loop.cwd(), fname)
         local root_pattern = util.root_pattern('compile_commands.json', 'compile_flags.txt')
@@ -19,13 +21,23 @@ require'lspconfig'.clangd.setup {
 }
 
 -- Python
-require'lspconfig'.jedi_language_server.setup{
+require'lspconfig'.pyright.setup{
+    handlers = {
+        ['textDocument/publishDiagnostics'] = function(...) end
+    },
     capabilities = capabilities
 }
 
 -- Rust
 require'lspconfig'.rust_analyzer.setup{
     capabilities = capabilities,
+    -- settings = {
+    --     ['rust-analyzer'] = {
+    --         ['diagnostics'] = {
+    --             ['warningsAsHint'] = {'unused_variables'}
+    --         }
+    --     }
+    -- },
     root_dir = function(fname)
         local filename = util.path.is_absolute(fname) and fname or util.path.join(vim.loop.cwd(), fname)
         local root_pattern = util.root_pattern('Cargo.toml')
@@ -49,7 +61,23 @@ require'lspconfig'.gopls.setup{
 -- JavaScript/TypeScript
 require'lspconfig'.tsserver.setup{
     handlers = {
-        ['textDocument/publishDiagnostics'] = function(...) end
+        ['textDocument/publishDiagnostics'] = function(id, result, ctx, config)
+            -- Diagnostics codes to ignore
+            local ignore_codes = {
+                [80001] = true
+            }
+
+            result.diagnostics = vim.tbl_filter(function(diag)
+                return not ignore_codes[diag.code]
+            end, result.diagnostics)
+
+            -- -- Add diagnostic's code to the message
+            -- for _, d in ipairs(result.diagnostics) do
+            --     d.message = string.format("%s (%d)", d.message, d.code)
+            -- end
+
+            return vim.lsp.handlers["textDocument/publishDiagnostics"](id, result, ctx, config)
+        end
     }
 }
 
