@@ -1,0 +1,62 @@
+#!/bin/bash
+# syncmsg: Communicate between terminals using FIFO
+
+
+silent_id=false
+write_mode=false
+sync_id=""
+
+if [[ $# == 0 ]]; then
+    write_mode=true
+fi
+
+while [[ $# > 0 ]]; do
+    case "$1" in
+        -w|--write)
+            write_mode=true
+            ;;
+        -s|--silent)
+            silent_id=true
+            ;;
+        *)
+            if [ -z "${sync_id}" ]; then
+                sync_id=$1
+            else
+                echo "syncmsg: arguments are ambiguous" >&2
+                exit 1
+            fi
+            ;;
+    esac
+    shift
+done
+
+# read mode
+if [ "$write_mode" = false ]; then
+    if [ -z "${sync_id}" ]; then
+        echo "syncmsg: missing ID" >&2
+        exit 1
+    fi
+
+    FIFO="/tmp/syncmsg.${sync_id}"
+    if ! [ -p "$FIFO" ]; then
+        echo "syncmsg: ${sync_id}: invalid ID" >&2
+        exit 1
+    fi
+
+    cat $FIFO
+    exit 0
+fi
+
+[ -z "${sync_id}" ] && sync_id="$$"
+
+FIFO="/tmp/syncmsg.${sync_id}"
+mkfifo "$FIFO" -m=600 || exit $?
+[ "$silent_id" = false ] && echo "ID: ${sync_id}"
+
+function _clean {
+    rm "$FIFO"
+}
+trap _clean EXIT
+
+cat > "$FIFO"
+exit $?

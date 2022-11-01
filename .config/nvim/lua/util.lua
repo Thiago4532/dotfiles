@@ -119,6 +119,12 @@ local function diary_date_prettify(date)
     -- return date
 end
 
+local function center_cursor()
+    local cursor = api.nvim_win_get_cursor(0)
+    vim.cmd(string.format('normal! %dzt', cursor[1] - 10))
+    api.nvim_win_set_cursor(0, cursor)
+end
+
 return {
     cf_int_ll = cf_int_ll,
     set_indent = set_indent,
@@ -128,4 +134,5 @@ return {
     clock_print = clock_print,
     clock_dunst = clock_dunst,
     diary_date_prettify = diary_date_prettify,
+    center_cursor = center_cursor,
 }

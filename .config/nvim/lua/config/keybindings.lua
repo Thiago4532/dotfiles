@@ -112,6 +112,9 @@ map('n', '<leader>=', '=`]', opts)
 -- repeat last search command on replace mode
 map('n', '<leader>R', 'q/kyy:q<CR>:%s/<C-r>"', { noremap = true })
 
+-- center cursor
+map('n', 'zg', ":lua require'util'.center_cursor()<CR>", opts)
+
 map('n', '<F8>', ":DetectIndent<CR>",opts)
 map('n', '<F9>', ":MarkdownPreview<CR>",opts)
 

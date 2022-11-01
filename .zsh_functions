@@ -67,3 +67,14 @@ function ghcup-activate() {
         unset GHCUP_ENV
     }
 }
+
+function syncdir() {
+    # cd mode
+    if [ -p "/tmp/syncmsg.syncdir" ]; then
+        folder=`syncmsg syncdir` || return $?
+        cd $folder
+        return $?
+    fi
+
+    pwd | syncmsg -w -s syncdir
+}

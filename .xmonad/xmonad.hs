@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wno-deprecations #-}
 {-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, PatternGuards, TypeSynonymInstances, DeriveDataTypeable, LambdaCase, MultiWayIf #-}
 -- IMPORTS
 
@@ -391,6 +392,7 @@ myManageHook = composeOne [
     , className =? "MPlayer"                             -?> doFloat
     , className =? "Gimp"                                -?> doFloat
     , title     =? "LearnOpenGL"                         -?> doCenterFloat
+    , title     =? "SFML"                                -?> doCenterFloat
     , title     =? "PokeClone"                           -?> doCenterFloat
     , title     =? "Picture-in-Picture"                  -?> doFloat
     , resource  =? "desktop_window"                      -?> doIgnore
@@ -416,10 +418,10 @@ myStartupHook = do
     spawnOnce "setxkbmap -option altwin:swap_alt_win"
     setFullscreenSupported
 
-    spawn "xset r rate 300 33"
     spawnOnce "xss-lock -- slock"
     spawnOnce "clingo"
-    spawnOnce "dex -a"
+    spawnOnce "lxsession -s xmonad -e LXDE"
+    spawn "xset r rate 300 33"
 
     spawnAndDoOnce (doShift "NSP" <+> popupFloat) "keepassxc"
 

@@ -5,12 +5,12 @@
 
 # Custom flags
 CFLAGS="-O2 -std=c++17 -DTDEBUG"
+GDB_CFLAGS="-ggdb3 -std=c++17 -DTDEBUG"
 CACHE_FOLDER="$HOME/.cache/rr"
 
 # Program variables
 NORMAL_IPATH="$CACHE_FOLDER/include"
 GDB_IPATH="$CACHE_FOLDER/gdb-include"
-GDB_CFLAGS="$CFLAGS -ggdb3"
 
 shopt -s lastpipe
 mode_precompile_headers() {
@@ -58,7 +58,9 @@ mode_normal() {
         echo "Done!" >&2
     fi
 
-    exec ./"$BINARY"
+    [ -z "${RR_COPY_CLIPBOARD}" ] \
+        && exec ./"$BINARY" \
+        || xclip -o -selection clipboard | exec ./"$BINARY"
 }
 
 mode_gdb() {
@@ -87,10 +89,10 @@ if [ $# -lt 1 ]; then
 fi
 
 case "$1" in
-    -headers)
+    -h|-headers)
         mode_precompile_headers
         ;;
-    -gdb)
+    -g|-gdb)
         mode_gdb "${@:2}"
         ;;
     *)

@@ -9,7 +9,7 @@ require'lspconfig'.clangd.setup {
     before_init = require'lsp-semantic.configs'.clangd.before_init,
     capabilities = capabilities,
     init_options = {
-        fallbackFlags = {'-Wno-c++17-extensions'},
+        fallbackFlags = {'-Wno-c++17-extensions', '-DTDEBUG'},
     },
     root_dir = function(fname)
         local filename = util.path.is_absolute(fname) and fname or util.path.join(vim.loop.cwd(), fname)
@@ -17,7 +17,8 @@ require'lspconfig'.clangd.setup {
 
         return root_pattern(filename)
         or root_pattern(vim.loop.cwd())
-    end
+    end,
+    -- cmd = { "clangd", "--completion-style=detailed" }
 }
 
 -- Python

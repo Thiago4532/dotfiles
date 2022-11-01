@@ -154,15 +154,15 @@ return packer.startup({function()
     use {
         'vimwiki/vimwiki',
 
-        setup = [[vim.g.vimwiki_list = {{path = '~/Documents/vimwiki', path_html = '~/Documents/HTML'}}]],
-        event = 'BufNewFile,BufReadPre *.wiki,*.markdown,*.md',
+        setup = [[require'config.vimwiki']],
+        event = 'BufNewFile,BufReadPre *.wiki,*.markdown,*.md,*.rmd',
     }
 
-    use {
-        "nvim-neorg/neorg",
-        config = [[require'config.neorg']],
-        requires = "nvim-lua/plenary.nvim"
-    }
+    -- use {
+    --     "nvim-neorg/neorg",
+    --     config = [[require'config.neorg']],
+    --     requires = "nvim-lua/plenary.nvim"
+    -- }
 
     use {
         'oberblastmeister/neuron.nvim',
@@ -175,9 +175,7 @@ return packer.startup({function()
 
     use { 'mbbill/undotree', config = [[vim.g.undotree_WindowLayout = 3]] }
 
-    use { 'github/copilot.vim', cmd = 'Copilot' }
-
-    use { 'nathom/filetype.nvim', disable = not nvim_nightly }
+    -- use { 'nathom/filetype.nvim', disable = not nvim_nightly }
 
     use { 'famiu/bufdelete.nvim' }
 
