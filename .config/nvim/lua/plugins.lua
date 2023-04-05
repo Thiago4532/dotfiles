@@ -65,7 +65,7 @@ return packer.startup({function()
             'L3MON4D3/LuaSnip',
             'saadparwaiz1/cmp_luasnip',
             'ray-x/lsp_signature.nvim',
-            'Thiago4532/lsp-semantic.nvim',
+            -- 'Thiago4532/lsp-semantic.nvim',
         }
     }
 

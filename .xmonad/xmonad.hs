@@ -139,12 +139,18 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch rofi (run)
     , ((modm,               xK_p     ), spawn "rofi -modi run -no-show-icons -show")
     
+    -- -- timer firework
+    -- , ((modm,               xK_u     ), spawn "timer 30")
+    -- --
+    -- -- timer firework
+    -- , ((modm .|. shiftMask,          xK_u     ), spawn "pkill timer")
+    
     -- launch rofi
     , ((modm .|. shiftMask, xK_p     ), spawn "rofi -show")
     , ((modm .|. shiftMask, xK_r     ), spawn "rofi -show window")
     
     -- emoji picker
-    , ((mod1Mask           ,xK_period), spawn "rofimoji &")
+    -- , ((mod1Mask           ,xK_period), spawn "rofimoji &")
 
     -- launch nmtui
     , ((modm,               xK_y     ), namedScratchpadAction scratchpads "nmtuiTerminal")
@@ -237,6 +243,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     
     -- Cycle through keyboard layouts
     , ((modm .|. shiftMask, xK_u     ), spawn "keyboard cycle")
+
+    -- Scatha
+    , ((modm, xK_o), spawn "sleep 1; /home/thiagomm/scatha.sh")
 
     -- Volume down
     , ((modm              , xK_q     ), spawn "xmonad --recompile; pkill xmobar; xmonad --restart")
@@ -392,6 +401,7 @@ myManageHook = composeOne [
     , className =? "MPlayer"                             -?> doFloat
     , className =? "Gimp"                                -?> doFloat
     , title     =? "LearnOpenGL"                         -?> doCenterFloat
+    , title     =? "Figure 1"                             -?> doFloat
     , title     =? "SFML"                                -?> doCenterFloat
     , title     =? "PokeClone"                           -?> doCenterFloat
     , title     =? "Picture-in-Picture"                  -?> doFloat
@@ -426,7 +436,7 @@ myStartupHook = do
     spawnAndDoOnce (doShift "NSP" <+> popupFloat) "keepassxc"
 
     spawnOnce "nitrogen --restore && conky"
-    spawnOnce picomCmd
+    -- spawnOnce picomCmd
 
     dynStatusBarStartup xmobarSpawn mempty
 

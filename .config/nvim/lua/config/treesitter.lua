@@ -1,4 +1,4 @@
-local disabled_list = {'c', 'cpp', 'bash', 'zsh', 'haskell', 'vim'}
+local disabled_list = {'c', 'cpp', 'bash', 'zsh', 'haskell', 'vim', 'zig'}
 
 return require'nvim-treesitter.configs'.setup {
     highlight = {

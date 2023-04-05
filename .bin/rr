@@ -1,11 +1,11 @@
 #!/bin/bash
 ## rr - C++ compile and run
-## Dependencies: g++
-## Author: Thiago Mota (https://github.com/Thiago4532)
+## Dependencies: g++ # Author: Thiago Mota (https://github.com/Thiago4532)
 
 # Custom flags
 CFLAGS="-O2 -std=c++17 -DTDEBUG"
 GDB_CFLAGS="-ggdb3 -std=c++17 -DTDEBUG"
+EXTRA_FLAGS="-I$HOME/.local/include"
 CACHE_FOLDER="$HOME/.cache/rr"
 
 # Program variables
@@ -30,11 +30,11 @@ mode_precompile_headers() {
 
     # Normal mode
     mkdir -p "$NORMAL_IPATH/bits" || exit $?
-    g++ -H $CFLAGS "$STDC_PATH" -o "$NORMAL_IPATH/bits/stdc++.h.gch" || exit $?
+    g++ -H $CFLAGS $EXTRA_FLAGS "$STDC_PATH" -o "$NORMAL_IPATH/bits/stdc++.h.gch" || exit $?
 
     # GDB mode
     mkdir -p "$GDB_IPATH/bits" || exit $?
-    g++ -H $GDB_CFLAGS "$STDC_PATH" -o "$GDB_IPATH/bits/stdc++.h.gch" || exit $?
+    g++ -H $GDB_CFLAGS $EXTRA_FLAGS "$STDC_PATH" -o "$GDB_IPATH/bits/stdc++.h.gch" || exit $?
 }
 
 mode_normal() {
@@ -54,7 +54,7 @@ mode_normal() {
 
     if [ "$SOURCE" -nt "$BINARY" ]; then
         echo "Compiling: g++ $CFLAGS" >&2
-        g++ $CFLAGS -I"$NORMAL_IPATH" -o "$BINARY" "$SOURCE" || exit $?
+        g++ $CFLAGS $EXTRA_FLAGS -I"$NORMAL_IPATH" -o "$BINARY" "$SOURCE" || exit $?
         echo "Done!" >&2
     fi
 
@@ -78,7 +78,7 @@ mode_gdb() {
         exit 1
     fi
 
-    g++ $GDB_CFLAGS -I"$GDB_IPATH" -o "$BINARY" "$SOURCE" || exit $?
+    g++ $GDB_CFLAGS $EXTRA_FLAGS -I"$GDB_IPATH" -o "$BINARY" "$SOURCE" || exit $?
     exec gdb ./"$BINARY"
 }
 

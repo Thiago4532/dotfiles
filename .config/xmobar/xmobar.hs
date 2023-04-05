@@ -58,7 +58,7 @@ config = defaultConfig {
                            , mSeparator
                            , mColor C.red $ mAction "kitty -e htop" "%memory%"
                            , mSeparator
-                           , mColor C.green $ "%battery%"
+                           , mColor C.green $ mAction "xfce4-power-manager-settings" "%battery%"
                            , mSeparator
                            , mColor C.magenta $ mAction "pavucontrol" "%alsa:default:Master%"
                            , mSeparator

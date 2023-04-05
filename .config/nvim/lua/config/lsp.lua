@@ -1,15 +1,14 @@
 local vim = vim
 local util = require'lspconfig/util'
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- C/C++
 require'lspconfig'.clangd.setup {
-    before_init = require'lsp-semantic.configs'.clangd.before_init,
+    -- before_init = require'lsp-semantic.configs'.clangd.before_init,
     capabilities = capabilities,
     init_options = {
-        fallbackFlags = {'-Wno-c++17-extensions', '-DTDEBUG'},
+        fallbackFlags = {'-DTDEBUG'},
     },
     root_dir = function(fname)
         local filename = util.path.is_absolute(fname) and fname or util.path.join(vim.loop.cwd(), fname)
@@ -18,7 +17,7 @@ require'lspconfig'.clangd.setup {
         return root_pattern(filename)
         or root_pattern(vim.loop.cwd())
     end,
-    -- cmd = { "clangd", "--completion-style=detailed" }
+    cmd = { "clangd-16" }
 }
 
 -- Python
