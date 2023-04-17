@@ -57,7 +57,7 @@ fi
 source ~/.zplug/init.zsh
 
 # Plugins
-[ -f /usr/share/doc/pkgfile/command-not-found.zsh ] && source /usr/share/doc/pkgfile/command-not-found.zsh
+# [ -f /usr/share/doc/pkgfile/command-not-found.zsh ] && source /usr/share/doc/pkgfile/command-not-found.zsh
 [ -f /etc/zsh_command_not_found ] && source /etc/zsh_command_not_found
 command -v fasd > /dev/null && source ~/.fasd.zsh
 

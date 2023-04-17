@@ -15,7 +15,7 @@ require'telescope'.setup{
                 i = { ["<c-d>"] = "delete_buffer" },
                 n = { ["<c-d>"] = "delete_buffer" }
             },
-            initial_mode = "normal"
+            -- initial_mode = "normal"
         }, 
         lsp_references = normal_mode,
         lsp_implementations = normal_mode,

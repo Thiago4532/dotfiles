@@ -63,6 +63,10 @@ local function write_indent_modeline()
 end
 
 local function dunst_notify(title, msg, id)
+    if msg == nil then
+        msg = title
+        title = "Neovim"
+    end
     local args = {'-i', 'nvim', title, msg}
     if id ~= nil then
         args[#args + 1] = '-r'

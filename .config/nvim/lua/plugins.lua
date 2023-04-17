@@ -11,7 +11,7 @@ local function executable(...)
     return true
 end
 
-local nvim_nightly = (vim.fn.has("nvim-0.7") == 1)
+-- local nvim_nightly = (vim.fn.has("nvim-0.7") == 1)
 return packer.startup({function()
     use {
         'wbthomason/packer.nvim',
@@ -28,7 +28,7 @@ return packer.startup({function()
     use {
         {
             'nvim-treesitter/nvim-treesitter',
-            branch = not nvim_nightly and '0.5-compat' or nil,
+            -- branch = not nvim_nightly and '0.5-compat' or nil,
             config = [[require'config.treesitter']],
             requires = {
                 {
@@ -36,7 +36,7 @@ return packer.startup({function()
                 },
                 {
                     'nvim-treesitter/nvim-treesitter-textobjects',
-                    branch = not nvim_nightly and '0.5-compat' or nil
+                    -- branch = not nvim_nightly and '0.5-compat' or nil
                 }
             },
 
@@ -60,29 +60,28 @@ return packer.startup({function()
         requires = {
             { 'hrsh7th/nvim-cmp', config = [[require'config.complete']] },
             'hrsh7th/cmp-nvim-lsp',
-            -- 'hrsh7th/vim-vsnip',
-            -- 'hrsh7th/cmp-vsnip',
-            'L3MON4D3/LuaSnip',
             'saadparwaiz1/cmp_luasnip',
+            'L3MON4D3/LuaSnip',
+            'hrsh7th/cmp-nvim-lsp-signature-help',
             'ray-x/lsp_signature.nvim',
-            -- 'Thiago4532/lsp-semantic.nvim',
+            'nvim-lua/lsp-status.nvim',
         }
     }
 
     -- Statusline and bufferline
     use {
-        {
+        -- {
             'hoob3rt/lualine.nvim',
             requires = 'kyazdani42/nvim-web-devicons',
 
             config = [[require'config.statusline']],
-        },
-        {
-            'akinsho/bufferline.nvim',
-            requires = 'kyazdani42/nvim-web-devicons',
+        -- },
+        -- {
+        --     'akinsho/bufferline.nvim',
+        --     requires = 'kyazdani42/nvim-web-devicons',
 
-            config = [[require'config.bufferline']],
-        }
+        --     config = [[require'config.bufferline']],
+        -- }
     }
 
     -- Colorscheme
@@ -158,28 +157,14 @@ return packer.startup({function()
         event = 'BufNewFile,BufReadPre *.wiki,*.markdown,*.md,*.rmd',
     }
 
-    -- use {
-    --     "nvim-neorg/neorg",
-    --     config = [[require'config.neorg']],
-    --     requires = "nvim-lua/plenary.nvim"
-    -- }
-
-    use {
-        'oberblastmeister/neuron.nvim',
-        config = [[require'config.neuron']],
-        requires = 'nvim-telescope/telescope.nvim'
-    }
-
     use { 'lambdalisue/suda.vim' }
     use { 'lukas-reineke/indent-blankline.nvim' }
 
     use { 'mbbill/undotree', config = [[vim.g.undotree_WindowLayout = 3]] }
 
-    -- use { 'nathom/filetype.nvim', disable = not nvim_nightly }
-
     use { 'famiu/bufdelete.nvim' }
 
-    use { 'phaazon/hop.nvim', config = [[require'hop'.setup{}]] }
+    use { 'phaazon/hop.nvim', config = [[require'config.hop']] }
 
     use { 
         'iamcco/markdown-preview.nvim',
@@ -189,10 +174,14 @@ return packer.startup({function()
         run = 'cd app && yarn install',
     }
 
-    use { 'edluffy/hologram.nvim' }
+    use 'Thiago4532/lsp-tree.nvim'
+    use { 'ThePrimeagen/harpoon', config = [[require'config.harpoon']] }
+
+    use 'jghauser/mkdir.nvim'
+    -- use { 'edluffy/hologram.nvim' }
 end,
 config = {
     profile = {
-        enable = true,
+        enable = false,
     },
 }})

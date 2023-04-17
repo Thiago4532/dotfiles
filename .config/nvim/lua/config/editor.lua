@@ -7,7 +7,9 @@ bo.shiftwidth, o.shiftwidth = 4, 4
 bo.expandtab, o.expandtab = true, true
 
 -- Show line numbers
-wo.number, o.number = true, true wo.relativenumber, o.relativenumber = true, true
+wo.number, o.number = true, true
+wo.relativenumber, o.relativenumber = true, true
+
 -- No ESC delay
 o.timeoutlen = 500
 o.ttimeoutlen = 0
@@ -55,6 +57,9 @@ o.shortmess = o.shortmess .. 'I'
 
 -- Omnicompletion menu
 o.completeopt = 'menu,menuone,noselect'
+
+-- Do not ident namespace in C++
+o.cino = 'N-s,:0'
 
 -- Split right
 o.splitright = true

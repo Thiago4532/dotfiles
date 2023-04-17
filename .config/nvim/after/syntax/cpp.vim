@@ -1,3 +1,3 @@
 highlight link cppSTLVariable Normal
-highlight link LspSemanticNamespace cppSTLNamespace
+highlight link @lsp.type.namespace.cpp cppSTLNamespace
 syntax keyword None left right

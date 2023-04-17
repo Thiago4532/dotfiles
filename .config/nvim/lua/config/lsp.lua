@@ -1,13 +1,19 @@
 local vim = vim
 local util = require'lspconfig/util'
+local lsp_status = require'lsp-status'
 
 capabilities = require('cmp_nvim_lsp').default_capabilities()
+lsp_status_capabilities = vim.tbl_extend('keep', capabilities, lsp_status.capabilities)
 
 -- C/C++
 require'lspconfig'.clangd.setup {
-    -- before_init = require'lsp-semantic.configs'.clangd.before_init,
-    capabilities = capabilities,
+    on_attach = function(client, bufnr)
+        require'lsp-tree'.on_attach(client, bufnr)
+        lsp_status.on_attach(client, bufnr)
+    end,
+    capabilities = lsp_status_capabilities,
     init_options = {
+        clangdFileStatus = true,
         fallbackFlags = {'-DTDEBUG'},
     },
     root_dir = function(fname)
@@ -17,6 +23,7 @@ require'lspconfig'.clangd.setup {
         return root_pattern(filename)
         or root_pattern(vim.loop.cwd())
     end,
+    handlers = lsp_status.extensions.clangd.setup(),
     cmd = { "clangd-16" }
 }
 
@@ -80,6 +87,9 @@ require'lspconfig'.tsserver.setup{
         end
     }
 }
+
+-- Zig
+require'lspconfig'.zls.setup{}
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 vim.lsp.diagnostic.on_publish_diagnostics, {

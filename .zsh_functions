@@ -78,3 +78,38 @@ function syncdir() {
 
     pwd | syncmsg -w -s syncdir
 }
+
+function alarm_at() {
+    local d="$1"
+    shift
+    echo alarm "$@" | at "$d"
+}
+
+function set_timer() {
+    local rem
+    if [[ "$1" =~ ^[0-9]+$ ]]; then
+        rem=$1
+    elif [[ "$1" =~ ^[0-9]+:[0-9]+$ ]]; then
+        rem=$((60 * ${1%:*} + ${1#*:}))
+    else
+        echo "set_timer: Number expected in the first argument!" >&2
+        return 1
+    fi
+    shift
+
+    if (( $# < 1 )); then
+        echo "set_timer: Title expected in the second argument" >&2
+        return 1
+    fi
+
+    while true; do
+        printf "%02d:%02d\n" $(($rem/60)) $(($rem%60))
+        if (( $rem == 0 )); then
+            alarm "$@"
+            break
+        fi
+
+        sleep 1
+        rem=$(($rem - 1))
+    done
+}

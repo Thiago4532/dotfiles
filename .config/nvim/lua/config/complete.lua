@@ -20,6 +20,7 @@ cmp.setup {
         -- { name = 'vsnip' },
         { name = 'luasnip' },
         { name = 'nvim_lsp' },
+        { name = 'nvim_lsp_signature_help' },
     },
     mapping = cmp.mapping.preset.insert {
         ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),

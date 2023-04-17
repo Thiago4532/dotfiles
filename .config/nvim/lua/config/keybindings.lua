@@ -1,4 +1,4 @@
-local map = vim.api.nvim_set_keymap
+local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 local optexpr = { silent = true, noremap = true, expr = true }
 
@@ -9,48 +9,50 @@ map('n', 'Q', '<Nop>', opts)
 map('n', '<C-n>', ':NvimTreeToggle<CR>', opts) 
 
 -- Highlight keybindings
-map('n', '<F1>', ':TSHighlightCapturesUnderCursor<CR>', opts) map('n', '<F3>', ':noh<CR>', opts)
+map('n', '<F1>', ':Inspect<CR>', opts) map('n', '<F3>', ':noh<CR>', opts)
 map('n', '<F4>', [[
 &ic ? ':set noic<CR>:echo "Case-sensitive"<CR>' : ':set ic<CR>:echo "Case-insensitive"<CR>'
 ]], optexpr)
 
 -- Buffer keybindings
-map('n', '<C-h>', ':BufferLineCyclePrev<CR>', opts);
-map('n', '<C-l>', ':BufferLineCycleNext<CR>', opts);
-map('n', 'H', ':BufferLineMovePrev<CR>', opts)
-map('n', 'L', ':BufferLineMoveNext<CR>', opts)
+-- map('n', '<C-h>', ':BufferLineCyclePrev<CR>', opts);
+-- map('n', '<C-l>', ':BufferLineCycleNext<CR>', opts);
+-- map('n', 'H', ':bp<CR>', opts)
+-- map('n', 'L', ':bl<CR>', opts)
 
 map('n', '<leader>q', ':Bdelete<CR>', opts);
 map('n', '<leader>QQ', ':Bdelete!<CR>', opts);
-map('n', '<leader>1', ':BufferLineGoToBuffer 1<CR>', opts);
-map('n', '<leader>2', ':BufferLineGoToBuffer 2<CR>', opts);
-map('n', '<leader>3', ':BufferLineGoToBuffer 3<CR>', opts);
-map('n', '<leader>4', ':BufferLineGoToBuffer 4<CR>', opts);
-map('n', '<leader>5', ':BufferLineGoToBuffer 5<CR>', opts);
-map('n', '<leader>6', ':BufferLineGoToBuffer 6<CR>', opts);
-map('n', '<leader>7', ':BufferLineGoToBuffer 7<CR>', opts);
-map('n', '<leader>8', ':BufferLineGoToBuffer 8<CR>', opts);
-map('n', '<leader>9', ':BufferLineGoToBuffer 9<CR>', opts);
+-- map('n', '<leader>1', ':BufferLineGoToBuffer 1<CR>', opts);
+-- map('n', '<leader>2', ':BufferLineGoToBuffer 2<CR>', opts);
+-- map('n', '<leader>3', ':BufferLineGoToBuffer 3<CR>', opts);
+-- map('n', '<leader>4', ':BufferLineGoToBuffer 4<CR>', opts);
+-- map('n', '<leader>5', ':BufferLineGoToBuffer 5<CR>', opts);
+-- map('n', '<leader>6', ':BufferLineGoToBuffer 6<CR>', opts);
+-- map('n', '<leader>7', ':BufferLineGoToBuffer 7<CR>', opts);
+-- map('n', '<leader>8', ':BufferLineGoToBuffer 8<CR>', opts);
+-- map('n', '<leader>9', ':BufferLineGoToBuffer 9<CR>', opts);
 
 -- lsp keybindings
 map('n', 'K', ':lua vim.lsp.buf.hover()<CR>', opts)
-map('n', ',cf', ':lua require"lsp-tree".methods.hover_current_function()<CR>', opts)
+map('n', ',gf', ':lua require"lsp-tree".methods.hover_current_function()<CR>', opts)
 map('n', '<C-k>', ':lua vim.lsp.buf.signature_help()<CR>', opts)
 map('i', '<C-k>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
 -- map('n', '<space>wa', ':lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
 -- map('n', '<space>wr', ':lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
 -- map('n', '<space>wl', ':lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-map('n', '<Space>rn', ':lua vim.lsp.buf.rename()<CR>', opts)
+map('n', '<space>rn', ':lua vim.lsp.buf.rename()<CR>', opts)
 map('n', '<space>e', ':lua vim.diagnostic.open_float()<CR>', opts)
 map('n', '<space>E', ":lua require'telescope.builtin'.lsp_workspace_diagnostics()<CR>", opts)
 map('n', '[d', ':lua vim.diagnostic.goto_prev()<CR>', opts)
 map('n', ']d', ':lua vim.diagnostic.goto_next()<CR>', opts)
 -- map('n', '<space>q', ':lua vim.diagnostic.setloclist()<CR>', opts)
 map("n", "<space>f", ":lua vim.lsp.buf.formatting()<CR>", opts)
-map('n', '<leader>s', ':ClangdSwitchSourceHeader<CR>', opts)
+map('n', '<space>s', ':ClangdSwitchSourceHeader<CR>', opts)
 
 -- telescope keybindings
 map('n', '<leader>;', ":lua require('telescope.builtin').buffers()<cr>", opts)
+map('n', '<C-p>', ":lua require('telescope.builtin').find_files()<cr>", opts)
+map('n', '<leader>m', ":lua require('telescope.builtin').marks()<cr>", opts)
 map('n', '<C-p>', ":lua require('telescope.builtin').find_files()<cr>", opts)
 map('n', '<space>g', ":lua require('telescope.builtin').live_grep()<cr>", opts)
 map('n', '<space>h', ":lua require('telescope.builtin').help_tags()<cr>", opts)
@@ -60,6 +62,7 @@ map('n', 'gd', ":lua require'telescope.builtin'.lsp_definitions()<CR>", opts)
 map('n', '<leader>D', ":lua require'telescope.builtin'.lsp_type_definitions()<CR>", opts)
 map('n', 'gi', ":lua require'telescope.builtin'.lsp_implementations()<CR>", opts)
 map('n', 'gr', ":lua require'telescope.builtin'.lsp_references()<CR>", opts)
+map('n', '<space>d', ":lua require'telescope.builtin'.lsp_document_symbols()<CR>", opts)
 map('n', '<leader>a', ":lua vim.lsp.buf.code_action()<CR>", opts)
 
 -- map('i', '<C-Space>', "<C-x><C-o>", opts)
@@ -83,10 +86,6 @@ map('n', '<M-Backspace>',   '<C-w>=', opts)
 map('n', '<M-,>',           '<C-w><', opts)
 map('n', '<M-.>',           '<C-w>>', opts)
 map('n', '<M-q>',           '<C-w>q', opts)
-
--- Hop
-map('n', '<leader>w', ":HopWord<CR>", opts)
-map('n', '<leader>l', ":HopLineStart<CR>", opts)
 
 -- terminal keybindings
 map('t', '<Esc>', '<C-\\><C-n>', opts)

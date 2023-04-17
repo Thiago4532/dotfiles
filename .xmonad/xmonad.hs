@@ -4,9 +4,11 @@
 
 import XMonad
 import Control.Monad
+import Control.Concurrent
 import Data.List
 import Data.Maybe
 import Data.Monoid
+import Data.Time
 import GHC.IO.Handle.Types (Handle)
 import System.Exit
 import qualified Data.Map        as M
@@ -20,7 +22,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 
 -- Layouts
-import XMonad.Layout.Accordion
+import XMonad.Layout.SimplestFloat
 import XMonad.Layout.GridVariants
 import XMonad.Layout.IndependentScreens
 import XMonad.Layout.LayoutModifier
@@ -31,19 +33,21 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing
-import XMonad.Layout.Simplest
+import XMonad.Layout.WindowArranger
 import qualified XMonad.Layout.BoringWindows as BW
 
 -- Actions
 import XMonad.Actions.Commands
 import XMonad.Actions.SpawnOn
 import XMonad.Actions.Minimize
+import XMonad.Actions.Promote
 
 -- Utility
 import XMonad.Util.Loggers
 import XMonad.Util.Run
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.SpawnOnce
+import qualified XMonad.Util.ExtensibleState as XS
 
 -- System
 import System.Posix.Env (putEnv)
@@ -89,11 +93,22 @@ myWorkspaces    = ["1","2","3","4","5","6","7","8","9","NSP"]
 -- Utility functions
 --
 
+currentWS :: X WorkspaceId
+currentWS = withWindowSet $ return . W.currentTag
+
+notifySend :: (MonadIO m) => String -> m ()
+notifySend m = spawn $ join ["dunstify XMonad \"", m, "\""]
+
+notifySendID :: (MonadIO m) => String -> String -> m ()
+notifySendID i m = spawn $ join ["dunstify XMonad -h string:x-dunst-stack-tag:", i, " \"", m, "\""]
+
+sleep :: Int -> X()
+sleep = liftIO . threadDelay . (1000000 *)
+
 picomCmd = "picom"
 
 picomToggle :: X()
 picomToggle = spawn $ "pkill -x picom || " ++ picomCmd
-
 
 -- Fullscreen support
 -- https://www.reddit.com/r/xmonad/comments/gc4b9i/what_is_the_best_way_to_make_xmonad_respect_true/
@@ -122,6 +137,52 @@ centerWindow win = do
 -- actionList = 
 --     [ ("mirror: Mirror the current layout",          sendMessage $ Toggle MIRROR)
 --     , ("float: Float and center the focused window", withFocused $ centerWindow )] 
+
+-- data SpawnFloat = SpawnFloat Bool
+--                     deriving (Read, Show)
+
+-- getSpawnFloat :: X Bool
+-- getSpawnFloat = XS.get >>= return . ext
+--                         where ext (SpawnFloat b) = b
+
+-- toggleSpawnFloat :: X ()
+-- toggleSpawnFloat = XS.modifyM f
+--     where notify = notifySendID "SpawnFloat" . ("Spawn Floating Windows: " ++)
+--           f (SpawnFloat b) = case b of
+--                                  False -> notify "ON" >> return (SpawnFloat True)
+--                                  True -> notify "OFF" >> return (SpawnFloat False)
+
+-- instance ExtensionClass SpawnFloat where
+--     initialValue = SpawnFloat False
+--     extensionType = PersistentExtension
+
+data SpawnFloatW = SpawnFloatW { spawnFloatW :: [WorkspaceId] }
+            deriving (Read, Show)
+
+appendElem :: a -> [a] -> [a]
+appendElem x y = (x:y)
+
+removeElem :: (Eq a) => a -> [a] -> [a]
+removeElem x [] = []
+removeElem x (y:ys) | x == y    = removeElem x ys
+                    | otherwise = y : removeElem x ys
+
+isSpawnFloatW :: X Bool
+isSpawnFloatW = currentWS >>= \w -> XS.get >>= return . elem w . spawnFloatW
+
+toggleSpawnFloatW :: X ()
+toggleSpawnFloatW = currentWS >>= XS.modifyM . f
+    where notify w m = notifySendID "SpawnFloatW" $ join ["Spawn Floating Windows on workspace '", w, "': ", m]
+          f w (SpawnFloatW wl) = if w `elem` wl
+                                 then notify w "OFF" >> return (SpawnFloatW $ removeElem w wl)
+                                 else notify w "ON" >> return (SpawnFloatW $ appendElem w wl)
+
+spawnFloatWHook = liftX isSpawnFloatW >>= \b -> if b then doFloat
+                                                     else return mempty
+
+instance ExtensionClass SpawnFloatW where
+    initialValue = SpawnFloatW []
+    extensionType = PersistentExtension
 
 ------------------------------------------------------------------------
 
@@ -186,7 +247,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Resize viewed windows to the correct size
     , ((modm,               xK_n     ), refresh)
 
-    -- Move focus to the next window
+    -- Move focus to the next window (TAB edition)
     , ((modm,               xK_Tab   ), BW.focusDown)
 
     -- Move focus to the next window
@@ -222,6 +283,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Float and center the focused window
     , ((modm .|. shiftMask, xK_t     ), withFocused $ centerWindow )
+
+    -- Enable shouldSpawnFloat
+    , ((modm .|. shiftMask, xK_n     ), toggleSpawnFloatW )
     
     -- Toggle mirror
     , ((modm .|. shiftMask, xK_m     ), sendMessage $ Toggle MIRROR)
@@ -244,8 +308,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Cycle through keyboard layouts
     , ((modm .|. shiftMask, xK_u     ), spawn "keyboard cycle")
 
-    -- Scatha
-    , ((modm, xK_o), spawn "sleep 1; /home/thiagomm/scatha.sh")
+    -- -- Scatha
+    -- , ((modm, xK_o), spawn "sleep 1; /home/thiagomm/scatha.sh")
 
     -- Volume down
     , ((modm              , xK_q     ), spawn "xmonad --recompile; pkill xmobar; xmonad --restart")
@@ -365,9 +429,11 @@ tall      = renamed [Replace "Tall"]
             $ mySmartBorders
             $ ResizableTall 1 (3/100) (1/2) []
 grid      = mySmartBorders
+            $ windowArrange
             $ Grid (16/10)
-accordion = mySmartBorders
-            $ Accordion
+sfloat    = renamed [Replace "Floating"]
+            $ mySmartBorders
+            $ simplestFloat
 
 myLayoutHook = avoidStruts $ BW.boringWindows
                            $ mkToggle (single MIRROR)
@@ -376,7 +442,7 @@ myLayoutHook = avoidStruts $ BW.boringWindows
                            $ myLayout
     where myLayout =     tall
                      ||| grid
-                     ||| accordion
+                     ||| sfloat
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -400,10 +466,6 @@ myManageHook = composeOne [
       className =? "notification"                        -?> doFloat
     , className =? "MPlayer"                             -?> doFloat
     , className =? "Gimp"                                -?> doFloat
-    , title     =? "LearnOpenGL"                         -?> doCenterFloat
-    , title     =? "Figure 1"                             -?> doFloat
-    , title     =? "SFML"                                -?> doCenterFloat
-    , title     =? "PokeClone"                           -?> doCenterFloat
     , title     =? "Picture-in-Picture"                  -?> doFloat
     , resource  =? "desktop_window"                      -?> doIgnore
     , resource  =? "kdesktop"                            -?> doIgnore
@@ -411,9 +473,21 @@ myManageHook = composeOne [
     , className =? "discord"                             -?> doShift ( myWorkspaces !! 8 )
     ] <+> manageSpawn
       <+> namedScratchpadManageHook scratchpads
+      <+> spawnFloatWHook
 
 ------------------------------------------------------------------------
 -- Event handling
+
+-- Bring clicked floating window to the front
+-- floatClickFocusHandler :: Event -> X All
+-- floatClickFocusHandler ButtonEvent { ev_window = w } = do
+-- 	withWindowSet $ \s -> do
+-- 		if isFloat w s
+-- 		   then (focus w >> promote)
+-- 		   else return ()
+-- 		return (All True)
+-- 		where isFloat w ss = M.member w $ W.floating ss
+-- floatClickFocusHandler _ = return (All True)
 
 myEventHook = fullscreenEventHook
 
