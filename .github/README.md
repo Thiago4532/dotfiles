@@ -41,5 +41,5 @@ After installing packer.nvim, run this command to install all the NeoVim plugins
 
 Now, you must run this command to install all [treesitter](https://github.com/nvim-treesitter/nvim-treesitter) parsers:
 ```vim
-:TSInstall maintained
+:TSInstall all
 ```

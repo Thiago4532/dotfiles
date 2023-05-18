@@ -14,7 +14,9 @@ local function pattern_size(str, pattern)
 end
 
 -- Exported functions
-local function cf_int_ll()
+local M = {}
+
+M.cf_int_ll = function()
     api.nvim_buf_set_lines(0, 1, 1, true, {'#define int ll'})
     local lines = api.nvim_buf_get_lines(0, 0, -1, true);
 
@@ -28,7 +30,16 @@ local function cf_int_ll()
     end
 end
 
-local function set_indent(spaces, use_tab)
+M.parse_c_header_name = function(name)
+    local guard_name = require'header-guard'.guard_name()
+    if guard_name then
+        return guard_name
+    end
+
+    return name
+end
+
+M.set_indent = function(spaces, use_tab)
     use_tab = use_tab or false
 
     bo.softtabstop = spaces
@@ -43,7 +54,7 @@ local function set_indent(spaces, use_tab)
     end
 end
 
-local function write_indent_modeline()
+M.write_indent_modeline = function()
     local comment = bo.commentstring
     if comment:len() == 0 then
         api.nvim_err_writeln("Failed to write_indent_modeline: commentstring is empty!")
@@ -62,7 +73,7 @@ local function write_indent_modeline()
     api.nvim_buf_set_lines(0, -1, -1, true, {comment:format(modeline)})
 end
 
-local function dunst_notify(title, msg, id)
+M.notify_send = function(title, msg, id)
     if msg == nil then
         msg = title
         title = "Neovim"
@@ -73,70 +84,46 @@ local function dunst_notify(title, msg, id)
         args[#args + 1] = id
     end
 
-    return uv.spawn('dunstify', {
+    return uv.spawn('notify-send', {
         args = args,
         detach = true,
     })
 end
+M.dunst_notify = M.notify_send -- Compatibility
 
 local clock = nil
-local function clock_reset()
+M.clock_reset = function()
     clock = uv.hrtime()
 end
 
-local function clock_print()
+M.clock_print = function()
     if clock then
         local time = (uv.hrtime() - clock) / 1e6
         print("Clock:", time)
     end
 end
 
-local function clock_dunst()
+M.clock_dunst = function()
     if clock then
         local time = (uv.hrtime() - clock) / 1e6
-        dunst_notify('Clock', time, '674532')
+        M.dunst_notify('Clock', time, '674532')
     end
 end
 
-local function diary_date_prettify(date)
-    local i, j = 1, 0
-
-    j = date:find('-', i)
-    local year = tonumber(date:sub(i, j - 1))
-    i = j + 1
-
-    j = date:find('-', i)
-    local month = tonumber(date:sub(i, j - 1))
-    i = j + 1
-
-    j = date:len() + 1
-    local day = tonumber(date:sub(i, j - 1))
-    i = j + 1
-
-    local epoch = os.time({year = year, month = month, day = day})
-
-    local day_of_the_week = os.date("%A", epoch):gsub("^%l", string.upper)
-    local date = os.date("%x", epoch)
-
-    return string.format("%s - %s", day_of_the_week, date)
-
-    -- return date
-end
-
-local function center_cursor()
+M.center_cursor = function()
     local cursor = api.nvim_win_get_cursor(0)
     vim.cmd(string.format('normal! %dzt', cursor[1] - 10))
     api.nvim_win_set_cursor(0, cursor)
 end
 
-return {
-    cf_int_ll = cf_int_ll,
-    set_indent = set_indent,
-    write_indent_modeline = write_indent_modeline,
-    dunst_notify = dunst_notify,
-    clock_reset = clock_reset,
-    clock_print = clock_print,
-    clock_dunst = clock_dunst,
-    diary_date_prettify = diary_date_prettify,
-    center_cursor = center_cursor,
-}
+M.is_executable = function(...)
+    for i=1,select('#', ...) do
+        local arg = select(i, ...)
+        if vim.fn.executable(arg) == 0 then
+            return false
+        end
+    end
+    return true
+end
+
+return M

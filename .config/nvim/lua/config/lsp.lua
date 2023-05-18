@@ -1,6 +1,7 @@
 local vim = vim
 local util = require'lspconfig/util'
 local lsp_status = require'lsp-status'
+local is_executable = require'util'.is_executable
 
 capabilities = require('cmp_nvim_lsp').default_capabilities()
 lsp_status_capabilities = vim.tbl_extend('keep', capabilities, lsp_status.capabilities)
@@ -24,7 +25,7 @@ require'lspconfig'.clangd.setup {
         or root_pattern(vim.loop.cwd())
     end,
     handlers = lsp_status.extensions.clangd.setup(),
-    cmd = { "clangd-16" }
+    cmd = { is_executable("clangd-16") and "clangd-16" or "clangd" }
 }
 
 -- Python

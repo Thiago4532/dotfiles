@@ -1,15 +1,6 @@
 vim.cmd [[packadd packer.nvim]]
 local packer = require'packer'
-
-local function executable(...)
-    for i=1,select('#', ...) do
-        local arg = select(i, ...)
-        if vim.fn.executable(arg) == 0 then
-            return false
-        end
-    end
-    return true
-end
+local executable = require'util'.is_executable
 
 -- local nvim_nightly = (vim.fn.has("nvim-0.7") == 1)
 return packer.startup({function()
@@ -178,6 +169,8 @@ return packer.startup({function()
     use { 'ThePrimeagen/harpoon', config = [[require'config.harpoon']] }
 
     use 'jghauser/mkdir.nvim'
+
+    use { 'stevearc/aerial.nvim', config = [[require'config.aerial']] }
     -- use { 'edluffy/hologram.nvim' }
 end,
 config = {

@@ -1,6 +1,6 @@
-#ifndef $1
-#define $1
+#ifndef ${require'util'.parse_c_header_name([[$1]])}
+#define ${require'util'.parse_c_header_name([[$1]])}
 
 $C
 
-#endif
+#endif // ${require'util'.parse_c_header_name([[$1]])}

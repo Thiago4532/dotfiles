@@ -311,9 +311,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- -- Scatha
     -- , ((modm, xK_o), spawn "sleep 1; /home/thiagomm/scatha.sh")
 
-    -- Volume down
-    , ((modm              , xK_q     ), spawn "xmonad --recompile; pkill xmobar; xmonad --restart")
-
     -- Restart xmonad
     , ((modm              , xK_q     ), spawn "xmonad --recompile; pkill xmobar; xmonad --restart")
     
@@ -499,7 +496,7 @@ xmobarSpawn 0 = spawnPipe "xmobar-launch"
 xmobarSpawn 1 = spawnPipe "xmobar-launch-1"
 
 myStartupHook = do
-    spawnOnce "setxkbmap -option altwin:swap_alt_win"
+    spawn "setxkbmap -option altwin:swap_alt_win"
     setFullscreenSupported
 
     spawnOnce "xss-lock -- slock"
