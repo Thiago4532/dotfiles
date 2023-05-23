@@ -420,7 +420,7 @@ mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
 
 data SPACING = SPACING deriving (Read, Show, Eq, Typeable)
 instance Transformer SPACING Window where
-    transform _ x k = k (mySpacing 10 x) (\(ModifiedLayout _ x') -> x')
+    transform _ x k = k (mySpacing 3 x) (\(ModifiedLayout _ x') -> x')
 
 tall      = renamed [Replace "Tall"]
             $ mySmartBorders
