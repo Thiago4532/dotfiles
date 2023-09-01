@@ -15,14 +15,15 @@ import qualified Data.Map        as M
 import qualified XMonad.StackSet as W
 
 -- Hooks
-import XMonad.Hooks.DynamicBars
+import XMonad.Hooks.StatusBar
+import XMonad.Hooks.StatusBar.PP
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.UrgencyHook
 
 -- Layouts
-import XMonad.Layout.SimplestFloat
 import XMonad.Layout.GridVariants
 import XMonad.Layout.IndependentScreens
 import XMonad.Layout.LayoutModifier
@@ -198,16 +199,16 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_F12   ), picomToggle)
 
     -- launch rofi (run)
-    , ((modm,               xK_p     ), spawn "rofi -modi run -no-show-icons -show")
+    , ((modm .|. shiftMask, xK_p     ), spawn "rofi -modi run -no-show-icons -show")
     
-    -- -- timer firework
-    -- , ((modm,               xK_u     ), spawn "timer 30")
+    -- timer firework
+    , ((modm,               xK_u     ), spawn "pkill conky; conky")
     -- --
     -- -- timer firework
     -- , ((modm .|. shiftMask,          xK_u     ), spawn "pkill timer")
     
     -- launch rofi
-    , ((modm .|. shiftMask, xK_p     ), spawn "rofi -show")
+    , ((modm,               xK_p     ), spawn "rofi -show")
     , ((modm .|. shiftMask, xK_r     ), spawn "rofi -show window")
     
     -- emoji picker
@@ -428,9 +429,6 @@ tall      = renamed [Replace "Tall"]
 grid      = mySmartBorders
             $ windowArrange
             $ Grid (16/10)
-sfloat    = renamed [Replace "Floating"]
-            $ mySmartBorders
-            $ simplestFloat
 
 myLayoutHook = avoidStruts $ BW.boringWindows
                            $ mkToggle (single MIRROR)
@@ -439,7 +437,6 @@ myLayoutHook = avoidStruts $ BW.boringWindows
                            $ myLayout
     where myLayout =     tall
                      ||| grid
-                     ||| sfloat
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -486,30 +483,31 @@ myManageHook = composeOne [
 -- 		where isFloat w ss = M.member w $ W.floating ss
 -- floatClickFocusHandler _ = return (All True)
 
-myEventHook = fullscreenEventHook
+-- myEventHook = fullscreenEventHook
 
 ------------------------------------------------------------------------
 -- Startup hook
 
-xmobarSpawn :: ScreenId -> IO Handle
-xmobarSpawn 0 = spawnPipe "xmobar-launch"
-xmobarSpawn 1 = spawnPipe "xmobar-launch-1"
+-- xmobarSpawn :: ScreenId -> IO Handle
+-- xmobarSpawn 0 = spawnPipe "xmobar-launch"
+-- xmobarSpawn 1 = spawnPipe "xmobar-launch-1"
 
 myStartupHook = do
-    spawn "setxkbmap -option altwin:swap_alt_win"
+    -- spawn "setxkbmap -layout br -variant nodeadkeys -option altwin:swap_alt_win"
     setFullscreenSupported
 
     spawnOnce "xss-lock -- slock"
     spawnOnce "clingo"
     spawnOnce "lxsession -s xmonad -e LXDE"
-    spawn "xset r rate 300 33"
+
+    spawn "xset r rate 300 35"
 
     spawnAndDoOnce (doShift "NSP" <+> popupFloat) "keepassxc"
 
     spawnOnce "nitrogen --restore && conky"
     -- spawnOnce picomCmd
 
-    dynStatusBarStartup xmobarSpawn mempty
+    -- dynStatusBarStartup xmobarSpawn mempty
 
     spawn $ join ["pidof trayer || trayer --edge top --distance 2 --monitor primary"
                                         , " --align right --widthtype request"
@@ -541,14 +539,16 @@ myXmobarPP currentColor = namedScratchpadFilterOutWorkspacePP $ xmobarPP
     }
 
 -- Active Xmobar
-activeBar = myPP {
-          ppCurrent =  ppCurrent myPP
-        , ppVisible = ppVisible myPP . clickableWorkspaces
-        , ppHidden = clickableWorkspaces
-        } where myPP = myXmobarPP C.yellow
+activeBar = myPP
+    { ppCurrent =  ppCurrent myPP
+    , ppVisible = ppVisible myPP . clickableWorkspaces
+    , ppHidden = clickableWorkspaces
+    } where myPP = myXmobarPP C.yellow
 
 -- Non-active Xmobar
 nonActiveBar = myXmobarPP C.red
+
+mySB = statusBarProp "xmobar-launch" (pure activeBar)
 
 ------------------------------------------------------------------------
 -- Run xmonad with the settings you specify.
@@ -561,9 +561,7 @@ javaHack conf = conf
   }
 
 main = do
-    xmonad $ javaHack $ ewmh $ docks defaults {
-        logHook = multiPP activeBar nonActiveBar
-        }
+    xmonad $ withEasySB mySB defToggleStrutsKey $ javaHack $ ewmhFullscreen $ ewmh $ docks $ defaults
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
@@ -589,6 +587,6 @@ defaults = def {
       -- hooks, layouts
         layoutHook         = myLayoutHook,
         manageHook         = myManageHook,
-        handleEventHook    = myEventHook,
+        -- handleEventHook   /= myEventHook,
         startupHook        = myStartupHook
     }

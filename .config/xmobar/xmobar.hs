@@ -26,8 +26,7 @@ osIcon = mColor C.blue "\xf303  Arch Linux"
 
 config :: Config
 config = defaultConfig {
-        font = "xft:Ubuntu Nerd Font:weight=bold:pixelsize=12:antialias=true:hinting=true"
-        , additionalFonts = [ "xft:Noto Color Emoji:pixelsize=12::antialias=true:hinting=true" ]
+        font = "Ubuntu Nerd Font Bold 9"
         , borderColor = "black"
         , border = TopB
         , bgColor = C.background
@@ -42,13 +41,13 @@ config = defaultConfig {
                         , Run $ Battery ["-t", "\xf241   bat: (<left>% <acstatus>)"] 50
                         , Run $ Com "scripts/trayer-padding-icon.sh" [] "trayerpad" 20
                         , Run $ Kbd []
-                        , Run $ UnsafeStdinReader
+                        , Run $ UnsafeXMonadLog
                         ]
         , sepChar = "%"
         , alignSep = mLeftRightSep
         , template = join' [ osIcon
                            , mSeparator
-                           , "%UnsafeStdinReader%"
+                           , "%UnsafeXMonadLog%"
                            , mLeftRightSep
                            , "\xe712 %uname%"
                            , mSeparator

@@ -12,7 +12,6 @@ return packer.startup({function()
         'PackerClean', 'PackerCompile', 'PackerLoad', 'PackerProfile' }
     }
 
-    use 'lewis6991/impatient.nvim'
     use { 'dstein64/vim-startuptime', cmd = 'StartupTime' }
 
     -- Syntax Highlighting
@@ -31,7 +30,10 @@ return packer.startup({function()
                 }
             },
 
-            run = ':TSUpdate',
+            run = function()
+                local ts_update = require'nvim-treesitter.install'.update({with_sync = true})
+                ts_update()
+            end
         },
 
         'vim-jp/vim-cpp',
@@ -55,7 +57,6 @@ return packer.startup({function()
             'L3MON4D3/LuaSnip',
             'hrsh7th/cmp-nvim-lsp-signature-help',
             'ray-x/lsp_signature.nvim',
-            'nvim-lua/lsp-status.nvim',
         }
     }
 
@@ -88,9 +89,9 @@ return packer.startup({function()
         cmd = { 'NvimTreeOpen', 'NvimTreeToggle', 'NvimTreeClose' },
     }
 
-    use { 'Krasjet/auto.pairs', config = [[vim.g.AutoPairsOpenBalanceBlacklist = {'{'}]] }
+    -- use { 'Krasjet/auto.pairs', config = [[vim.g.AutoPairsOpenBalanceBlacklist = {'{'}]] }
     
-    -- use { 'windwp/nvim-autopairs', config = [[require'nvim-autopairs'.setup{}]] }
+    use { 'windwp/nvim-autopairs' }
 
     -- Editorconfig
     use { 'editorconfig/editorconfig-vim' }
@@ -149,7 +150,7 @@ return packer.startup({function()
     }
 
     use { 'lambdalisue/suda.vim' }
-    use { 'lukas-reineke/indent-blankline.nvim' }
+    -- use { 'lukas-reineke/indent-blankline.nvim' }
 
     use { 'mbbill/undotree', config = [[vim.g.undotree_WindowLayout = 3]] }
 
@@ -166,6 +167,8 @@ return packer.startup({function()
     }
 
     use 'Thiago4532/lsp-tree.nvim'
+    use 'Thiago4532/header-guard.nvim'
+
     use { 'ThePrimeagen/harpoon', config = [[require'config.harpoon']] }
 
     use 'jghauser/mkdir.nvim'

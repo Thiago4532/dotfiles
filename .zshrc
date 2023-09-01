@@ -59,12 +59,12 @@ source ~/.zplug/init.zsh
 # Plugins
 # [ -f /usr/share/doc/pkgfile/command-not-found.zsh ] && source /usr/share/doc/pkgfile/command-not-found.zsh
 [ -f /etc/zsh_command_not_found ] && source /etc/zsh_command_not_found
-command -v fasd > /dev/null && source ~/.fasd.zsh
 
 zplug romkatv/powerlevel10k, as:theme, depth:1 # Powerlevel10k theme
 zplug zsh-users/zsh-completions
 zplug Aloxaf/fzf-tab
 zplug zsh-users/zsh-autosuggestions
+zplug agkozak/zsh-z
 zplug zdharma-continuum/fast-syntax-highlighting, defer:2
 
 # Then, source plugins and add commands to $PATH
@@ -87,7 +87,3 @@ compdef _htracker htracker
 
 # precmd
 precmd () { print -Pn "\e]0;zsh: %~\a" }
-
-# BEGIN_KITTY_SHELL_INTEGRATION
-if test -e "/usr/lib/kitty/shell-integration/kitty.zsh"; then source "/usr/lib/kitty/shell-integration/kitty.zsh"; fi
-# END_KITTY_SHELL_INTEGRATION

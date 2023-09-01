@@ -105,7 +105,7 @@
     # public_ip             # public IP address
     # proxy                 # system-wide http/https/ftp proxy
     my_ssh
-    battery                 # internal battery
+    #battery                 # internal battery
     my_os_icon              # os identifier (custom)
     # wifi                  # wifi speed
     # example               # example user-defined segment (see prompt_example function below)
@@ -228,6 +228,8 @@
   # Display anchor directory segments in bold.
   typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=true
   # Don't shorten directories that contain any of these files. They are anchors.
+  typeset -g POWERLEVEL9K_DIR_LEFT_RIGHT_WHITESPACE=
+
   local anchor_files=(
     .bzr
     .citc

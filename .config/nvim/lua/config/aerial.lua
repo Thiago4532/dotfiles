@@ -7,4 +7,4 @@ require('aerial').setup({
     end
 })
 
-vim.keymap.set('n', '<C-a>', '<cmd>AerialToggle!<CR>')
+vim.keymap.set('n', '<C-t>', '<cmd>AerialToggle!<CR>')

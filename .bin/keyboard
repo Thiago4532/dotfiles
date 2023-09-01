@@ -3,11 +3,11 @@
 ## Dependencies: setxkbmap dunst
 ## Author: Thiago Mota (github.com/Thiago4532)
 
-layouts=("us" "us")
-variants=("" "intl")
-names=("US" "US Intl.")
+layouts=("br" "br")
+variants=("nodeadkeys" "")
+names=("BR (no dead keys)" "BR")
 
-extraArgs="-option altwin:swap_alt_win"
+extraArgs=""
 
 currentLayout=`setxkbmap -query | awk '($1=="layout:"){print $2}'`
 currentVariant=`setxkbmap -query | awk '($1=="variant:"){print $2}'`

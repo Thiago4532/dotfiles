@@ -1,10 +1,14 @@
 local cmp = require'cmp'
+local cmp_autopairs = require'nvim-autopairs.completion.cmp'
 local luasnip = require'luasnip'
+
+require'nvim-autopairs'.setup()
 
 local has_words_before = function()
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
     return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
+
 
 cmp.setup {
     completion = {
@@ -53,6 +57,20 @@ cmp.setup.cmdline {
     mapping = cmp.mapping.preset.cmdline({})
 }
 
+cmp.event:on(
+    'confirm_done',
+    cmp_autopairs.on_confirm_done()
+)
+
 -- Keymaps
+vim.api.nvim_set_keymap(
+    'i',
+    '<S-CR>',
+    'v:lua.MPairs.completion_confirm()',
+    { expr = true, noremap = true }
+)
+
+
 -- vim.api.nvim_set_keymap("i", "<C-E>", "<Plug>luasnip-next-choice", {})
 -- vim.api.nvim_set_keymap("s", "<C-E>", "<Plug>luasnip-next-choice", {})
+

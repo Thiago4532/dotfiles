@@ -44,7 +44,7 @@ o.hidden = true
 bo.swapfile, o.swapfile = false, false
 
 -- Lower update time
-o.updatetime = 300
+-- o.updatetime = 2000
 
 -- Persistent undo
 bo.undofile, o.undofile = true, true
