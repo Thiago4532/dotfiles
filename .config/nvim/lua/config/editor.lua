@@ -58,8 +58,10 @@ o.shortmess = o.shortmess .. 'I'
 -- Omnicompletion menu
 o.completeopt = 'menu,menuone,noselect'
 
+o.foldmethod = 'marker'
+
 -- Do not ident namespace in C++
-o.cino = 'N-s,:0'
+o.cino = 'N-s,:0,g0'
 
 -- Split right
 o.splitright = true

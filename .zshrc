@@ -87,3 +87,10 @@ compdef _htracker htracker
 
 # precmd
 precmd () { print -Pn "\e]0;zsh: %~\a" }
+
+# bun completions
+[ -s "/home/thiagomm/.bun/_bun" ] && source "/home/thiagomm/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

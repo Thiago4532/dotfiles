@@ -12,6 +12,8 @@ CACHE_FOLDER="$HOME/.cache/rr"
 NORMAL_IPATH="$CACHE_FOLDER/include"
 GDB_IPATH="$CACHE_FOLDER/gdb-include"
 
+should_run=1
+
 shopt -s lastpipe
 mode_precompile_headers() {
     STDC_PATH=""
@@ -58,9 +60,11 @@ mode_normal() {
         echo "Done!" >&2
     fi
 
-    [ -z "${RR_COPY_CLIPBOARD}" ] \
-        && exec ./"$BINARY" \
-        || xclip -o -selection clipboard | exec ./"$BINARY"
+    if [ $should_run -eq 1 ]; then
+        [ -z "${RR_COPY_CLIPBOARD}" ] \
+            && exec ./"$BINARY" \
+            || xclip -o -selection clipboard | exec ./"$BINARY"
+    fi
 }
 
 mode_gdb() {
@@ -79,7 +83,9 @@ mode_gdb() {
     fi
 
     g++ $GDB_CFLAGS $EXTRA_FLAGS -I"$GDB_IPATH" -o "$BINARY" "$SOURCE" || exit $?
-    exec gdb ./"$BINARY"
+
+    [ $should_run -eq 1 ] &&
+        exec gdb ./"$BINARY"
 }
 
 ## Main execution
@@ -88,14 +94,23 @@ if [ $# -lt 1 ]; then
     exit 64
 fi
 
-case "$1" in
-    -h|-headers)
-        mode_precompile_headers
-        ;;
-    -g|-gdb)
-        mode_gdb "${@:2}"
-        ;;
-    *)
-        mode_normal "$@"
-        ;;
-esac
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -h|-headers)
+            mode_precompile_headers
+            break
+            ;;
+        -g|-gdb)
+            mode_gdb "${@:2}"
+            break
+            ;;
+        -n|-no-run)
+            should_run=0
+            ;;
+        *)
+            mode_normal "$@"
+            break
+            ;;
+    esac
+    shift
+done

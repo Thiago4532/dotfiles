@@ -1,6 +1,10 @@
 local disabled_list = {'c', 'cpp', 'bash', 'zsh', 'haskell', 'vim', 'zig'}
 
-return require'nvim-treesitter.configs'.setup {
+thiago = 'aehh'
+
+require'nvim-treesitter.configs'.setup {
+    auto_install = true,
+
     highlight = {
         enable = true,
         disable = disabled_list,

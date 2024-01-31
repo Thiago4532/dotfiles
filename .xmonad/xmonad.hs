@@ -202,7 +202,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_p     ), spawn "rofi -modi run -no-show-icons -show")
     
     -- timer firework
-    , ((modm,               xK_u     ), spawn "pkill conky; conky")
+    -- , ((modm,               xK_u     ), spawn "pkill conky; conky")
     -- --
     -- -- timer firework
     -- , ((modm .|. shiftMask,          xK_u     ), spawn "pkill timer")
@@ -353,6 +353,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Next music (XF86AudioForward)
     , ((noModMask         ,0x1008ff17), spawn "playerctl next")
+    
+    -- Previous music
+    , ((modm,              xK_F2), spawn "playerctl previous")
+
+    -- Next music
+    , ((modm,              xK_F3), spawn "playerctl next")
 
     -- Volume mute (XF86AudioMute)
     , ((noModMask         ,0x1008ff12), spawn "volume mute")
@@ -463,7 +469,7 @@ myManageHook = composeOne [
     , title     =? "Picture-in-Picture"                  -?> doFloat
     , resource  =? "desktop_window"                      -?> doIgnore
     , resource  =? "kdesktop"                            -?> doIgnore
-    , className =? "TelegramDesktop"                     -?> popupFloat
+    -- , className =? "TelegramDesktop"                     -?> popupFloat
     , className =? "discord"                             -?> doShift ( myWorkspaces !! 8 )
     ] <+> manageSpawn
       <+> namedScratchpadManageHook scratchpads
@@ -499,6 +505,7 @@ myStartupHook = do
     spawnOnce "xss-lock -- slock"
     spawnOnce "clingo"
     spawnOnce "lxsession -s xmonad -e LXDE"
+    spawnOnce "dunst"
 
     spawn "xset r rate 300 35"
 
@@ -509,9 +516,9 @@ myStartupHook = do
 
     -- dynStatusBarStartup xmobarSpawn mempty
 
-    spawn $ join ["pidof trayer || trayer --edge top --distance 2 --monitor primary"
+    spawn $ join ["pidof trayer || trayer --edge top --distance 0 --monitor primary"
                                         , " --align right --widthtype request"
-                                        , " --iconspacing 8 --padding 6 --SetDockType true"
+                                        , " --iconspacing 10 --padding 4 --SetDockType true"
                                         , " --SetPartialStrut true --expand true --transparent true"
                                         , " --alpha 0 --height 16"
                                         , " --tint ", U.color2hex C.background]

@@ -5,6 +5,12 @@ local optexpr = { silent = true, expr = true }
 -- Disable Ex-mode
 map('n', 'Q', '<Nop>', opts)
 
+-- Disable <Space>
+map('', '<Space>', '<Nop>')
+
+-- Remapping , to global clipboard
+map('', ',', '"+')
+
 -- Toggle nvim-tree 
 map('n', '<C-n>', ':NvimTreeToggle<CR>', opts) 
 
@@ -29,7 +35,7 @@ map('n', '<space>rn', ':lua vim.lsp.buf.rename()<CR>', opts)
 map('n', '<space>e', ':lua vim.diagnostic.open_float()<CR>', opts)
 map('n', '[d', ':lua vim.diagnostic.goto_prev()<CR>', opts)
 map('n', ']d', ':lua vim.diagnostic.goto_next()<CR>', opts)
-map("n", "<space>F", ":lua vim.lsp.buf.formatting()<CR>", opts)
+map("n", "<space>F", ":lua vim.lsp.buf.format()<CR>", opts)
 map('n', '<space>s', ':ClangdSwitchSourceHeader<CR>', opts)
 -- map('n', '<space>wa', ':lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
 -- map('n', '<space>wr', ':lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
@@ -83,6 +89,3 @@ map('n', '<leader>R', 'q/kyy:q<CR>:%s/<C-r>"', { noremap = true })
 
 -- center cursor
 map('n', 'zg', ":lua require'util'.center_cursor()<CR>", opts)
-
-map('n', '<F9>', ":MarkdownPreview<CR>", opts)
-

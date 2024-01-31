@@ -33,7 +33,8 @@ local function map(lhs, rhs)
     return vim.keymap.set('n', lhs, rhs, { silent = true })
 end
 
-map('<leader>;', ":lua require('telescope.builtin').buffers()<cr>")
+map(';', ":lua require('telescope.builtin').buffers()<cr>")
+map('ç', ":lua require('telescope.builtin').buffers()<cr>")
 map('<C-p>', ":lua require('telescope.builtin').find_files()<cr>")
 map('<leader>m', ":lua require('telescope.builtin').marks()<cr>")
 map('<C-p>', ":lua require('telescope.builtin').find_files()<cr>")

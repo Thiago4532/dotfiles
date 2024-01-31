@@ -27,19 +27,18 @@ osIcon = mColor C.blue "\xf303  Arch Linux"
 config :: Config
 config = defaultConfig {
         font = "Ubuntu Nerd Font Bold 9"
-        , borderColor = "black"
-        , border = TopB
+        , border = NoBorder
         , bgColor = C.background
         , fgColor = C.white
         , position = TopW L 100
         , iconRoot = "icons"
-        , commands = [ Run $ Cpu ["-t", "\xf108  cpu: (<total>%)", "-L","3","-H","50","--high",C.red] 20
-                        , Run $ Memory ["-t","\xf233  mem: <used>M (<usedratio>%)"] 20
+        , commands = [ Run $ Cpu ["-t", "\xf108  <total>%", "-L","3","-H","50","--high",C.red] 20
+                        , Run $ Memory ["-t","\xf233  <usedratio>%"] 20
                         , Run $ Com "uname" ["-r"] "" 36000
                         , Run $ Date "\xf133  %b %d %Y - (%H:%M) " "date" 10
-                        , Run $ Alsa "default" "Master" ["-t", "\xf028  vol: (<volume>%)<status>", "--", "-O", "", "-o", " [MUTE]", "-c", "red"]
-                        , Run $ Battery ["-t", "\xf241   bat: (<left>% <acstatus>)"] 50
-                        , Run $ Com "scripts/trayer-padding-icon.sh" [] "trayerpad" 20
+                        , Run $ Alsa "default" "Master" ["-t", "\xf028  <volume>%<status>", "--", "-O", "", "-o", " [MUTE]", "-c", "red"]
+                        , Run $ Battery ["-t", "\xf241   <left>% <acstatus>"] 50
+                        , Run $ CommandReader "scripts/trayer-padding-icon.sh" "trayerpad"
                         , Run $ Kbd []
                         , Run $ UnsafeXMonadLog
                         ]
@@ -51,7 +50,7 @@ config = defaultConfig {
                            , mLeftRightSep
                            , "\xe712 %uname%"
                            , mSeparator
-                           , mColor C.cyan $ mAction "keyboard cycle" "\xf11c  key: %kbd%"
+                           , mColor C.cyan $ mAction "keyboard cycle" "\xf11c  %kbd%"
                            , mSeparator
                            , mColor C.yellow $ mAction "kitty -e htop" "%cpu%"
                            , mSeparator

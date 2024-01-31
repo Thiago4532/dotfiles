@@ -3,6 +3,7 @@ local util = require'lspconfig/util'
 local is_executable = require'util'.is_executable
 
 capabilities = require('cmp_nvim_lsp').default_capabilities()
+capabilities.offsetEncoding = 'utf-8'
 
 -- C/C++
 require'lspconfig'.clangd.setup {
@@ -10,7 +11,7 @@ require'lspconfig'.clangd.setup {
         require'lsp-tree'.on_attach(client, bufnr)
     end,
     init_options = {
-        fallbackFlags = {'-DTDEBUG'},
+        fallbackFlags = {'-DTDEBUG', vim.fn.expand('-I/home/thiagomm/.local/include')},
     },
     capabilities = capabilities,
     root_dir = function(fname)
