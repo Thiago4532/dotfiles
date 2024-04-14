@@ -1,0 +1,26 @@
+#!/bin/bash
+## bat-discharging: similar to bat-watts, but fail when the battery is not discharging.
+## dependencies: bc
+
+function get_battery() {
+    for supply in /sys/class/power_supply/*; do
+        local supply_type=$(<"$supply/type")
+        if [[ "$supply_type" == "Battery" ]]; then
+            BAT="$supply"
+            return
+        fi
+    done
+    echo "bat-discharge: failed to find a valid battery" >&2
+    exit 1
+}
+get_battery
+
+bat_status=$(<"$BAT/status")
+[[ "$bat_status" == "Discharging" ]] || exit 1
+
+voltage=$(<"$BAT/voltage_now")
+current=$(<"$BAT/current_now")
+
+export LC_NUMERIC='C.UTF-8'
+printf '%.2f\n' `bc -l <<< "$current * $voltage / 1000000000000"`
+

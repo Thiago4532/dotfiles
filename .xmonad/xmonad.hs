@@ -375,6 +375,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Brightness up (XF86MonBrightnessUp)
     , ((noModMask         ,0x1008ff02), spawn "brightness up")
 
+    -- Send F20/F21 key (used to mute audio in Discord)
+    , ((noModMask      ,0x1008ff1d), spawn "xdotool key 149")
+    , ((controlMask    ,0x1008ff1d), spawn "xdotool key 132")
+
+    -- Keyboard light ON/OFF
+    , ((noModMask      ,0x1008ff04), spawn "awelc-alt")
+
     ]
     ++
 

@@ -1,0 +1,5 @@
+build-*
+xmonad-*
+xmonad.errors
+*.hi
+*.o

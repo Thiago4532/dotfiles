@@ -1,0 +1,35 @@
+#!/bin/bash
+## dependencies: bc
+
+function get_battery() {
+    for supply in /sys/class/power_supply/*; do
+        local supply_type=$(<"$supply/type")
+        if [[ "$supply_type" == "Battery" ]]; then
+            BAT="$supply"
+            return
+        fi
+    done
+    echo "bat-discharge: failed to find a valid battery" >&2
+    exit 1
+}
+get_battery
+
+bat_status=$(<"$BAT/status")
+[[ "$bat_status" == "Discharging" ]] || exit 1
+
+current=$(<"$BAT/current_now")
+charge=$(<"$BAT/charge_now")
+
+rem=$(($charge * 3600 / current))
+
+hours=$(( $rem / 3600 ))
+rem=$(( $rem - 3600 * hours ))
+minutes=$(( rem / 60 ))
+rem=$(( $rem - 60 * $minutes ))
+seconds=$rem
+
+BAT_REM=$(printf '%02d:%02d:%02d remaining' "$hours" "$minutes" "$seconds")
+notify-send "Battery" "$BAT_REM"
+
+# export LC_NUMERIC='C.UTF-8'
+# printf '%.2f\n' `bc -l <<< "$current * $voltage / 1000000000000"`

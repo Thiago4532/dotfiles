@@ -4,13 +4,14 @@ import Data.List (intercalate)
 import System.Environment (getArgs)
 
 import qualified Cfg.Colors as C
-
-join' :: [[a]] -> [a]
-join' = intercalate []
+import MyPlugins.CustomCommand
 
 ----------------------------------------------
 -- Utils
 --
+
+join' :: [[a]] -> [a]
+join' = intercalate []
 
 mColor color s = join' ["<fc=", color, ">", s, "</fc>"]
 mAction action s = join' ["<action=`", action, "`>", s, "</action>"]
@@ -24,6 +25,10 @@ osIcon = mColor C.blue "\xf303  Arch Linux"
 -- Configuration
 --
 
+batWattsCb :: String -> String
+batWattsCb "" = ""
+batWattsCb watts = mColor C.yellow $ mAction "scripts/bat-notify" $ join' ["\xf140b", watts, " W", mSeparator]
+
 config :: Config
 config = defaultConfig {
         font = "Ubuntu Nerd Font Bold 9"
@@ -35,10 +40,11 @@ config = defaultConfig {
         , commands = [ Run $ Cpu ["-t", "\xf108  <total>%", "-L","3","-H","50","--high",C.red] 20
                         , Run $ Memory ["-t","\xf233  <usedratio>%"] 20
                         , Run $ Com "uname" ["-r"] "" 36000
+                        , Run $ CustomCommand "scripts/bat-discharging" [""] batWattsCb "" "bat-watts" 15
                         , Run $ Date "\xf133  %b %d %Y - (%H:%M) " "date" 10
                         , Run $ Alsa "default" "Master" ["-t", "\xf028  <volume>%<status>", "--", "-O", "", "-o", " [MUTE]", "-c", "red"]
                         , Run $ Battery ["-t", "\xf241   <left>% <acstatus>"] 50
-                        , Run $ CommandReader "scripts/trayer-padding-icon.sh" "trayerpad"
+                        , Run $ CommandReader "scripts/trayer-padding-icon" "trayerpad"
                         , Run $ Kbd []
                         , Run $ UnsafeXMonadLog
                         ]
@@ -48,6 +54,8 @@ config = defaultConfig {
                            , mSeparator
                            , "%UnsafeXMonadLog%"
                            , mLeftRightSep
+                           , "%bat-watts%"
+                        -- , mSeparator
                            , "\xe712 %uname%"
                            , mSeparator
                            , mColor C.cyan $ mAction "keyboard cycle" "\xf11c  %kbd%"
