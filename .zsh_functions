@@ -113,3 +113,12 @@ function set_timer() {
         rem=$(($rem - 1))
     done
 }
+
+function check_exe() {
+    # TODO: Command is not the right way to solve this problem
+    command -v exa > /dev/null
+}
+
+function chromium_env() {
+    export PATH="$HOME/.local/depot_tools:$PATH"
+}

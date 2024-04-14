@@ -11,8 +11,8 @@ fi
 
 # History configuration
 HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=500000
+SAVEHIST=500000
 setopt incappendhistory
 
 # Shell options
@@ -64,7 +64,6 @@ zplug romkatv/powerlevel10k, as:theme, depth:1 # Powerlevel10k theme
 zplug zsh-users/zsh-completions
 zplug Aloxaf/fzf-tab
 zplug zsh-users/zsh-autosuggestions
-zplug agkozak/zsh-z
 zplug zdharma-continuum/fast-syntax-highlighting, defer:2
 
 # Then, source plugins and add commands to $PATH
@@ -73,17 +72,20 @@ zplug load
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# Aliases
-source ~/.zsh_aliases
-
 # Functions
 source ~/.zsh_functions
+
+# Aliases
+source ~/.zsh_aliases
 
 # Non-public scripts
 [ -f ~/.zsh_priv ] && source ~/.zsh_priv
 
+check_exe zoxide && eval "$(zoxide init zsh)"
+
 # Extra completions
 compdef _htracker htracker
+compdef _man batman
 
 # precmd
 precmd () { print -Pn "\e]0;zsh: %~\a" }

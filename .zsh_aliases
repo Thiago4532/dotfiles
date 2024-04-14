@@ -1,13 +1,16 @@
 #!/bin/zsh
+# .zsh_functions must be sourced before this
+
 alias sudo='sudo '
-command -v exa> /dev/null && alias ls='exa' || alias ls='ls --color=auto'
-command -v rg> /dev/null && alias grep=rg
-command -v ninja> /dev/null && alias cmake='CMAKE_GENERATOR=Ninja cmake'
-command -v llvm-objdump >/dev/null && alias objdump='llvm-objdump'
+check_exe exa && alias ls='exa' || alias ls='ls --color=auto'
+check_exe rg && alias grep='fake-grep'
+check_exe ninja && alias cmake='CMAKE_GENERATOR=Ninja cmake'
+check_exe llvm-objdump && alias objdump='llvm-objdump'
+check_exe batman && alias man='batman'
 alias tssh='TERM=xterm-256color \ssh'
-alias nssh='TERM=kitty \ssh'
+# alias nssh='TERM=kitty \ssh'
 alias dragon='dragon-drop'
-if [[ $TERM == "xterm-kitty" ]]; then alias ssh='kitty +kitten ssh'; fi
+if [[ $TERM == "xterm-kitty" ]]; then alias ssh='kitten ssh'; fi
 alias open='xdg-open'
 alias rdb='rr -gdb'
 alias rrc='RR_COPY_CLIPBOARD=1 rr'

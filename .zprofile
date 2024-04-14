@@ -18,12 +18,12 @@ export MOZ_DISABLE_RDD_SANDBOX=1
 
 if [ -n "$DESKTOP_SESSION" ]; then
     eval `gnome-keyring-daemon --start`
-    export SSH_AUTH_SOCK
 fi
 
-if [ -z "$SSH_AUTH_SOCK" ] ; then
-    eval `ssh-agent -s`
-fi
+export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/gcr/ssh
+# if [ -z "$SSH_AUTH_SOCK" ] ; then
+#     eval `ssh-agent -s`
+# fi
 
 if mux_status; then
     export __EGL_VENDOR_LIBRARY_FILENAMES="/usr/share/glvnd/egl_vendor.d/10_nvidia.json"
