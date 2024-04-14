@@ -4,7 +4,6 @@ local api = vim.api
 local uv = vim.loop
 local bo = vim.bo
 
--- Helper functions
 local function pattern_size(str, pattern)
     i, j = str:find(pattern)
     if i == nil then
@@ -13,10 +12,9 @@ local function pattern_size(str, pattern)
     return j - i + 1
 end
 
--- Exported functions
 local M = {}
 
-M.cf_int_ll = function()
+M.cp_int2ll = function()
     api.nvim_buf_set_lines(0, 1, 1, true, {'#define int ll'})
     local lines = api.nvim_buf_get_lines(0, 0, -1, true);
 
@@ -103,12 +101,13 @@ M.clock_print = function()
     end
 end
 
-M.clock_dunst = function()
+M.clock_notify = function()
     if clock then
         local time = (uv.hrtime() - clock) / 1e6
-        M.dunst_notify('Clock', time, '674532')
+        M.clock_notify('Clock', time, '674532')
     end
 end
+M.clock_dunst = M.clock_notify -- Compatibility
 
 M.center_cursor = function()
     local cursor = api.nvim_win_get_cursor(0)

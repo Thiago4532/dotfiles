@@ -21,7 +21,7 @@ require'lspconfig'.clangd.setup {
         return root_pattern(filename)
         or root_pattern(vim.loop.cwd())
     end,
-    cmd = { is_executable("clangd-16") and "clangd-16" or "clangd" }
+    -- cmd = { "clangd", "--clang-tidy" },
 }
 
 -- Python

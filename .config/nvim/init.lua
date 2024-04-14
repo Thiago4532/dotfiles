@@ -15,6 +15,7 @@ g.loaded_netrw = 1
 g.loaded_netrwPlugin = 1
 
 require 'plugins'
+require 'buf-config'.setup()
 
 -- post-plugin configuration
 
@@ -26,6 +27,7 @@ require 'config.keybindings'
 cmd[[
 runtime vimscript/ui.vim
 runtime vimscript/autocmd.vim
+runtime vimscript/commands.vim
 ]]
 
 function printi(...)
