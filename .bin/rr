@@ -94,23 +94,38 @@ if [ $# -lt 1 ]; then
     exit 64
 fi
 
+prog=''
+mode='mode_normal'
+
 while [ $# -gt 0 ]; do
     case "$1" in
-        -h|-headers)
+        -h|--headers)
             mode_precompile_headers
-            break
+            exit $?
             ;;
-        -g|-gdb)
-            mode_gdb "${@:2}"
-            break
+        -g|--gdb)
+            mode="mode_gdb"
             ;;
-        -n|-no-run)
+        -n|--no-run)
             should_run=0
             ;;
+        -*)
+            echo "rr: invalid option: $1" >&2
+            exit 1
+            ;;
         *)
-            mode_normal "$@"
-            break
+            if ! [ -z "$prog" ] ; then
+                echo "rr: multiple programs specified" >&2
+                exit 1
+            fi
+            prog="$1"
             ;;
     esac
     shift
 done
+
+if [ -z "$prog" ] ; then
+    echo "rr: no program specified" >&2
+    exit 1
+fi
+$mode "$prog"

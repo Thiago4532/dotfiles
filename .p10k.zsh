@@ -292,7 +292,7 @@
 
   # The default icon shown next to non-writable directories when POWERLEVEL9K_DIR_SHOW_WRITABLE is
   # set to v2.
-  # typeset -g POWERLEVEL9K_LOCK_ICON='⭐'
+  typeset -g POWERLEVEL9K_LOCK_ICON='\uF023 '
 
   # POWERLEVEL9K_DIR_CLASSES allows you to specify custom icons and colors for different
   # directories. It must be an array with 3 * N elements. Each triplet consists of:
@@ -338,7 +338,13 @@
   # parameter. For example, if POWERLEVEL9K_DIR_WORK_NOT_WRITABLE_FOREGROUND is not set, it falls
   # back to POWERLEVEL9K_DIR_FOREGROUND.
   #
-  # typeset -g POWERLEVEL9K_DIR_CLASSES=()
+  typeset -g POWERLEVEL9K_DIR_CLASSES=(
+    '/etc(|/*)'      ETC            '\uF013 '
+    '~/.config(|/*)' CONFIG         '\uF013 '
+    '~'              HOME           '\uF015 '
+    '~/*'            HOME_SUBFOLDER '\uF07C '
+    '*'              DEFAULT        '\uF115 '
+  )
 
   # Custom prefix.
   # typeset -g POWERLEVEL9K_DIR_PREFIX='in '

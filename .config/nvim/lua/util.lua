@@ -125,4 +125,12 @@ M.is_executable = function(...)
     return true
 end
 
+M.sanitize_ascii = function(s)
+    local ss = s:gsub('[^\x20-\x7F]', function(c)
+        local byte = c:byte(1)
+        return string.format('\\x%02x', byte);
+    end)
+    return ss
+end
+
 return M

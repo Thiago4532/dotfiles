@@ -1,6 +1,5 @@
-local disabled_list = {'c', 'cpp', 'bash', 'zsh', 'haskell', 'vim', 'zig'}
-
-thiago = 'aehh'
+-- local disabled_list = {'cuda', 'bash', 'zsh', 'haskell', 'vim', 'zig'}
+local disabled_list = {'c', 'cpp', 'cuda', 'bash', 'zsh', 'haskell', 'vim', 'zig'}
 
 require'nvim-treesitter.configs'.setup {
     auto_install = true,

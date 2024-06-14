@@ -16,8 +16,6 @@ local function perror(...)
 end
 
 
-local ns = require'util'.notify_send
-
 local function match_config(path)
     path = path or vim.api.nvim_buf_get_name(0)
     local is_windows = uv.os_uname().version:match 'Windows'

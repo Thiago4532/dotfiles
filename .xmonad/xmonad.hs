@@ -98,7 +98,10 @@ currentWS :: X WorkspaceId
 currentWS = withWindowSet $ return . W.currentTag
 
 notifySend :: (MonadIO m) => String -> m ()
-notifySend m = spawn $ join ["dunstify XMonad \"", m, "\""]
+notifySend m = spawn $ join ["notify-send XMonad \"", m, "\""]
+
+notifySendT :: (MonadIO m) => String -> String -> m ()
+notifySendT t m = spawn $ join ["notify-send \"", t ,"\" \"", m, "\""]
 
 notifySendID :: (MonadIO m) => String -> String -> m ()
 notifySendID i m = spawn $ join ["dunstify XMonad -h string:x-dunst-stack-tag:", i, " \"", m, "\""]
@@ -134,53 +137,54 @@ centerWindow win = do
     windows $ W.float win (W.RationalRect ((1 - w) / 2) ((1 - h) / 2) w h)
     return ()
 
--- actionList :: [(String, X())]
--- actionList = 
---     [ ("mirror: Mirror the current layout",          sendMessage $ Toggle MIRROR)
---     , ("float: Float and center the focused window", withFocused $ centerWindow )] 
+-- Spawn Floating Windows on workspace
 
--- data SpawnFloat = SpawnFloat Bool
---                     deriving (Read, Show)
+data FloatingMode = NoFloating | NormalFloating | CenteredFloating
 
--- getSpawnFloat :: X Bool
--- getSpawnFloat = XS.get >>= return . ext
---                         where ext (SpawnFloat b) = b
-
--- toggleSpawnFloat :: X ()
--- toggleSpawnFloat = XS.modifyM f
---     where notify = notifySendID "SpawnFloat" . ("Spawn Floating Windows: " ++)
---           f (SpawnFloat b) = case b of
---                                  False -> notify "ON" >> return (SpawnFloat True)
---                                  True -> notify "OFF" >> return (SpawnFloat False)
-
--- instance ExtensionClass SpawnFloat where
---     initialValue = SpawnFloat False
---     extensionType = PersistentExtension
-
-data SpawnFloatW = SpawnFloatW { spawnFloatW :: [WorkspaceId] }
+data SpawnFloatW = SpawnFloatW { spawnFloatW :: [(WorkspaceId, Bool)] }
             deriving (Read, Show)
 
-appendElem :: a -> [a] -> [a]
-appendElem x y = (x:y)
+sfwAppendElem :: WorkspaceId -> Bool -> [(WorkspaceId, Bool)] -> [(WorkspaceId, Bool)]
+sfwAppendElem x b [] = [(x, b)]
+sfwAppendElem x b (y:ys) | x == fst y    = (x, b) : ys
+                         | otherwise     = y : sfwAppendElem x b ys
 
-removeElem :: (Eq a) => a -> [a] -> [a]
-removeElem x [] = []
-removeElem x (y:ys) | x == y    = removeElem x ys
-                    | otherwise = y : removeElem x ys
+sfwRemoveElem :: WorkspaceId -> [(WorkspaceId, Bool)] -> [(WorkspaceId, Bool)]
+sfwRemoveElem x [] = []
+sfwRemoveElem x (y:ys) | x == fst y    = sfwRemoveElem x ys
+                       | otherwise     = y : sfwRemoveElem x ys
 
-isSpawnFloatW :: X Bool
-isSpawnFloatW = currentWS >>= \w -> XS.get >>= return . elem w . spawnFloatW
+_sfwGetFloatingMode :: WorkspaceId -> [(WorkspaceId, Bool)] -> FloatingMode
+_sfwGetFloatingMode _ []     = NoFloating
+_sfwGetFloatingMode x (y:ys)
+                        | y == (x, False) = NormalFloating
+                        | y == (x, True)  = CenteredFloating
+                        | otherwise       = _sfwGetFloatingMode x ys
+
+sfwGetFloatingMode :: WorkspaceId -> SpawnFloatW -> FloatingMode
+sfwGetFloatingMode w (SpawnFloatW wl) = _sfwGetFloatingMode w wl
+
+-- Set spawn floating mode for workspace
+sfwSetFloatingMode :: WorkspaceId -> SpawnFloatW -> FloatingMode -> SpawnFloatW
+sfwSetFloatingMode w (SpawnFloatW wl) NoFloating       = SpawnFloatW $ sfwRemoveElem w wl
+sfwSetFloatingMode w (SpawnFloatW wl) NormalFloating   = SpawnFloatW $ sfwAppendElem w False wl
+sfwSetFloatingMode w (SpawnFloatW wl) CenteredFloating = SpawnFloatW $ sfwAppendElem w True wl
+
+sfwGetFloatingModeW :: X FloatingMode
+sfwGetFloatingModeW = currentWS >>= \w -> XS.get >>= return . sfwGetFloatingMode w
 
 toggleSpawnFloatW :: X ()
 toggleSpawnFloatW = currentWS >>= XS.modifyM . f
     where notify w m = notifySendID "SpawnFloatW" $ join ["Spawn Floating Windows on workspace '", w, "': ", m]
-          f w (SpawnFloatW wl) = if w `elem` wl
-                                 then notify w "OFF" >> return (SpawnFloatW $ removeElem w wl)
-                                 else notify w "ON" >> return (SpawnFloatW $ appendElem w wl)
+          f w sfw = case sfwGetFloatingMode w sfw of
+                      NoFloating       -> notify w "ON"            >> return (sfwSetFloatingMode w sfw NormalFloating)
+                      NormalFloating   -> notify w "ON (Center)"   >> return (sfwSetFloatingMode w sfw CenteredFloating)
+                      CenteredFloating -> notify w "OFF"           >> return (sfwSetFloatingMode w sfw NoFloating)
 
-spawnFloatWHook = liftX isSpawnFloatW >>= \b -> if b then doFloat
-                                                     else return mempty
-
+spawnFloatWHook = liftX sfwGetFloatingModeW >>= \m -> case m of
+                                                        NoFloating       -> return mempty
+                                                        NormalFloating   -> doFloat
+                                                        CenteredFloating -> doCenterFloat
 instance ExtensionClass SpawnFloatW where
     initialValue = SpawnFloatW []
     extensionType = PersistentExtension
@@ -574,8 +578,45 @@ javaHack conf = conf
                     *> io (putEnv "_JAVA_AWT_WM_NONREPARENTING=1")
   }
 
+-- data DiscordPID = DiscordPID { discordPID :: Int }
+
+-- instance ExtensionClass DiscordPID where
+--     initialValue = DiscordPID 0
+--     -- extensionType = PersistentExtension
+
+-- getDiscordPID :: X Int
+-- getDiscordPID = XS.get >>= return . discordPID
+
+-- setDiscordPID :: Int -> X ()
+-- setDiscordPID x = XS.modify (const (DiscordPID x))
+
+-- discordController :: X Bool
+-- discordController = do
+--     value <- getDiscordPID
+--     setDiscordPID (value + 1)
+--     notifySend ("Discord: " ++ show value)
+--     return (value >= 100)
+
+discordHook :: ManageHook
+discordHook = do
+    name <- title
+    if name == "Discord Updater"
+       then mempty
+       else doFocus
+    -- b <- liftX discordController
+    -- if b then doFocus else doAskUrgent
+
+myActivateHook :: ManageHook
+myActivateHook =
+    ifM (className =? "discord") discordHook doFocus
+
 main = do
-    xmonad $ withEasySB mySB defToggleStrutsKey $ javaHack $ ewmhFullscreen $ ewmh $ docks $ defaults
+    xmonad $ withEasySB mySB defToggleStrutsKey 
+           $ javaHack 
+           $ ewmhFullscreen 
+           $ setEwmhActivateHook myActivateHook . ewmh 
+           $ docks 
+           $ defaults
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will

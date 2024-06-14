@@ -122,3 +122,7 @@ function check_exe() {
 function chromium_env() {
     export PATH="$HOME/.local/depot_tools:$PATH"
 }
+
+function termcd() {
+    local DIR="`termcd-helper`" && cd "$DIR"
+}

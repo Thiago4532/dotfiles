@@ -3,19 +3,20 @@
 
 alias sudo='sudo '
 check_exe exa && alias ls='exa' || alias ls='ls --color=auto'
-check_exe rg && alias grep='fake-grep'
+check_exe rg && alias grep='rg'
+# check_exe rg && alias grep='fake-grep'
 check_exe ninja && alias cmake='CMAKE_GENERATOR=Ninja cmake'
 check_exe llvm-objdump && alias objdump='llvm-objdump'
 check_exe batman && alias man='batman'
 alias tssh='TERM=xterm-256color \ssh'
-# alias nssh='TERM=kitty \ssh'
 alias dragon='dragon-drop'
-if [[ $TERM == "xterm-kitty" ]]; then alias ssh='kitten ssh'; fi
+[[ $TERM == "xterm-kitty" ]] && alias s='kitten ssh' || alias s='ssh'
 alias open='xdg-open'
 alias rdb='rr -gdb'
 alias rrc='RR_COPY_CLIPBOARD=1 rr'
 alias sd='syncdir'
 alias odmp='objdump -M intel --disassembler-color=terminal'
+check_exe paru && check_exe pacman-wrapper && alias pacman='pacman-wrapper' # I want to start upgrading using paru.
 
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 

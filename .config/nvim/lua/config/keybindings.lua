@@ -89,3 +89,7 @@ map('n', '<leader>R', 'q/kyy:q<CR>:%s/<C-r>"', { noremap = true })
 
 -- center cursor
 map('n', 'zg', ":lua require'util'.center_cursor()<CR>", opts)
+
+-- why is the opposite the default?
+map('', "`", "'")
+map('', "'", "`")

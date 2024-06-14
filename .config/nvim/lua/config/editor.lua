@@ -65,3 +65,6 @@ o.cino = 'N-s,:0,g0'
 
 -- Split right
 o.splitright = true
+
+-- Allow execution of local configuration
+o.exrc = true

@@ -1,4 +1,15 @@
-vim.loader.enable()
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", -- latest stable release
+        lazypath,
+    })
+end
+vim.opt.rtp:prepend(lazypath)
 
 local g = vim.g
 local cmd = vim.cmd
@@ -11,15 +22,16 @@ g.loaded_node_provider = 0
 g.loaded_perl_provider = 0
 g.zig_fmt_autosave = 0
 g.mapleader = ','
-g.loaded_netrw = 1
-g.loaded_netrwPlugin = 1
+-- g.loaded_netrw = 1
+-- g.loaded_netrwPlugin = 1
 
-require 'plugins'
+require'lazy'.setup('plugins')
 require 'buf-config'.setup()
 
 -- post-plugin configuration
 
 util = require'util'
+require 'impl.ftdetect'
 
 require 'config.editor'
 require 'config.keybindings'
@@ -31,8 +43,9 @@ runtime vimscript/commands.vim
 ]]
 
 function printi(...)
-    local tbl = vim.tbl_map(vim.inspect, {...})
-    local n = select('#', ...)
+    vim.print(...)
+    -- local tbl = vim.tbl_map(vim.inspect, {...})
+    -- local n = select('#', ...)
 
-    print(unpack(tbl, 1, n))
+    -- print(unpack(tbl, 1, n))
 end

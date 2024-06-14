@@ -60,12 +60,12 @@ cmp.event:on(
 )
 
 -- Keymaps
-vim.api.nvim_set_keymap(
-    'i',
-    '<S-CR>',
-    'v:lua.MPairs.completion_confirm()',
-    { expr = true, noremap = true }
-)
+-- vim.api.nvim_set_keymap(
+--     'i',
+--     '<S-CR>',
+--     'v:lua.MPairs.completion_confirm()',
+--     { expr = true, noremap = true }
+-- )
 
 
 -- vim.api.nvim_set_keymap("i", "<C-E>", "<Plug>luasnip-next-choice", {})
