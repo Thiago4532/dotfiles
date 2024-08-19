@@ -7,3 +7,5 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 export PATH=$PATH:$HOME/.local/bin
 export PATH=$PATH:$HOME/.bin
+
+export CP_TEMPLATE_DIR="$HOME/GitHub/CP-Template"

@@ -1,25 +1,30 @@
--- local disabled_list = {'cuda', 'bash', 'zsh', 'haskell', 'vim', 'zig'}
-local disabled_list = {'c', 'cpp', 'cuda', 'bash', 'zsh', 'haskell', 'vim', 'zig'}
+local ts_disabled = {'c', 'cpp', 'cuda'}
+tm_opts.ts_disabled = ts_disabled
+
+local highlight_disabled = {'bash', 'zsh', 'haskell', 'vim', 'zig'}
+for _, v in ipairs(ts_disabled) do
+    highlight_disabled[#highlight_disabled + 1] = v
+end
 
 require'nvim-treesitter.configs'.setup {
     auto_install = true,
 
     highlight = {
         enable = true,
-        disable = disabled_list,
+        disable = highlight_disabled
     },
-    incremental_selection = {
-        enable = true,
-        disable = disabled_list,
-    },
+    -- incremental_selection = {
+    --     enable = true,
+    --     disable = ts_disabled,
+    -- },
     playground = {
         enable = true,
-        disable = disabled_list,
+        disable = ts_disabled,
     },
     textobjects = {
         select = {
             enable = true,
-            disable = disabled_list,
+            disable = ts_disabled,
 
             lookahead = false,
 
@@ -30,5 +35,5 @@ require'nvim-treesitter.configs'.setup {
                  ["ic"] = "@class.inner",
             }
         },
-    }
+    },
 }

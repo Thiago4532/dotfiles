@@ -32,6 +32,10 @@ compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
 autoload -U select-word-style
 select-word-style bash
 
+autoload zmv
+alias zcp='zmv -C'
+alias zln='zmv -L'
+
 # Environment variables
 ZLE_RPROMPT_INDENT=0
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=4"

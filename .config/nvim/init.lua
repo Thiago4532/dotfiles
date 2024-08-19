@@ -17,7 +17,8 @@ local fn = vim.fn
 
 -- disable providers
 g.loaded_python_provider = 0
-g.loaded_python3_provider = 0 g.loaded_ruby_provider = 0
+g.loaded_python3_provider = 0
+g.loaded_ruby_provider = 0
 g.loaded_node_provider = 0
 g.loaded_perl_provider = 0
 g.zig_fmt_autosave = 0
@@ -25,7 +26,18 @@ g.mapleader = ','
 -- g.loaded_netrw = 1
 -- g.loaded_netrwPlugin = 1
 
-require'lazy'.setup('plugins')
+tm_opts = {}
+
+require'lazy'.setup {
+    spec = {
+        { import = 'plugins' },
+    },
+    change_detection = {
+        enabled = true,
+        notify = false,
+    },
+}
+
 require 'buf-config'.setup()
 
 -- post-plugin configuration
@@ -41,6 +53,8 @@ runtime vimscript/ui.vim
 runtime vimscript/autocmd.vim
 runtime vimscript/commands.vim
 ]]
+
+require 'bad-habits'
 
 function printi(...)
     vim.print(...)

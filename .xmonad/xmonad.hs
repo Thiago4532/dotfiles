@@ -324,6 +324,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Session lock
     , ((modm .|. controlMask, xK_l   ), spawn "loginctl lock-session")
+    
+    -- Turn screen off
+    , ((modm .|. controlMask, xK_k   ), spawn "xset dpms force off")
 
     -- Take a interactive screenshot (PrtSc)
     , ((noModMask         , 0xff61   ), spawn "maim -s --format=png | xclip -selection clipboard -t image/png && notify-send -t 1000 'Copied screenshot to clipboard!'")
@@ -534,7 +537,9 @@ myStartupHook = do
                                         , " --alpha 0 --height 16"
                                         , " --tint ", U.color2hex C.background]
 
-    spawnOnce "systemctl --user start replay-sorcery"
+    -- spawnOnce "systemctl --user start replay-sorcery"
+    spawnOnce "xfce4-power-manager"
+    -- spawnOnce "checar"
 
 ------------------------------------------------------------------------
 -- Log hook

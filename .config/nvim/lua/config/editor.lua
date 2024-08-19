@@ -7,8 +7,8 @@ bo.shiftwidth, o.shiftwidth = 4, 4
 bo.expandtab, o.expandtab = true, true
 
 -- Show line numbers
-wo.number, o.number = true, true
-wo.relativenumber, o.relativenumber = true, true
+o.number = true
+o.relativenumber = true
 
 -- No ESC delay
 o.timeoutlen = 500
@@ -23,25 +23,25 @@ o.ruler = false
 o.mouse = ''
 
 -- Disable automatic EOL
-o.fixendofline, bo.fixendofline = false, false
+o.fixendofline = false
 
 -- Disable cursor shape on Insert Mode
 o.guicursor = ''
 
 -- Don't wrap long lines
-wo.wrap, o.wrap = false, false
+o.wrap = false
 
 -- Turn on insensitive case
 o.ignorecase = true
 
 -- Disable sign column
-wo.signcolumn, o.signcolumn = 'no', 'no'
+o.signcolumn = 'no'
 
 -- Hide buffers instead of closing them
 o.hidden = true
 
 -- No swap file
-bo.swapfile, o.swapfile = false, false
+o.swapfile = false
 
 -- Lower update time
 -- o.updatetime = 2000
@@ -59,6 +59,7 @@ o.shortmess = o.shortmess .. 'I'
 o.completeopt = 'menu,menuone,noselect'
 
 o.foldmethod = 'marker'
+vim.opt.foldopen:remove 'search'
 
 -- Do not ident namespace in C++
 o.cino = 'N-s,:0,g0'

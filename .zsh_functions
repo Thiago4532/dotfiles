@@ -114,6 +114,15 @@ function set_timer() {
     done
 }
 
+function stopwatch() {
+    local rem=0
+    while true; do
+        printf "%02d:%02d\n" $(($rem/60)) $(($rem%60))
+        sleep 1
+        rem=$(($rem + 1))
+    done
+}
+
 function check_exe() {
     # TODO: Command is not the right way to solve this problem
     command -v exa > /dev/null
@@ -125,4 +134,29 @@ function chromium_env() {
 
 function termcd() {
     local DIR="`termcd-helper`" && cd "$DIR"
+}
+alias tcd='termcd'
+
+function spawn_in() {
+    (
+        cd "$1" || return $?
+        shift
+        exec "$@"
+    )
+}
+
+function nvcfg() {
+    local config="${XDG_CONFIG_HOME:-$HOME/.config}/nvim" 
+    local filename="$(spawn_in "$config" fzf)"
+    print -s spawn_in "$config" nvim "$filename"
+    spawn_in "$config" nvim "$filename"
+}
+
+function open() {
+    local logfile="${XDG_CACHE_HOME:-$HOME/.cache}/open.log"
+
+    while [ "$#" -gt 0 ]; do
+        ( xdg-open "$1" >"$logfile" 2>&1 & )
+        shift
+    done
 }

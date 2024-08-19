@@ -1,91 +1,97 @@
 #!/bin/bash
 ## rr - C++ compile and run
-## Dependencies: g++ # Author: Thiago Mota (https://github.com/Thiago4532)
+## Dependencies: g++, md5sum, xclip (if clipboard)
+# Author: Thiago Mota (https://github.com/Thiago4532)
 
 # Custom flags
-CFLAGS="-O2 -std=c++17 -DTDEBUG"
-GDB_CFLAGS="-ggdb3 -std=c++17 -DTDEBUG"
+CFLAGS="-O2 -std=c++17 -DTDEBUG" 
 EXTRA_FLAGS="-I$HOME/.local/include"
 CACHE_FOLDER="$HOME/.cache/rr"
 
 # Program variables
-NORMAL_IPATH="$CACHE_FOLDER/include"
-GDB_IPATH="$CACHE_FOLDER/gdb-include"
-
 should_run=1
+force_compile=''
+force_precompile=''
+SOURCE=''
+BINARY=''
 
 shopt -s lastpipe
-mode_precompile_headers() {
-    STDC_PATH=""
+
+compute_ipath() {
+    local __hash=$(md5sum <<< "$EXTRA_FLAGS $CFLAGS" | head -c 8) || exit $?
+    IPATH="$CACHE_FOLDER/$__hash"
+}
+
+precompile_headers() {
+    local PCH_SOURCE=""
     echo | g++ -x c++ -E -v - 2>&1 | sed -n 's,^ ,,p' | while read -r ipath; do
         [ -d "$ipath" ] || continue
         if [ -f "$ipath/bits/stdc++.h" ]; then
-            STDC_PATH="$ipath/bits/stdc++.h"
+            PCH_SOURCE="$ipath/bits/stdc++.h"
             break
         fi
     done
 
-    if [ -z "$STDC_PATH" ]; then
+    if [ -z "$PCH_SOURCE" ]; then
         echo "Failed to precompile headers" >&2
         exit 1
     fi
 
-    # Normal mode
-    mkdir -p "$NORMAL_IPATH/bits" || exit $?
-    g++ -H $CFLAGS $EXTRA_FLAGS "$STDC_PATH" -o "$NORMAL_IPATH/bits/stdc++.h.gch" || exit $?
+    compute_ipath
+    local PCH_DEST="$IPATH/bits/stdc++.h.gch" 
+    local CC_BINARY=`which g++`
 
-    # GDB mode
-    mkdir -p "$GDB_IPATH/bits" || exit $?
-    g++ -H $GDB_CFLAGS $EXTRA_FLAGS "$STDC_PATH" -o "$GDB_IPATH/bits/stdc++.h.gch" || exit $?
+    if [ "$CC_BINARY" -nt "$PCH_DEST" ] || [ "$PCH_SOURCE" -nt "$PCH_DEST" ] || ! [ -z "$force_precompile" ]; then
+        mkdir -p "$IPATH/bits" || exit $?
+        echo "Precompiling: g++ $CFLAGS" >&2
+        g++ -H $EXTRA_FLAGS $CFLAGS "$PCH_SOURCE" -o "$PCH_DEST">/dev/null 2>&1 || exit $?
+        echo "Done: $IPATH" >&2
+    fi
 }
 
-mode_normal() {
-    if [ $# -lt 1 ]; then
-        echo "usage: ${0##*/} file [flags]" >&2
-        exit 64
-    fi
-
-    CFLAGS="$CFLAGS ${@:2}"
-    local SOURCE="$1.cpp"
-    local BINARY="$1"
-
+do_compile() {
     if ! [ -f "$SOURCE" ]; then
         echo "$SOURCE does not exist!" >&2
         exit 1
     fi
 
-    if [ "$SOURCE" -nt "$BINARY" ]; then
+    if [ "$SOURCE" -nt "$BINARY" ] || ! [ -z "$force_compile" ]; then
+        precompile_headers
+
         echo "Compiling: g++ $CFLAGS" >&2
-        g++ $CFLAGS $EXTRA_FLAGS -I"$NORMAL_IPATH" -o "$BINARY" "$SOURCE" || exit $?
+        g++ $EXTRA_FLAGS $CFLAGS -I"$IPATH" -o "$BINARY" "$SOURCE" || exit $?
         echo "Done!" >&2
     fi
-
-    if [ $should_run -eq 1 ]; then
-        [ -z "${RR_COPY_CLIPBOARD}" ] \
-            && exec ./"$BINARY" \
-            || xclip -o -selection clipboard | exec ./"$BINARY"
-    fi
 }
 
-mode_gdb() {
-    if [ $# -lt 1 ]; then
-        echo "usage: ${0##*/} -gdb file [flags]" >&2
-        exit 64
-    fi
+pre_normal() {
+    SOURCE="$1.cpp"
+    BINARY="$1"
+}
 
-    CFLAGS="$CFLAGS ${@:2}"
-    local SOURCE="$1.cpp"
-    local BINARY="$1"
+run_normal() {
+    [ -z "${RR_COPY_CLIPBOARD}" ] \
+        && exec ./"$BINARY" \
+        || xclip -o -selection clipboard | exec ./"$BINARY"
+}
 
-    if ! [ -f "$SOURCE" ]; then
-        echo "$SOURCE does not exist!" >&2
-        exit 1
-    fi
+pre_gdb() {
+    CFLAGS="$CFLAGS -O0 -ggdb3"
+    SOURCE="$1.cpp"
+    BINARY="$1_g"
+}
 
-    g++ $GDB_CFLAGS $EXTRA_FLAGS -I"$GDB_IPATH" -o "$BINARY" "$SOURCE" || exit $?
+run_gdb() {
+    exec gdb "$BINARY"
+}
 
-    [ $should_run -eq 1 ] &&
-        exec gdb ./"$BINARY"
+parse_env() {
+    while IFS='=' read -r -d',' key value; do
+        [ -z "$key" ] && continue
+        key="${key/-/_}"
+        key="TDEB_${key^^}"
+        export "$key"="$value"
+    done
 }
 
 ## Main execution
@@ -95,19 +101,42 @@ if [ $# -lt 1 ]; then
 fi
 
 prog=''
-mode='mode_normal'
+mode='normal'
 
 while [ $# -gt 0 ]; do
     case "$1" in
         -h|--headers)
-            mode_precompile_headers
-            exit $?
+            force_precompile='yes'
             ;;
         -g|--gdb)
-            mode="mode_gdb"
+            mode='gdb'
             ;;
         -n|--no-run)
             should_run=0
+            ;;
+        -e|--env) # TODO: improve this (check arguments)
+            shift
+            parse_env <<< "$1,"
+            ;;
+        -t|--test) # TODO: improve this (check arguments)
+            shift
+            export TDEB_TEST="$1"
+            ;;
+        -s) # equivalent to -e no_error
+            shift
+            export TDEB_NO_ERROR=1
+            ;;
+        -f|--force)
+            force_compile='yes'
+            ;;
+        -x)
+            shift
+            CFLAGS="$CFLAGS $1"
+            ;;
+        --)
+            shift
+            CFLAGS="$CFLAGS $@"
+            break
             ;;
         -*)
             echo "rr: invalid option: $1" >&2
@@ -124,8 +153,17 @@ while [ $# -gt 0 ]; do
     shift
 done
 
+pre_$mode "$prog"
+
+# if ! [ -z "$should_precompile" ]; then
+#     precompile_headers
+#     [ -z "$prog" ] && exit 0
 if [ -z "$prog" ] ; then
     echo "rr: no program specified" >&2
     exit 1
 fi
-$mode "$prog"
+
+do_compile
+if [ $should_run -eq 1 ]; then
+    run_$mode
+fi

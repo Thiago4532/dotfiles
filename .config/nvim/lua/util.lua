@@ -14,20 +14,6 @@ end
 
 local M = {}
 
-M.cp_int2ll = function()
-    api.nvim_buf_set_lines(0, 1, 1, true, {'#define int ll'})
-    local lines = api.nvim_buf_get_lines(0, 0, -1, true);
-
-    api.nvim_command('normal! \x05')
-    for i = 1,#lines do
-        if lines[i]:find('int main()') then
-            local l = lines[i]:gsub('int', 'int32_t')
-            api.nvim_buf_set_lines(0, i - 1, i, true, {l}) 
-            break
-        end
-    end
-end
-
 M.parse_c_header_name = function(name)
     local guard_name = require'header-guard'.guard_name()
     if guard_name then

@@ -1,95 +1,101 @@
-local map = vim.keymap.set
-local opts = { silent = true }
-local optexpr = { silent = true, expr = true }
+local dmap = vim.keymap.set
+local mopts   = { silent = true }
+local mopts_e = { silent = true, expr = true }
+
+local function map(mode, lhs, rhs, expr)
+    local opts = expr and mopts_e or mopts
+    dmap(mode, lhs, rhs, opts)
+end
 
 -- Disable Ex-mode
-map('n', 'Q', '<Nop>', opts)
+map('n', 'Q', '<Nop>')
 
 -- Disable <Space>
-map('', '<Space>', '<Nop>')
+dmap('', '<Space>', '<Nop>')
 
 -- Remapping , to global clipboard
-map('', ',', '"+')
-
--- Toggle nvim-tree 
-map('n', '<C-n>', ':NvimTreeToggle<CR>', opts) 
+dmap('', ',', '"+')
 
 -- Highlight keybindings
-map('n', '<F1>', ':Inspect<CR>', opts) map('n', '<F3>', ':noh<CR>', opts)
+map('n', '<F1>', ':Inspect<CR>')
+map('n', '<F3>', ':noh<CR>')
 map('n', '<F4>', [[
 &ic ? ':set noic<CR>:echo "Case-sensitive"<CR>' : ':set ic<CR>:echo "Case-insensitive"<CR>'
-]], optexpr)
+]], true)
 
 -- Buffer keybindings
-map('n', 'H', ':bp<CR>', opts)
-map('n', 'L', ':bl<CR>', opts)
-map('n', '<leader>q', ':Bdelete<CR>', opts);
-map('n', '<leader>QQ', ':Bdelete!<CR>', opts);
+map('n', 'H', ':bp<CR>')
+map('n', 'L', ':bl<CR>')
+map('n', '<leader>q', ':Bdelete<CR>');
+map('n', '<leader>QQ', ':Bdelete!<CR>');
 
 -- lsp keybindings
-map('n', 'K', ':lua vim.lsp.buf.hover()<CR>', opts)
-map('n', ',gf', ':lua require"lsp-tree".methods.hover_current_function()<CR>', opts)
-map('n', '<C-k>', ':lua vim.lsp.buf.signature_help()<CR>', opts)
-map('i', '<C-k>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-map('n', '<space>rn', ':lua vim.lsp.buf.rename()<CR>', opts)
-map('n', '<space>e', ':lua vim.diagnostic.open_float()<CR>', opts)
-map('n', '[d', ':lua vim.diagnostic.goto_prev()<CR>', opts)
-map('n', ']d', ':lua vim.diagnostic.goto_next()<CR>', opts)
-map("n", "<space>F", ":lua vim.lsp.buf.format()<CR>", opts)
-map('n', '<space>s', ':ClangdSwitchSourceHeader<CR>', opts)
--- map('n', '<space>wa', ':lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
--- map('n', '<space>wr', ':lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
--- map('n', '<space>wl', ':lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
--- map('n', '<space>q', ':lua vim.diagnostic.setloclist()<CR>', opts)
+map('n', 'K', ':lua vim.lsp.buf.hover()<CR>')
+map('n', ',gf', ':lua require"lsp-tree".methods.hover_current_function()<CR>')
+map('n', '<C-k>', ':lua vim.lsp.buf.signature_help()<CR>')
+map('i', '<C-k>', '<Cmd>lua vim.lsp.buf.signature_help()<CR>')
+map('n', '<space>rn', ':lua vim.lsp.buf.rename()<CR>')
+map('n', '<space>e', ':lua vim.diagnostic.open_float()<CR>')
+map('n', '[d', ':lua vim.diagnostic.goto_prev()<CR>')
+map('n', ']d', ':lua vim.diagnostic.goto_next()<CR>')
+map("n", "<space>F", ":lua vim.lsp.buf.format()<CR>")
+map('n', '<space>s', ':ClangdSwitchSourceHeader<CR>')
+-- map('n', '<space>wa', ':lua vim.lsp.buf.add_workspace_folder()<CR>')
+-- map('n', '<space>wr', ':lua vim.lsp.buf.remove_workspace_folder()<CR>')
+-- map('n', '<space>wl', ':lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>')
+-- map('n', '<space>q', ':lua vim.diagnostic.setloclist()<CR>')
 
 
 -- window keybindings
-map('n', '<M-h>',           '<C-w>h', opts)
-map('n', '<M-j>',           '<C-w>j', opts)
-map('n', '<M-k>',           '<C-w>k', opts)
-map('n', '<M-l>',           '<C-w>l', opts)
-map('n', '<M-H>',           '<C-w>H', opts)
-map('n', '<M-J>',           '<C-w>J', opts)
-map('n', '<M-K>',           '<C-w>K', opts)
-map('n', '<M-L>',           '<C-w>L', opts)
-map('n', '<M-Tab>',         '<C-w>w', opts)
-map('n', '<M-S-Tab>',       '<C-w>W', opts)
-map('n', '<M-s>',           '<C-w>s', opts)
-map('n', '<M-v>',           '<C-w>v', opts)
-map('n', '<M-=>',           '<C-w>+', opts)
-map('n', '<M-->',           '<C-w>-', opts)
-map('n', '<M-Backspace>',   '<C-w>=', opts)
-map('n', '<M-,>',           '<C-w><', opts)
-map('n', '<M-.>',           '<C-w>>', opts)
-map('n', '<M-q>',           '<C-w>q', opts)
+map('n', '<M-h>',           '<C-w>h')
+map('n', '<M-j>',           '<C-w>j')
+map('n', '<M-k>',           '<C-w>k')
+map('n', '<M-l>',           '<C-w>l')
+map('n', '<M-H>',           '<C-w>H')
+map('n', '<M-J>',           '<C-w>J')
+map('n', '<M-K>',           '<C-w>K')
+map('n', '<M-L>',           '<C-w>L')
+map('n', '<M-Tab>',         '<C-w>w')
+map('n', '<M-S-Tab>',       '<C-w>W')
+map('n', '<M-s>',           '<C-w>s')
+map('n', '<M-v>',           '<C-w>v')
+map('n', '<M-=>',           '<C-w>+')
+map('n', '<M-->',           '<C-w>-')
+map('n', '<M-Backspace>',   '<C-w>=')
+map('n', '<M-,>',           '<C-w><')
+map('n', '<M-.>',           '<C-w>>')
+map('n', '<M-q>',           '<C-w>q')
 
 -- terminal keybindings
-map('t', '<Esc>', '<C-\\><C-n>', opts)
+map('t', '<Esc>', '<C-\\><C-n>')
 
 -- add j/k to jumplist
-map('n', 'j', [[(v:count > 1 ? "m'" . v:count : '') . 'j']], optexpr)
-map('n', 'k', [[(v:count > 1 ? "m'" . v:count : '') . 'k']], optexpr)
+map('n', 'j', [[(v:count > 1 ? "m'" . v:count : '') . 'j']], true)
+map('n', 'k', [[(v:count > 1 ? "m'" . v:count : '') . 'k']], true)
 
 -- why not?
-map('n', 'Y', 'y$', opts)
+map('n', 'Y', 'y$')
 
 -- Toggle wrap
 map('n', '<leader>tw', [[
 &wrap ? ':set nowrap<CR>:echo "Wrap disabled!"<CR>' : ':set wrap<CR>:echo "Wrap enabled!"<CR>'
-]], optexpr)
+]], true)
 
 -- UndoTree
-map('n', 'U', ":UndotreeToggle<CR>", opts)
+map('n', 'U', ":UndotreeToggle<CR>")
 
 -- Indent after paste
-map('n', '<leader>=', '=`]', opts)
+map('n', '<leader>=', '=`]')
 
 -- repeat last search command on replace mode
-map('n', '<leader>R', 'q/kyy:q<CR>:%s/<C-r>"', { noremap = true })
+dmap('n', '<leader>R', 'q/kyy:q<CR>:%s/<C-r>"')
 
 -- center cursor
-map('n', 'zg', ":lua require'util'.center_cursor()<CR>", opts)
+map('n', 'zg', ":lua require'util'.center_cursor()<CR>")
 
 -- why is the opposite the default?
-map('', "`", "'")
-map('', "'", "`")
+dmap('', "`", "'")
+dmap('', "'", "`")
+
+-- copy whole file
+map('n', 'cpy', ':%y+<CR>')
