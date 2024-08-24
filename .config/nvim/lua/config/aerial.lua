@@ -7,7 +7,7 @@ for _, ft in ipairs(tm_opts.ts_disabled) do
     backends[ft] = alt_backends
 end
 
-require('aerial').setup({
+require'aerial'.setup({
     backends = backends,
 
     -- optionally use on_attach to set keymaps when aerial has attached to a buffer
