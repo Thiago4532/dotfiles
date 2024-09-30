@@ -1,3 +1,4 @@
+local vim = vim
 local dmap = vim.keymap.set
 local mopts   = { silent = true }
 local mopts_e = { silent = true, expr = true }
@@ -16,18 +17,17 @@ dmap('', '<Space>', '<Nop>')
 -- Remapping , to global clipboard
 dmap('', ',', '"+')
 
--- Highlight keybindings
 map('n', '<F1>', ':Inspect<CR>')
 map('n', '<F3>', ':noh<CR>')
-map('n', '<F4>', [[
-&ic ? ':set noic<CR>:echo "Case-sensitive"<CR>' : ':set ic<CR>:echo "Case-insensitive"<CR>'
-]], true)
-
--- Buffer keybindings
-map('n', 'H', ':bp<CR>')
-map('n', 'L', ':bl<CR>')
-map('n', '<leader>q', ':Bdelete<CR>');
-map('n', '<leader>QQ', ':Bdelete!<CR>');
+map('n', '<F4>', function() 
+    if vim.o.ic then
+        vim.o.ic = false
+        print 'Case-sensitive'
+    else
+        vim.o.ic = true
+        print 'Case-insensitive'
+    end
+end)
 
 -- lsp keybindings
 map('n', 'K', ':lua vim.lsp.buf.hover()<CR>')
@@ -44,7 +44,6 @@ map('n', '<space>s', ':ClangdSwitchSourceHeader<CR>')
 -- map('n', '<space>wr', ':lua vim.lsp.buf.remove_workspace_folder()<CR>')
 -- map('n', '<space>wl', ':lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>')
 -- map('n', '<space>q', ':lua vim.diagnostic.setloclist()<CR>')
-
 
 -- window keybindings
 map('n', '<M-h>',           '<C-w>h')
@@ -70,16 +69,54 @@ map('n', '<M-q>',           '<C-w>q')
 map('t', '<Esc>', '<C-\\><C-n>')
 
 -- add j/k to jumplist
-map('n', 'j', [[(v:count > 1 ? "m'" . v:count : '') . 'j']], true)
-map('n', 'k', [[(v:count > 1 ? "m'" . v:count : '') . 'k']], true)
+map({'n', 'x'}, 'j', function()
+    if vim.v.count > 1 then
+        return "m'" .. vim.v.count .. 'j'
+    elseif tm_blocking['j'] then
+        return ''
+    else
+        return 'j'
+    end
+end, true)
+map({'n', 'x'}, 'k', function()
+    if vim.v.count > 1 then
+        return "m'" .. vim.v.count .. 'k'
+    elseif tm_blocking['k'] then
+        return ''
+    else
+        return 'k'
+    end
+end, true)
+
+map({'n', 'x'}, 'h', function()
+    if tm_blocking['h'] then
+        return ''
+    else
+        return 'h'
+    end
+end, true)
+
+map({'n', 'x'}, 'l', function()
+    if tm_blocking['l'] then
+        return ''
+    else
+        return 'l'
+    end
+end, true)
 
 -- why not?
 map('n', 'Y', 'y$')
 
 -- Toggle wrap
-map('n', '<leader>tw', [[
-&wrap ? ':set nowrap<CR>:echo "Wrap disabled!"<CR>' : ':set wrap<CR>:echo "Wrap enabled!"<CR>'
-]], true)
+map('n', '<leader>tw', function()
+    if vim.o.wrap then
+        vim.o.wrap = false
+        print 'Wrap disabled!'
+    else
+        vim.o.wrap = true
+        print 'Wrap enabled!'
+    end
+end)
 
 -- UndoTree
 map('n', 'U', ":UndotreeToggle<CR>")
@@ -91,7 +128,7 @@ map('n', '<leader>=', '=`]')
 dmap('n', '<leader>R', 'q/kyy:q<CR>:%s/<C-r>"')
 
 -- center cursor
-map('n', 'zg', ":lua require'util'.center_cursor()<CR>")
+map('n', 'zg', require'util'.center_cursor)
 
 -- why is the opposite the default?
 dmap('', "`", "'")
@@ -99,3 +136,6 @@ dmap('', "'", "`")
 
 -- copy whole file
 map('n', 'cpy', ':%y+<CR>')
+
+map('n', '<space>n', 'zon')
+map('n', '<space>N', 'zoN')

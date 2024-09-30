@@ -12,7 +12,8 @@ o.relativenumber = true
 
 -- No ESC delay
 o.timeoutlen = 500
-o.ttimeoutlen = 0
+o.ttimeout = false
+-- o.ttimeoutlen = 0
 
 -- Statusline settings
 o.laststatus = 2

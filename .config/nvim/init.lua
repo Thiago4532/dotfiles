@@ -42,7 +42,7 @@ require 'buf-config'.setup()
 
 -- post-plugin configuration
 
-util = require'util'
+UU = require'util'
 require 'impl.ftdetect'
 
 require 'config.editor'
@@ -54,7 +54,7 @@ runtime vimscript/autocmd.vim
 runtime vimscript/commands.vim
 ]]
 
-require 'bad-habits'
+require 'impl.bad-habits'
 
 function printi(...)
     vim.print(...)

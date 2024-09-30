@@ -21,6 +21,14 @@ function! s:gruvbox_material_custom() abort
     highlight link LspSemanticNamespace TSNamespace
     highlight link LspSemanticEnumMember TSStructure
     highlight link LspSemanticParameter Blue
+
+    " render-markdown
+    highlight RenderMarkdownH1Bg guibg=#3b2e2e
+    highlight RenderMarkdownH2Bg guibg=#3b322c
+    highlight RenderMarkdownH3Bg guibg=#3a352d
+    highlight RenderMarkdownH4Bg guibg=#35362e
+    highlight RenderMarkdownH5Bg guibg=#303534
+    highlight RenderMarkdownH6Bg guibg=#393134
 endfunction
 
 augroup GruvboxMaterialCustom
@@ -28,10 +36,4 @@ augroup GruvboxMaterialCustom
     autocmd ColorScheme gruvbox-material call s:gruvbox_material_custom()
 augroup END
 
-augroup TokyoNightCustom
-    autocmd!
-    autocmd ColorScheme tokyonight call s:gruvbox_material_custom()
-augroup END
-
 colorscheme gruvbox-material
-" colorscheme tokyonight

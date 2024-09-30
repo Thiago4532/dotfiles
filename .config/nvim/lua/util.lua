@@ -4,14 +4,6 @@ local api = vim.api
 local uv = vim.loop
 local bo = vim.bo
 
-local function pattern_size(str, pattern)
-    i, j = str:find(pattern)
-    if i == nil then
-        return nil
-    end
-    return j - i + 1
-end
-
 local M = {}
 
 M.parse_c_header_name = function(name)
@@ -57,23 +49,69 @@ M.write_indent_modeline = function()
     api.nvim_buf_set_lines(0, -1, -1, true, {comment:format(modeline)})
 end
 
-M.notify_send = function(title, msg, id)
-    if msg == nil then
-        msg = title
-        title = "Neovim"
-    end
+
+local function notify_send(title, msg, id)
     local args = {'-i', 'nvim', title, msg}
     if id ~= nil then
         args[#args + 1] = '-r'
         args[#args + 1] = id
     end
 
-    return uv.spawn('notify-send', {
+    local handle
+    handle = uv.spawn('notify-send', {
         args = args,
-        detach = true,
-    })
+    }, function(code, signal)
+        handle:close()
+        if code ~= 0 or signal ~= 0 then
+            local err = code == 0 and 'signal='..signal or 'code='..code
+            vim.schedule(function()
+                vim.api.nvim_err_writeln('notify-send failed: '.. err)
+            end)
+        end
+    end)
+    if not handle then
+        vim.api.nvim_err_writeln('failed to spawn notify-send')
+    end
 end
-M.dunst_notify = M.notify_send -- Compatibility
+M.notify_send = notify_send
+
+local notification_ids = setmetatable({}, {
+    __index = function(self, title)
+        local id = math.floor(math.random() * 1e6)
+
+        self[title] = id
+        return id
+    end
+})
+
+function M.notifyi(opts)
+    local title, id
+    if type(opts) == 'table' then
+        title = opts[1]
+        id = opts[2] or notification_ids[title]
+    elseif type(opts) == 'string' then
+        title = opts
+        id = nil
+    else
+        error('opts: expected table or string')
+    end
+
+    return function(...)
+        local msg = {...}
+        for i=1,select('#', ...) do
+            if msg == nil then
+                msg[i] = 'nil'
+            else
+                msg[i] = tostring(msg[i])
+            end
+        end
+        msg = table.concat(msg, ' ')
+
+        return notify_send(title, msg, id)
+    end 
+end
+
+M.notify = M.notifyi 'Neovim'
 
 local clock = nil
 M.clock_reset = function()
@@ -90,7 +128,7 @@ end
 M.clock_notify = function()
     if clock then
         local time = (uv.hrtime() - clock) / 1e6
-        M.clock_notify('Clock', time, '674532')
+        M.notifyi('Clock', time .. 'ms', 674532)
     end
 end
 M.clock_dunst = M.clock_notify -- Compatibility
