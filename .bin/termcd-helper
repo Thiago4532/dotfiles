@@ -1,0 +1,20 @@
+#!/bin/bash
+
+function filter_parent() {
+    local parent_name="$1"
+    while read -r pid; do
+        local ppid=$(rg 'PPid:\t([0-9]+)' -r '$1' "/proc/$pid/status")
+        [[ "$(<"/proc/$ppid/comm")" == "$parent_name" ]] &&
+            echo "$pid"
+    done
+    return 0
+}
+
+function show_cwd() {
+    while read -r pid; do
+        readlink "/proc/$pid/cwd"
+    done
+    return 0
+}
+
+pgrep -x zsh | filter_parent "kitty" | show_cwd | sort -u | fzf --reverse

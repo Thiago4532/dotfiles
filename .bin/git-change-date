@@ -1,0 +1,10 @@
+#!/bin/bash
+
+[ $# -eq 0 ] && exit 1
+
+ndate="$*"
+gitdate=$(LC_ALL=C.UTF-8 date +'%c %z' -d "$ndate")
+
+echo "Date: $gitdate"
+
+GIT_COMMITTER_DATE="$gitdate" git commit --amend --no-edit --date "$gitdate"

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo 'Use ripgrep instead of grep!'
+exit 1

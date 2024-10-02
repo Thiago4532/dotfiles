@@ -1,0 +1,23 @@
+#!/bin/bash
+## nvidia-monitor - Monitor if NVIDIA is powered off.
+## Dependencies: paplay mate-media
+
+CARD_PATH="/sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0"
+
+is_powered=0
+while true; do
+    POWER_STATE=$(<"$CARD_PATH/power_state")
+
+    if [[ "$POWER_STATE" == "D3cold" ]]; then
+        if [[ $is_powered == 1 ]]; then
+            paplay /usr/share/sounds/freedesktop/stereo/bell.oga
+            is_powered=0
+        fi
+    else
+        if [[ $is_powered == 0 ]]; then
+            paplay /usr/share/sounds/freedesktop/stereo/complete.oga
+            is_powered=1
+        fi
+    fi
+    sleep 3
+done

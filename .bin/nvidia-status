@@ -1,0 +1,13 @@
+#!/bin/bash
+## nvidia-status - Check if NVIDIA card is powered on.
+
+CARD_PATH="/sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0"
+POWER_STATE=$(<"$CARD_PATH/power_state")
+
+if [[ "$POWER_STATE" == "D3cold" ]]; then
+    echo 'NVIDIA: OFF'
+    exit 0
+else
+    echo 'NVIDIA: ON'
+    exit 1
+fi

@@ -1,0 +1,7 @@
+#!/bin/bash
+## cset-exec
+### Similar to cset shield -e, but allows you to execute the program as the current user,
+### instead of having to execute as root.
+
+sudo cset shield --shield --pid $$ >/dev/null || exit $?
+exec "$@"

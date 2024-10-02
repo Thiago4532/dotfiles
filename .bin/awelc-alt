@@ -1,0 +1,31 @@
+#!/bin/bash
+
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/awelc"
+
+if [ -f "$CONFIG" ]; then
+    pmode=$(<"$CONFIG")
+else
+    pmode="OFF"
+fi
+
+case "$pmode" in
+    "OFF") mode="DIM" ;;
+    "ON")  mode="OFF" ;;
+    *)     mode="ON" ;;
+esac
+
+case "$mode" in
+    "OFF")
+        awelc 0 || exit $?
+        ;;
+    "DIM")
+        awelc 50 || exit $?
+        ;;
+    "ON")  
+        awelc 100 || exit $?
+        ;;
+    *)
+        echo "something is wrong" >&2
+        exit 1
+esac
+echo "$mode" > "$CONFIG"
