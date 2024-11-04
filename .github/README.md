@@ -13,6 +13,7 @@ Configure git to show only tracked files and checkout files:
 ```bash
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME' # Dotfiles
 dotfiles config --local status.showUntrackedFiles no
+dotfiles update --init
 dotfiles checkout --force
 ```
 
