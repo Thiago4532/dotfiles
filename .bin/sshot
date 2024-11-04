@@ -1,0 +1,38 @@
+#!/bin/bash
+export DEST="${XDG_PICTURES_DIR:-$HOME/Pictures}/Screenshots"
+
+function error() {
+    echo "sshot: $@" >&2
+    notify-send -u critical "Screenshot failed" "$@"
+    exit 1
+}
+
+mkdir -p "$DEST" || error "Failed to create directory $DEST"
+
+# Use the date to generate a unique filename
+filename="$DEST/Screenshot_$(date +%Y-%m-%d_%H-%M-%S).png"
+
+# Take the screenshot
+maim -s "$filename" || exit 0
+
+# Copy the file to the clipboard
+xclip -selection clipboard -t image/png -i "$filename" ||
+    error "Failed to copy screenshot to clipboard"
+
+echo "sshot: Saved to $filename"
+
+# Send a notification with an action and capture the action result
+action=$(dunstify "Screenshot" "Saved and copied to clipboard!" \
+    --action="drag,Drag-and-drop" \
+    --action="copy,Copy filename" \
+) || error "Failed to send notification"
+
+# Check the selected action
+case "$action" in
+    "drag")
+        dragon-drop "$filename"
+        ;;
+    "copy")
+        echo -n "$filename" | xclip -selection clipboard
+        ;;
+esac

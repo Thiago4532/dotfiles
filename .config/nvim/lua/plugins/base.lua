@@ -203,11 +203,22 @@ return {
     --     ft = 'lua',
     -- },
     {
-        init = function() 
-            vim.g.mdmath_disable_auto_setup = true
-        end,
-        dir = vim.fn.expand('~/GitHub/mdmath.nvim'),
-        lazy = false,
-        opts = {},
-    }
+        'Thiago4532/mdmath.nvim',
+        -- branch = 'dynamic-size',
+        -- dir = vim.fn.expand('~/GitHub/mdmath.nvim'),
+        opts = {
+            -- dynamic = false,
+            -- filetypes = {}
+        }
+        -- ft = 'markdown',
+        -- config = false,
+    },
+
+    -- {
+    --     'Mofiqul/vscode.nvim',
+    --     build = function()
+    --         return require'mdmath.build'.build_lazy()
+    --     end,
+    --     dependencies = 'mdmath.nvim'
+    -- },
 }

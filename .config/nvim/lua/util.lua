@@ -1,10 +1,23 @@
 local vim = vim
 
 local api = vim.api
-local uv = vim.loop
+local uv = vim.uv
 local bo = vim.bo
 
 local M = {}
+
+function M.err_message(...)
+    local message = table.concat(vim.iter({ ... }):flatten():totable())
+    if vim.in_fast_event() then
+        vim.schedule(function()
+            api.nvim_err_writeln(message)
+            api.nvim_command('redraw')
+        end)
+    else
+        api.nvim_err_writeln(message)
+        api.nvim_command('redraw')
+    end
+end
 
 M.parse_c_header_name = function(name)
     local guard_name = require'header-guard'.guard_name()
@@ -57,21 +70,7 @@ local function notify_send(title, msg, id)
         args[#args + 1] = id
     end
 
-    local handle
-    handle = uv.spawn('notify-send', {
-        args = args,
-    }, function(code, signal)
-        handle:close()
-        if code ~= 0 or signal ~= 0 then
-            local err = code == 0 and 'signal='..signal or 'code='..code
-            vim.schedule(function()
-                vim.api.nvim_err_writeln('notify-send failed: '.. err)
-            end)
-        end
-    end)
-    if not handle then
-        vim.api.nvim_err_writeln('failed to spawn notify-send')
-    end
+    M.spawn_bg('notify-send', args)
 end
 M.notify_send = notify_send
 
@@ -125,10 +124,14 @@ M.clock_print = function()
     end
 end
 
-M.clock_notify = function()
+M.clock_notify = function(unique)
     if clock then
         local time = (uv.hrtime() - clock) / 1e6
-        M.notifyi('Clock', time .. 'ms', 674532)
+        if unique then
+            M.notifyi 'Clock' (time .. 'ms')
+        else
+            M.notifyi {'Clock', 674532} (time .. 'ms')
+        end
     end
 end
 M.clock_dunst = M.clock_notify -- Compatibility
@@ -155,6 +158,43 @@ M.sanitize_ascii = function(s)
         return string.format('\\x%02x', byte);
     end)
     return ss
+end
+
+-- Spawn and detach
+M.spawn_bg = function(cmd, opts)
+    opts = opts or {}
+    local args = {}
+    for k,v in ipairs(opts) do
+        args[k] = v
+    end
+
+    local handle
+    handle = uv.spawn(cmd, {
+        args = args,
+        detached = false,
+    }, function(code, signal)
+        if code ~= 0 or signal ~= 0 then
+            if not opts.silent then
+                local err = code == 0 and 'signal='..signal or 'code='..code
+                M.err_message(string.format('spawn_bg: failed to spawn %s: %s', cmd, err))
+            end
+        end
+    end)
+    if not handle then
+        if not opts.silent then
+            M.err_message('spawn_bg: failed to spawn', cmd)
+        end
+    end
+    handle:close()
+    handle:unref()
+end
+
+M.bark = function()
+    if not M.is_executable'bark' then
+        return
+    end
+
+    M.spawn_bg('bark', {silent = true})
 end
 
 return M

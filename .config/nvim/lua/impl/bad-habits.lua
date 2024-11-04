@@ -1,5 +1,6 @@
 local vim = vim
 local api = vim.api
+local uv = vim.uv
 
 local function err_message(...)
     local message = table.concat(vim.iter({ ... }):flatten():totable())
@@ -30,43 +31,52 @@ end
 map('n', ',yG', try_copy)
 
 local blocklist = {'h', 'j', 'k', 'l'}
-local safe_amount = 2
+local timeout = 1000
+local bark_tries = 3
 
 local blocking = {}
+local num_tries = {}
 for _, key in ipairs(blocklist) do
-    blocking[key] = false
+    blocking[key] = 0
+    num_tries[key] = 0
 end
-tm_blocking = blocking
 
-local current_key = nil
-local current_count = 0
+local function check(key)
+    local now = uv.now()
+    if now - blocking[key] < timeout then
+        local message = 'You pressed ' .. key .. ' too soon!'
+        api.nvim_echo({{ message, 'ErrorMsg' }}, false, {})
 
-local ns = vim.api.nvim_create_namespace('tm-bad-habits')
-vim.on_key(function(key, typed)
-    if not key then
-        return
-    end
-
-    if blocking[key] == nil then
-        if current_key then
-            blocking[current_key] = false
-            current_key = nil
+        num_tries[key] = num_tries[key] + 1
+        if num_tries[key] == bark_tries then
+            require'util'.bark()
         end
-        return
+        return ''
     end
 
-    if current_key == key then
-        current_count = current_count + 1
-    else
-        if current_key then
-            blocking[current_key] = false
-        end
-        current_key = key
-        current_count = 1
-    end
+    blocking[key] = now
+    num_tries[key] = 0
+    return key
+end
 
-    if current_count >= safe_amount then
-        blocking[key] = true
-    end
-end, ns)
+-- map({'n', 'x'}, 'j', function()
+--     if vim.v.count > 1 then
+--         return "m'" .. vim.v.count .. 'j'
+--     end
+--     return check 'j'
+-- end, true)
 
+-- map({'n', 'x'}, 'k', function()
+--     if vim.v.count > 1 then
+--         return "m'" .. vim.v.count .. 'k'
+--     end
+--     return check 'k'
+-- end, true)
+
+-- map({'n', 'x'}, 'h', function()
+--     return check 'h'
+-- end, true)
+
+-- map({'n', 'x'}, 'l', function()
+--     return check 'l'
+-- end, true)

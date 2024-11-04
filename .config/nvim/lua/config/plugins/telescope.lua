@@ -6,7 +6,8 @@ require'telescope'.setup{
     defaults = {
         mappings = {
             n = { ["<c-c>"] = "close" },
-        }
+        },
+        file_ignore_patterns = { 'LICENSE' },
     },
     pickers = {
         buffers = {

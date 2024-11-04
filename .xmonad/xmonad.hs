@@ -329,7 +329,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. controlMask, xK_k   ), spawn "xset dpms force off")
 
     -- Take a interactive screenshot (PrtSc)
-    , ((noModMask         , 0xff61   ), spawn "maim -s --format=png | xclip -selection clipboard -t image/png && notify-send -t 1000 'Copied screenshot to clipboard!'")
+    , ((noModMask         , 0xff61   ), spawn "sshot")
 
     -- Take a screenshot (M-PrtSc)
     , ((modm              , 0xff61   ), spawn "maim --format=png | xclip -selection clipboard -t image/png && notify-send -t 1000 'Copied screenshot to clipboard!'")

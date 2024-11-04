@@ -17,6 +17,7 @@ dmap('', '<Space>', '<Nop>')
 -- Remapping , to global clipboard
 dmap('', ',', '"+')
 
+map('n', '<F9>', ':MarkdownPreview<CR>')
 map('n', '<F1>', ':Inspect<CR>')
 map('n', '<F3>', ':noh<CR>')
 map('n', '<F4>', function() 
@@ -72,35 +73,16 @@ map('t', '<Esc>', '<C-\\><C-n>')
 map({'n', 'x'}, 'j', function()
     if vim.v.count > 1 then
         return "m'" .. vim.v.count .. 'j'
-    elseif tm_blocking['j'] then
-        return ''
     else
         return 'j'
     end
 end, true)
+
 map({'n', 'x'}, 'k', function()
     if vim.v.count > 1 then
         return "m'" .. vim.v.count .. 'k'
-    elseif tm_blocking['k'] then
-        return ''
     else
         return 'k'
-    end
-end, true)
-
-map({'n', 'x'}, 'h', function()
-    if tm_blocking['h'] then
-        return ''
-    else
-        return 'h'
-    end
-end, true)
-
-map({'n', 'x'}, 'l', function()
-    if tm_blocking['l'] then
-        return ''
-    else
-        return 'l'
     end
 end, true)
 
