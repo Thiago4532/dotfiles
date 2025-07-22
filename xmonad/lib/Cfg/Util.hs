@@ -1,1 +1,1 @@
-/home/thiagomm/.config/thmm/Cfg/Util.hs
+../../../colors/Cfg/Util.hs
