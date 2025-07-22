@@ -404,8 +404,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((noModMask         ,0x1008ff02), spawn "brightness up")
 
     -- Send F20/F21 key (used to mute audio in Discord)
-    , ((noModMask      ,0x1008ff1d), spawn "xdotool key 149")
-    , ((controlMask    ,0x1008ff1d), spawn "xdotool key 132")
+    , ((noModMask      ,0x1008ff1d), spawn "xdotool key u")
+    , ((controlMask    ,0x1008ff1d), spawn "xdotool key d")
 
     -- Keyboard light ON/OFF
     , ((noModMask      ,0x1008ff04), spawn "awelc-alt")
@@ -506,6 +506,7 @@ myManageHook = composeOne [
     , resource  =? "kdesktop"                            -?> doIgnore
     -- , className =? "TelegramDesktop"                     -?> popupFloat
     , className =? "discord"                             -?> doShift ( myWorkspaces !! 8 )
+    , className =? "vesktop"                             -?> doShift ( myWorkspaces !! 8 )
     ] <+> manageSpawn
       <+> namedScratchpadManageHook scratchpads
       <+> spawnFloatWHook
@@ -542,7 +543,7 @@ myStartupHook = do
     spawnOnce "clingo"
     spawnOnce "lxsession -s xmonad -e LXDE"
     spawnOnce "dunst"
-    spawnOnce "activity-recorder"
+    -- spawnOnce "activity-recorder"
 
     spawn "xset r rate 300 35"
 
@@ -606,7 +607,7 @@ javaHack conf = conf
                     *> io (putEnv "_JAVA_AWT_WM_NONREPARENTING=1")
   }
 
--- data DiscordPID = DiscordPID { discordPID :: Int }
+-- data DiscordPID = DiscordPID { iscordPID :: Int }
 
 -- instance ExtensionClass DiscordPID where
 --     initialValue = DiscordPID 0

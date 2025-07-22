@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# if [ $# -lt 1 ]; then
+#     echo "dotfiles: missing operation" >&2
+# fi
+
+# TODO: .Xresources xsettingsd
+
+# TODO: .zprofile should be stored, but should not be part of dotfiles itself
+tracked_zsh=(
+    ".zshrc"
+    ".zshenv"
+    ".zsh_aliases"
+    ".zsh_functions"
+    ".p10k.zsh"
+    ".zsh-completions"
+)
+
+tracked_config=(
+    "kitty"
+    "conky"
+    "dunst"
+    "rofi"
+    "thmm" # GUI only
+    "xmobar" # GUI only
+)
+
+# tracking nvim (git submodule)
+# tracking xmonad (GUI only)
+# tracking bin

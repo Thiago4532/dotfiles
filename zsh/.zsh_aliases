@@ -21,6 +21,4 @@ alias sdd='syncdir'
 alias odmp='objdump -M intel --disassembler-color=terminal'
 check_exe paru && check_exe pacman-wrapper && alias pacman='pacman-wrapper' # I want to start upgrading using paru.
 
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
-
 alias \$=''
