@@ -32,3 +32,8 @@ else
     export __EGL_VENDOR_LIBRARY_FILENAMES="/usr/share/glvnd/egl_vendor.d/50_mesa.json"
     export __GLX_VENDOR_LIBRARY_NAME="mesa"
 fi
+
+
+# Added by Toolbox App
+export PATH="$PATH:/home/thiagomm/.local/share/JetBrains/Toolbox/scripts"
+

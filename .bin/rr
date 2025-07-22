@@ -4,7 +4,7 @@
 # Author: Thiago Mota (https://github.com/Thiago4532)
 
 # Custom flags
-CFLAGS="-O2 -std=c++17 -DTDEBUG" 
+CFLAGS="-O2 -std=c++23 -DTDEBUG" 
 EXTRA_FLAGS="-I$HOME/.local/include"
 CACHE_FOLDER="$HOME/.cache/rr"
 
@@ -18,9 +18,17 @@ BINARY=''
 shopt -s lastpipe
 
 compute_ipath() {
-    local __hash=$(md5sum <<< "$EXTRA_FLAGS $CFLAGS" | head -c 8) || exit $?
+    local __hash=$(md5sum <<< "$EXTRA_FLAGS $CFLAGS" | head -c 12) || exit $?
     IPATH="$CACHE_FOLDER/$__hash"
 }
+
+function should_precompile() {
+    [ -n "$force_precompile" ] && return 0
+    [ -f "$1" ] || return 0
+    (( EPOCHSECONDS - $(stat -c %Y "$1") > 86400 ))
+}
+
+
 
 precompile_headers() {
     local PCH_SOURCE=""
@@ -33,19 +41,30 @@ precompile_headers() {
     done
 
     if [ -z "$PCH_SOURCE" ]; then
-        echo "Failed to precompile headers" >&2
+        echo "Failed to find stdc++.h" >&2
         exit 1
     fi
 
     compute_ipath
-    local PCH_DEST="$IPATH/bits/stdc++.h.gch" 
-    local CC_BINARY=`which g++`
 
-    if [ "$CC_BINARY" -nt "$PCH_DEST" ] || [ "$PCH_SOURCE" -nt "$PCH_DEST" ] || ! [ -z "$force_precompile" ]; then
-        mkdir -p "$IPATH/bits" || exit $?
-        echo "Precompiling: g++ $CFLAGS" >&2
-        g++ -H $EXTRA_FLAGS $CFLAGS "$PCH_SOURCE" -o "$PCH_DEST">/dev/null 2>&1 || exit $?
-        echo "Done: $IPATH" >&2
+    local PCH_DEST="$IPATH/bits/stdc++.h.gch"
+    local CC_BINARY=$(which g++)
+ 
+    if should_precompile "$PCH_DEST"; then
+        exec 200>>"/tmp/rr_pch_${IPATH//\//_}.lock"
+        if ! flock -n 200; then
+            echo "Precompilation already in progress, waiting..." >&2
+            flock 200 || exit $?
+            echo "Precompilation finished." >&2
+        else
+            rm -f "$PCH_DEST"
+            mkdir -p "$IPATH/bits" || exit $?
+            echo "Precompiling headers: g++ $CFLAGS" >&2
+            g++ -H $EXTRA_FLAGS $CFLAGS "$PCH_SOURCE" -o "$PCH_DEST" >/dev/null 2>&1 || exit $?
+            echo "Done: $PCH_DEST" >&2
+        fi
+        flock -u 200
+        exec 200>&-
     fi
 }
 
@@ -58,9 +77,20 @@ do_compile() {
     if [ "$SOURCE" -nt "$BINARY" ] || ! [ -z "$force_compile" ]; then
         precompile_headers
 
-        echo "Compiling: g++ $CFLAGS" >&2
-        g++ $EXTRA_FLAGS $CFLAGS -I"$IPATH" -o "$BINARY" "$SOURCE" || exit $?
-        echo "Done!" >&2
+        local FILE_PATH=$(readlink -f "$BINARY")
+        exec 198>>"/tmp/rr_compile_${FILE_PATH//\//_}.lock"
+
+        if ! flock -n 198; then
+            echo "Compilation already in progress, waiting..." >&2
+            flock 198 || exit $?
+            echo "Compilation finished." >&2
+        else
+            echo "Compiling: g++ $CFLAGS" >&2
+            g++ $EXTRA_FLAGS $CFLAGS -I"$IPATH" -o "$BINARY" "$SOURCE" || exit $?
+            echo "Done!" >&2
+        fi
+        flock -u 198
+        exec 198>&-
     fi
 }
 
@@ -70,6 +100,7 @@ pre_normal() {
 }
 
 run_normal() {
+    [ -n "$no_error" ] && exec 2>/dev/null
     [ -z "${RR_COPY_CLIPBOARD}" ] \
         && exec ./"$BINARY" \
         || xclip -o -selection clipboard | exec ./"$BINARY"
@@ -82,6 +113,7 @@ pre_gdb() {
 }
 
 run_gdb() {
+    [ -n "$no_error" ] && exec 2>/dev/null
     exec gdb "$BINARY"
 }
 
@@ -122,9 +154,8 @@ while [ $# -gt 0 ]; do
             shift
             export TDEB_TEST="$1"
             ;;
-        -s) # equivalent to -e no_error
-            shift
-            export TDEB_NO_ERROR=1
+        -s) # equivalent to -e no_error (not anymore lol)
+            no_error='yes'
             ;;
         -f|--force)
             force_compile='yes'
@@ -159,6 +190,10 @@ pre_$mode "$prog"
 #     precompile_headers
 #     [ -z "$prog" ] && exit 0
 if [ -z "$prog" ] ; then
+    if [ -n "$force_precompile" ]; then
+        precompile_headers
+        exit $?
+    fi
     echo "rr: no program specified" >&2
     exit 1
 fi

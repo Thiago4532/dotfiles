@@ -146,7 +146,7 @@ configuration {
   }
 }
 
-@theme "/home/thiagomm/.config/rofi/themes/gruvbox-material-dark.rasi"
+@theme "/home/thiagomm/.config/rofi/themes/gruvbox-material.rasi"
 
 #window {
     border-radius: 10px;

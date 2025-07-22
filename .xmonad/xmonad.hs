@@ -42,6 +42,7 @@ import XMonad.Actions.Commands
 import XMonad.Actions.SpawnOn
 import XMonad.Actions.Minimize
 import XMonad.Actions.Promote
+import XMonad.Actions.CopyWindow
 
 -- Utility
 import XMonad.Util.Loggers
@@ -204,6 +205,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch rofi (run)
     , ((modm .|. shiftMask, xK_p     ), spawn "rofi -modi run -no-show-icons -show")
+
+    , ((modm .|. shiftMask, xK_h     ), spawn "/home/thiagomm/toggle-mute.sh java")
     
     -- timer firework
     -- , ((modm,               xK_u     ), spawn "pkill conky; conky")
@@ -225,13 +228,24 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm              , xK_f     ), spawn "firefox")
 
     -- launch KeePassXC
-    , ((modm .|. shiftMask, xK_h     ), namedScratchpadAction scratchpads "keepassxc")
+    -- , ((modm .|. shiftMask, xK_h     ), namedScratchpadAction scratchpads "keepassxc")
 
     -- launch popup terminal
     , ((modm .|. controlMask, xK_Return), namedScratchpadAction scratchpads "popupTerminal")
 
     -- launch vimwiki
+    -- , ((modm              , xK_v     ), spawn "kitty nvim -- ~/Documents/vimwiki/index.wiki")
+    
+    -- launch vimwiki
     , ((modm              , xK_v     ), spawn "kitty nvim -- ~/Documents/vimwiki/index.wiki")
+
+    -- toggle “sticky” status of the focused window
+    , ((modm,               xK_v     )   , windows copyToAll)
+    , ((modm .|. shiftMask, xK_v     )   , killAllOtherCopies)
+
+
+    -- close focused window
+    , ((modm             , xK_c     ), spawn "sel2copy")
 
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
@@ -281,13 +295,16 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_l     ), sendMessage Expand)
 
     , ((modm,               xK_a), sendMessage MirrorShrink)
+    -- , ((modm,               xK_a), spawn "notifica")
     , ((modm,               xK_z), sendMessage MirrorExpand)
 
     -- Push window back into tiling
     , ((modm,               xK_t     ), withFocused $ windows . W.sink)
 
     -- Float and center the focused window
-    , ((modm .|. shiftMask, xK_t     ), withFocused $ centerWindow )
+    -- , ((modm .|. shiftMask, xK_t     ), withFocused $ centerWindow )
+    
+    , ((modm .|. shiftMask, xK_t     ), spawn "/home/thiagomm/Documents/underworld/2fa/token" )
 
     -- Enable shouldSpawnFloat
     , ((modm .|. shiftMask, xK_n     ), toggleSpawnFloatW )
@@ -330,11 +347,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Take a interactive screenshot (PrtSc)
     , ((noModMask         , 0xff61   ), spawn "sshot")
-
+    
     -- Take a screenshot (M-PrtSc)
     , ((modm              , 0xff61   ), spawn "maim --format=png | xclip -selection clipboard -t image/png && notify-send -t 1000 'Copied screenshot to clipboard!'")
+    
+    -- Scan a QR code (M-i)
+    -- , ((modm              , xK_i     ), spawn "qrcode-scan")
+    , ((modm              , xK_i     ), spawn "/home/thiagomm/Documents/underworld/2fa/extract_secret")
 
-    -- OCR script
+    -- Color grab
     , ((modm              , xK_g     ), spawn "cgrab")
     
     -- OCR script
@@ -516,10 +537,12 @@ myStartupHook = do
     -- spawn "setxkbmap -layout br -variant nodeadkeys -option altwin:swap_alt_win"
     setFullscreenSupported
 
+    spawnOnce "xset s off"
     spawnOnce "xss-lock -- slock"
     spawnOnce "clingo"
     spawnOnce "lxsession -s xmonad -e LXDE"
     spawnOnce "dunst"
+    spawnOnce "activity-recorder"
 
     spawn "xset r rate 300 35"
 

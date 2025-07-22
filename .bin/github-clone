@@ -1,0 +1,32 @@
+#!/bin/bash
+
+mode='ssh'
+
+# If first argument starts with -
+if [[ "$1" = -* ]]; then
+    if [[ "$1" = '-h' || "$1" = '-https' ]]; then
+        mode='https'
+    elif [[ "$1" = '-s' || "$1" = '-ssh' ]]; then
+        mode='ssh'
+    else
+        echo "Usage: github-clone [-h|--https|-s|--ssh] <repo> [args...]"
+        exit 1
+    fi
+    shift
+fi
+
+if [[ $# -lt 1 ]]; then
+    echo "Usage: github-clone [-h|--https|-s|--ssh] <repo> [args...]"
+    exit 1
+fi
+
+repo=$1
+# repo="${repo##*com/}" # To remove github.com/
+
+shift
+
+if [[ "$mode" = 'https' ]]; then
+    exec git clone "https://github.com/$repo.git" "$@"
+else
+    exec git clone "git@github.com:$repo.git" "$@"
+fi

@@ -11,10 +11,15 @@ function filter_parent() {
 }
 
 function show_cwd() {
+    local cwd=$(pwd)
     while read -r pid; do
-        readlink "/proc/$pid/cwd"
+        local dir
+        dir=$(readlink "/proc/$pid/cwd" 2>/dev/null) || continue
+        [[ "$dir" != "$cwd" ]] && echo "$dir"
     done
     return 0
 }
 
-pgrep -x zsh | filter_parent "kitty" | show_cwd | sort -u | fzf --reverse
+ESCAPED_HOME=$(printf '%s' "$HOME" | sed -e 's/[]\/.*^$[]/\\&/g')
+
+pgrep -x zsh | filter_parent "kitty" | show_cwd | sort -u | sed "s/^$ESCAPED_HOME/~/" | fzf --reverse --select-1 --exit-0 | sed -e "s/^~/$ESCAPED_HOME/"

@@ -18,9 +18,13 @@ get_battery
 bat_status=$(<"$BAT/status")
 [[ "$bat_status" == "Discharging" ]] || exit 1
 
+nvidia-status >/dev/null 2>&1 \
+    && nvidia="D"             \
+    || nvidia="E"
+
 voltage=$(<"$BAT/voltage_now")
 current=$(<"$BAT/current_now")
 
 export LC_NUMERIC='C.UTF-8'
-printf '%.2f\n' `bc -l <<< "$current * $voltage / 1000000000000"`
+printf "$nvidia%.2f\n" `bc -l <<< "$current * $voltage / 1000000000000"`
 

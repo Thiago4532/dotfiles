@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Check if maim and zbarimg are installed
+if ! command -v maim &> /dev/null; then
+    notify-send -u critical "Error" "maim is not installed."
+    exit 1
+fi
+
+if ! command -v zbarimg &> /dev/null; then
+    notify-send -u critical "Error" "zbar-tools (for zbarimg) is not installed."
+    exit 1
+fi
+
+if ! command -v notify-send &> /dev/null; then
+    echo "Warning: notify-send is not installed. Notifications will not be shown."
+    HAS_NOTIFY=false
+else
+    HAS_NOTIFY=true
+fi
+
+if ! command -v xclip &> /dev/null; then
+    echo "Warning: xclip is not installed. The QR code will not be copied to the clipboard."
+    HAS_XCLIP=false
+else
+    HAS_XCLIP=true
+fi
+
+# Take a screenshot of a selected area and pipe to zbarimg
+qrcode_data=$(maim -s --format=png | zbarimg --quiet --raw --oneshot -)
+
+# Check if any QR code was detected
+if [ -z "$qrcode_data" ]; then
+    if "$HAS_NOTIFY"; then
+        notify-send "Screenshot" "No QR code found in the selected area."
+    fi
+    echo "No QR code found."
+    exit 0
+fi
+
+# Send a notification
+if "$HAS_NOTIFY"; then
+    notify-send "QR Code Detected" "$qrcode_data"
+fi
+
+# Copy the QR code data to the clipboard
+if "$HAS_XCLIP"; then
+    echo -n "$qrcode_data" | xclip -selection clipboard
+    echo "QR code copied to clipboard."
+fi
+
+echo "QR Code: $qrcode_data"
+
+exit 0

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+SCRIPT_PATH=`readlink -f "$0"`
+cd "${SCRIPT_PATH%/*}/src" || {
+    echo "Failed to change directory to script location." >&2
+    exit 1
+}
+
+if [ "alarm2.cpp" -nt "alarm2" ]; then
+    echo "Source file is newer than the binary. Recompiling..." >&2
+    g++ -o alarm2 alarm2.cpp -std=c++23 -O2 -lX11 -lXss >/dev/null 2>/dev/null || {
+        echo "Compilation failed." >&2
+        exit 1
+    }
+fi
+
+exec ./alarm2 "$@"

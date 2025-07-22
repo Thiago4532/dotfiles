@@ -1,7 +1,2 @@
-.dotfiles
-.config/nvim/plugin/packer_compiled.lua
-.xmonad/xmonad-x86_64-linux
-.xmonad/build-x86_64-linux
-
-*.o
-*.hi
+data/*
+!data/.keep

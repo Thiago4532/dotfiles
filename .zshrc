@@ -22,8 +22,8 @@ bindkey -e
 # The following lines were added by compinstall
 zstyle :compinstall filename "$HOME/.zshrc"
 
-[ -d "$HOME/.zsh-completions" ] &&
-    fpath=($HOME/.zsh-completions $fpath)
+# [ -d "$HOME/.zsh-completions" ] &&
+#     fpath=($HOME/.zsh-completions $fpath)
 
 autoload -Uz compinit
 compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
@@ -51,6 +51,8 @@ bindkey "^A" beginning-of-line
 bindkey "^[[H" beginning-of-line
 bindkey "^E" end-of-line
 bindkey "^[[F" end-of-line
+bindkey -M emacs '^P' history-substring-search-up
+bindkey -M emacs '^N' history-substring-search-down
 
 if [ -f /usr/share/fzf/key-bindings.zsh ]; then
   source /usr/share/fzf/key-bindings.zsh
@@ -69,6 +71,8 @@ zplug zsh-users/zsh-completions
 zplug Aloxaf/fzf-tab
 zplug zsh-users/zsh-autosuggestions
 zplug zdharma-continuum/fast-syntax-highlighting, defer:2
+zplug zsh-users/zsh-history-substring-search
+# zplug zsh-users/zsh-syntax-highlighting, defer:2
 
 # Then, source plugins and add commands to $PATH
 zplug load
@@ -96,6 +100,8 @@ precmd () { print -Pn "\e]0;zsh: %~\a" }
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+compdef fake-git=git
 
 # to avoid non-zero status at startup
 true

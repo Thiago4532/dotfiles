@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ -t 1 ]; then
+    # Terminal output - use bold colors
+    bold=$(tput bold)
+    red=$(tput setaf 1)
+    green=$(tput setaf 2)
+    normal=$(tput sgr0)
+    echo "Remember to use ${bold}${green}s${normal} instead of ${bold}${red}ssh${normal}!"
+    exit 1
+else
+    # Not a terminal, pass through to real ssh
+    exec ssh "$@"
+fi

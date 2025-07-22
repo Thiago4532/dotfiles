@@ -27,7 +27,10 @@ osIcon = mColor C.blue "\xf303  Arch Linux"
 
 batWattsCb :: String -> String
 batWattsCb "" = ""
-batWattsCb watts = mColor C.yellow $ mAction "scripts/bat-notify" $ join' ["\xf140b", watts, " W", mSeparator]
+batWattsCb (gpu:watts) = color $ mAction "scripts/bat-notify" $ join' ["\xf140b", watts, " W", mSeparator]
+    where color = case gpu of
+                    'E' -> mColor C.red
+                    _   -> mColor C.yellow
 
 config :: Config
 config = defaultConfig {
@@ -45,15 +48,20 @@ config = defaultConfig {
                         , Run $ Alsa "default" "Master" ["-t", "\xf028  <volume>%<status>", "--", "-O", "", "-o", " [MUTE]", "-c", "red"]
                         , Run $ Battery ["-t", "\xf241   <left>% <acstatus>"] 50
                         , Run $ CommandReader "scripts/trayer-padding-icon" "trayerpad"
+                        -- , Run $ CommandReader "/home/thiagomm/acti/logger/hub-activity.sh" "hub-activity"
+                        , Run $ CommandReader "scripts/xmobar-message.sh" "hub-activity"
                         , Run $ Kbd []
                         , Run $ UnsafeXMonadLog
-                        ]
+                     ]
         , sepChar = "%"
         , alignSep = mLeftRightSep
         , template = join' [ osIcon
                            , mSeparator
                            , "%UnsafeXMonadLog%"
                            , mLeftRightSep
+                           -- , mColor C.red $ mAction "notifica" "Amanda"
+                           -- , mSeparator
+                           , "%hub-activity%"
                            , "%bat-watts%"
                         -- , mSeparator
                            , "\xe712 %uname%"

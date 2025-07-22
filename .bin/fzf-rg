@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rg --line-number --with-filename . --color=never --field-match-separator $'\u00a0' |
+  fzf --delimiter $'\u00a0' --preview "bat --color=always {1} --highlight-line {2}" --preview-window ~8,+{2}-5

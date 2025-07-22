@@ -1,0 +1,6 @@
+#!/bin/sh
+## drip - Drip!
+## Dependencies: libpulse mate-media
+## Author: Thiago Mota (github.com/Thiago4532)
+
+paplay /usr/share/sounds/mate/default/alerts/drip.ogg $@

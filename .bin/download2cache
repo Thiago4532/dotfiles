@@ -1,5 +1,5 @@
 #!/bin/bash
-## download2cache
+## download2cache with aria2c
 
 set -o pipefail
 
@@ -16,19 +16,21 @@ for pkg in "$@"; do
     fi
 done
 
-function list_urls() {
-    pacman -S --print "$@"
-}
-
-PACKAGES=()
 CACHE=/var/cache/pacman/pkg
 
+MAX_CONCURRENT_DOWNLOADS=5
+ARIA2C_OPTS="\
+    --dir=$CACHE \
+    --input-file=- \
+    --max-concurrent-downloads=$MAX_CONCURRENT_DOWNLOADS \
+    --continue=true \
+    --allow-overwrite=false"
+
+# Generate URLs for package files and their signatures
 pacman -S --print-format "%n %f" "$@" | while read -r name pkg; do
     letter="${name::1}"
     url="https://archive.archlinux.org/packages/$letter/$name/$pkg"
-    echo "Downloading $url"
-    sudo curl -O --output-dir "$CACHE" "$url"
-    echo "Downloading $url.sig"
-    sudo curl -O --output-dir "$CACHE" "$url.sig"
-done || exit $?
+    echo "$url"
+    echo "$url.sig"
+done | sudo aria2c $ARIA2C_OPTS || exit $?
 

@@ -20,5 +20,3 @@ current=$(<"$BAT/current_now")
 
 export LC_NUMERIC='C.UTF-8'
 printf '%.2f\n' `bc -l <<< "$current * $voltage / 1000000000000"`
-printf '%.2f\n' `bc -l <<< "$current * 12000000 / 1000000000000"`
-printf '%.2f\n' `bc -l <<< "$current * 11400000 / 1000000000000"`

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+xclip -o -selection primary | xclip -i -selection clipboard
+dunstify -h string:x-dunst-stack-tag:sel2copy -t 1000 -u normal "sel2copy" "Moved selection to clipboard!"
