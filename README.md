@@ -1,6 +1,8 @@
 # Thiago4532's dotfiles  
 
-Using git bare to manage dotfiles.
+Using symlink to manage dotfiles.
+
+> TODO: This README.md is outdated, basically all information here is wrong.
 
 ### Cloning
 
@@ -26,8 +28,9 @@ curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/instal
 
 After that, run `zplug install` to install all zsh plugins.
 
-### Neovim
+> TODO: I am currently using lazy.nvim
 
+### Neovim
 Install [packer.nvim](https://github.com/wbthomason/packer.nvim):
 ```sh
 # Unix instructions
