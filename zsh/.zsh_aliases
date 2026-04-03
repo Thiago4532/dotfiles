@@ -3,11 +3,9 @@
 
 alias sudo='sudo '
 # alias git='fake-git'
-alias docker='sudo docker'
-alias docker-compose='sudo docker-compose'
-check_exe exa && alias ls='exa' || alias ls='ls --color=auto'
-# check_exe rg && alias grep='rg'
-# check_exe rg && alias grep='fake-grep'
+# alias docker='sudo docker'
+# alias docker-compose='sudo docker-compose'
+check_exe eza && alias ls='eza' || alias ls='ls --color=auto'
 check_exe ninja && alias cmake='CMAKE_GENERATOR=Ninja cmake'
 check_exe llvm-objdump && alias objdump='llvm-objdump'
 check_exe batman && alias man='batman'
@@ -19,6 +17,7 @@ alias rdb='rr --gdb'
 alias rrc='RR_COPY_CLIPBOARD=1 rr'
 alias sdd='syncdir'
 alias odmp='objdump -M intel --disassembler-color=terminal'
-check_exe paru && check_exe pacman-wrapper && alias pacman='pacman-wrapper' # I want to start upgrading using paru.
+check_exe paru && check_exe pacman-wrapper &&
+    function pacman() { pacman-wrapper "$@" }
 
 alias \$=''

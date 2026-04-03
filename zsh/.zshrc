@@ -22,9 +22,6 @@ bindkey -e
 # The following lines were added by compinstall
 zstyle :compinstall filename "$HOME/.zshrc"
 
-# [ -d "$HOME/.zsh-completions" ] &&
-#     fpath=($HOME/.zsh-completions $fpath)
-
 autoload -Uz compinit
 compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
 # End of lines added by compinstall
@@ -64,7 +61,7 @@ source ~/.zplug/init.zsh
 
 # Plugins
 # [ -f /usr/share/doc/pkgfile/command-not-found.zsh ] && source /usr/share/doc/pkgfile/command-not-found.zsh
-[ -f /etc/zsh_command_not_found ] && source /etc/zsh_command_not_found
+# [ -f /etc/zsh_command_not_found ] && source /etc/zsh_command_not_found
 
 zplug romkatv/powerlevel10k, as:theme, depth:1 # Powerlevel10k theme
 zplug zsh-users/zsh-completions
@@ -92,16 +89,12 @@ source ~/.zsh_aliases
 check_exe zoxide && eval "$(zoxide init zsh)"
 
 # Extra completions
-compdef _htracker htracker
 compdef _man batman
 
 # precmd
 precmd () { print -Pn "\e]0;zsh: %~\a" }
 
-# bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
-
-compdef fake-git=git
+export NPM_CONFIG_PREFIX="$HOME/.local/npm"
 
 # to avoid non-zero status at startup
 true

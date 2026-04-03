@@ -22,13 +22,6 @@ function nvim-clearundo() {
     return $?
 }
 
-function nvim-startup() {
-    tempfile=`mktemp /tmp/nvim-startupXXXXXX`
-    nvim --startuptime $tempfile $@ &&
-        nvim -u NORC $tempfile
-    rm $tempfile
-}
-
 ##
 
 function pipxvenv() {
@@ -157,3 +150,20 @@ function open() {
     done
 }
 
+# function wrap-alias() {
+#     if [ $# -ne 2 ]; then
+#         echo "Usage: wrap-alias <alias> <command>" >&2
+#         return 1
+#     fi
+
+#     alias "$1"="$2"
+#     local completion="$_comps[$1]"
+#     if [ -n "$completion" ]; then
+#         compdef "$completion" "$2"
+#     fi
+# }
+
+function nvm() {
+    unset NPM_CONFIG_PREFIX
+    source "$HOME/.nvm/nvm.sh" && nvm "$@"
+}

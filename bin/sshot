@@ -22,7 +22,7 @@ xclip -selection clipboard -t image/png -i "$filename" ||
 echo "sshot: Saved to $filename"
 
 # Send a notification with an action and capture the action result
-action=$(dunstify "Screenshot" "Saved and copied to clipboard!" \
+action=$(dunstify "Screenshot" "Saved and copied to clipboard!" --timeout=10000 \
     --action="drag,Drag-and-drop" \
     --action="copy,Copy filename" \
 ) || error "Failed to send notification"

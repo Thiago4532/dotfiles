@@ -240,7 +240,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm              , xK_v     ), spawn "kitty nvim -- ~/Documents/vimwiki/index.wiki")
 
     -- toggle “sticky” status of the focused window
-    , ((modm,               xK_v     )   , windows copyToAll)
+    , ((modm .|. controlMask, xK_v   )   , windows copyToAll)
     , ((modm .|. shiftMask, xK_v     )   , killAllOtherCopies)
 
 
@@ -404,8 +404,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((noModMask         ,0x1008ff02), spawn "brightness up")
 
     -- Send F20/F21 key (used to mute audio in Discord)
-    , ((noModMask      ,0x1008ff1d), spawn "xdotool key u")
-    , ((controlMask    ,0x1008ff1d), spawn "xdotool key d")
+    -- , ((noModMask      ,0x1008ff1d), spawn "xdotool key u")
+    -- , ((controlMask    ,0x1008ff1d), spawn "xdotool key d")
 
     -- Keyboard light ON/OFF
     , ((noModMask      ,0x1008ff04), spawn "awelc-alt")
@@ -502,6 +502,7 @@ myManageHook = composeOne [
     , className =? "MPlayer"                             -?> doFloat
     , className =? "Gimp"                                -?> doFloat
     , title     =? "Picture-in-Picture"                  -?> doFloat
+    -- , title     =? "Bitwarden Password Manager"          -?> doFloat
     , resource  =? "desktop_window"                      -?> doIgnore
     , resource  =? "kdesktop"                            -?> doIgnore
     -- , className =? "TelegramDesktop"                     -?> popupFloat
