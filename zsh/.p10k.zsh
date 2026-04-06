@@ -1619,7 +1619,7 @@
 
   function prompt_my_ssh() {
     if (($P9K_SSH)); then
-      p10k segment -b 0 -f 3 -t 'SSH'
+      p10k segment -b 0 -f 11 -t 'SSH'
     fi
   }
 
