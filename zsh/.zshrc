@@ -1,3 +1,10 @@
+# OPENSPEC:START
+# OpenSpec shell completions configuration
+fpath=("/home/thiagomm/.zsh/completions" $fpath)
+autoload -Uz compinit
+compinit
+# OPENSPEC:END
+
 ## Thiago4532's dotfiles
 # Author: Thiago Mota
 # Source: https://github.com/Thiago4532/dotfiles

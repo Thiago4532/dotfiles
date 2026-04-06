@@ -32,6 +32,15 @@ batWattsCb (gpu:watts) = color $ mAction "scripts/bat-notify" $ join' ["\xf140b"
                     'E' -> mColor C.red
                     _   -> mColor C.yellow
 
+dpmsStateCb :: String -> String
+dpmsStateCb dpmsState = join' ["<fc=", color, ">"]
+    where color = case dpmsState of
+                    "false" -> C.yellow
+                    _       -> C.green
+
+mDpmsStateColor :: String -> String
+mDpmsStateColor s = join' ["%dpms-state-color%", s, "</fc>"]
+
 config :: Config
 config = defaultConfig {
         font = "Ubuntu Nerd Font Bold 9"
@@ -47,6 +56,7 @@ config = defaultConfig {
                         , Run $ Date "\xf133  %b %d %Y - (%H:%M) " "date" 10
                         , Run $ Alsa "default" "Master" ["-t", "\xf028  <volume>%<status>", "--", "-O", "", "-o", " [MUTE]", "-c", "red"]
                         , Run $ Battery ["-t", "\xf241   <left>% <acstatus>"] 50
+                        , Run $ CustomCommand "scripts/xmobar-dpms-state.sh" [""] dpmsStateCb "error" "dpms-state-color" 30
                         , Run $ CommandReader "scripts/trayer-padding-icon" "trayerpad"
                         -- , Run $ CommandReader "/home/thiagomm/acti/logger/hub-activity.sh" "hub-activity"
                         , Run $ CommandReader "scripts/xmobar-message.sh" "hub-activity"
@@ -72,7 +82,8 @@ config = defaultConfig {
                            , mSeparator
                            , mColor C.red $ mAction "kitty -e htop" "%memory%"
                            , mSeparator
-                           , mColor C.green $ mAction "xfce4-power-manager-settings" "%battery%"
+                           -- , mColor C.green $ mAction "xfce4-power-manager-settings" "%battery%"
+                           , mDpmsStateColor $ mAction "xfce4-power-manager-settings" "%battery%"
                            , mSeparator
                            , mColor C.magenta $ mAction "pavucontrol" "%alsa:default:Master%"
                            , mSeparator
